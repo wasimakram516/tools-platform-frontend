@@ -75,7 +75,7 @@ const TOOL_DEFINITIONS = [
     categoryId: "developer",
     keywords: ["jwt", "token", "decoder", "header", "payload"],
     processingMode: "browser",
-    status: "planned",
+    status: "available",
     relatedToolIds: ["DEV-01", "DEV-04"],
     badge: "JWT",
   },

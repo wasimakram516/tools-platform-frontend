@@ -19,6 +19,7 @@ Shared scope and sequencing live in the parent [`docs`](../docs/) directory; che
 | `/tools/base64-encoder-decoder` | Worker-based UTF-8 Base64 encoding and decoding workflow |
 | `/tools/url-encoder-decoder` | Worker-based URL component encoding and decoding workflow |
 | `/tools/uuid-generator` | Secure browser-native UUID v4 batch generator |
+| `/tools/jwt-decoder` | Local JWT header and payload decoder with explicit non-verification warnings |
 
 The tool and category pages are generated from the typed registry in `lib/tools/`. New tools
 should extend that registry and use the reusable tool-page shell rather than duplicating route
@@ -27,6 +28,9 @@ layout and metadata logic.
 The JSON Formatter, Base64 Encoder / Decoder, and URL Encoder / Decoder use Web Workers so
 large conversions do not block the interface. Their current local-processing limit is five
 million input characters.
+
+The JWT Decoder accepts tokens up to 100,000 characters and decodes their header and payload
+locally. It does not verify signatures or token authenticity, so decoded claims remain untrusted.
 
 ## Technology
 

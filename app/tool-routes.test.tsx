@@ -31,7 +31,7 @@ function renderRoute(component: ReactNode): void {
 }
 
 describe("registry-backed routes", () => {
-  it("renders the developer category and its planned states", async () => {
+  it("renders the complete initial developer tool category", async () => {
     const page = await CategoryPage({
       params: Promise.resolve({ categorySlug: "developer-tools" }),
     });
@@ -39,8 +39,8 @@ describe("registry-backed routes", () => {
     renderRoute(page);
 
     expect(screen.getByRole("heading", { name: "Developer tools" })).toBeInTheDocument();
-    expect(screen.getAllByRole("link", { name: "Open tool" })).toHaveLength(4);
-    expect(screen.getAllByText("Planned")).toHaveLength(1);
+    expect(screen.getAllByRole("link", { name: "Open tool" })).toHaveLength(5);
+    expect(screen.queryByText("Planned")).not.toBeInTheDocument();
   });
 
   it("renders the JSON tool inside the reusable tool shell", async () => {
@@ -88,6 +88,17 @@ describe("registry-backed routes", () => {
     expect(screen.getByLabelText("UUID generator workspace")).toBeInTheDocument();
   });
 
+  it("renders the JWT tool inside the reusable tool shell", async () => {
+    const page = await ToolPage({
+      params: Promise.resolve({ toolSlug: "jwt-decoder" }),
+    });
+
+    renderRoute(page);
+
+    expect(screen.getByRole("heading", { name: "JWT Decoder" })).toBeInTheDocument();
+    expect(screen.getByLabelText("JWT decoder workspace")).toBeInTheDocument();
+  });
+
   it("generates route params and metadata from the registry", async () => {
     expect(generateCategoryParams()).toEqual([{ categorySlug: "developer-tools" }]);
     expect(generateToolParams()).toEqual([
@@ -95,6 +106,7 @@ describe("registry-backed routes", () => {
       { toolSlug: "base64-encoder-decoder" },
       { toolSlug: "url-encoder-decoder" },
       { toolSlug: "uuid-generator" },
+      { toolSlug: "jwt-decoder" },
     ]);
     await expect(
       generateCategoryMetadata({
