@@ -13,9 +13,17 @@ body {
 }
 
 body {
+  background-color: #f7f9fc;
+  background-image: radial-gradient(circle at 1px 1px, rgba(31, 48, 74, 0.08) 1px, transparent 0);
+  background-size: 24px 24px;
   min-height: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: #c9d7ff;
+  color: #152238;
 }
 
 * {

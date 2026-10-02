@@ -1,0 +1,91 @@
+import { render, screen } from "@testing-library/react";
+import type { PropsWithChildren, ReactNode } from "react";
+import { describe, expect, it, vi } from "vitest";
+import CategoryPage, {
+  generateMetadata as generateCategoryMetadata,
+  generateStaticParams as generateCategoryParams,
+} from "@/app/categories/[categorySlug]/page";
+import ToolPage, {
+  generateMetadata as generateToolMetadata,
+  generateStaticParams as generateToolParams,
+} from "@/app/tools/[toolSlug]/page";
+import { AppThemeProvider } from "@/components/providers/app-theme-provider";
+import { RouteError } from "@/components/states/route-error";
+import { ToolPageLoading } from "@/components/states/tool-page-loading";
+
+vi.mock("@mui/material-nextjs/v16-appRouter", () => ({
+  AppRouterCacheProvider: ({ children }: PropsWithChildren) => children,
+}));
+
+vi.mock("next/navigation", () => ({
+  notFound: vi.fn(() => {
+    throw new Error("NEXT_NOT_FOUND");
+  }),
+}));
+
+/**
+ * Renders route output with the production Material UI theme.
+ */
+function renderRoute(component: ReactNode): void {
+  render(<AppThemeProvider>{component}</AppThemeProvider>);
+}
+
+describe("registry-backed routes", () => {
+  it("renders the developer category and its planned states", async () => {
+    const page = await CategoryPage({
+      params: Promise.resolve({ categorySlug: "developer-tools" }),
+    });
+
+    renderRoute(page);
+
+    expect(screen.getByRole("heading", { name: "Developer tools" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Open tool" })).toHaveAttribute(
+      "href",
+      "/tools/json-formatter",
+    );
+    expect(screen.getAllByText("Planned")).toHaveLength(4);
+  });
+
+  it("renders the JSON tool inside the reusable tool shell", async () => {
+    const page = await ToolPage({
+      params: Promise.resolve({ toolSlug: "json-formatter" }),
+    });
+
+    renderRoute(page);
+
+    expect(screen.getByRole("heading", { name: "JSON Formatter" })).toBeInTheDocument();
+    expect(screen.getByLabelText("JSON formatter workspace")).toBeInTheDocument();
+    expect(screen.getByText("On this device")).toBeInTheDocument();
+  });
+
+  it("generates route params and metadata from the registry", async () => {
+    expect(generateCategoryParams()).toEqual([{ categorySlug: "developer-tools" }]);
+    expect(generateToolParams()).toEqual([{ toolSlug: "json-formatter" }]);
+    await expect(
+      generateCategoryMetadata({
+        params: Promise.resolve({ categorySlug: "developer-tools" }),
+      }),
+    ).resolves.toMatchObject({ title: "Developer tools" });
+    await expect(
+      generateToolMetadata({
+        params: Promise.resolve({ toolSlug: "json-formatter" }),
+      }),
+    ).resolves.toMatchObject({ title: "JSON Formatter" });
+  });
+
+  it("renders reusable loading and recovery states", async () => {
+    const reset = vi.fn();
+    const user = (await import("@testing-library/user-event")).default.setup();
+
+    renderRoute(
+      <>
+        <ToolPageLoading />
+        <RouteError reset={reset} />
+      </>,
+    );
+
+    expect(screen.getAllByRole("main")).toHaveLength(2);
+    await user.click(screen.getByRole("button", { name: "Try again" }));
+    expect(reset).toHaveBeenCalledOnce();
+  });
+});

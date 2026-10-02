@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import type { PropsWithChildren, ReactNode } from "react";
 import { AppThemeProvider } from "@/components/providers/app-theme-provider";
 import { env } from "@/lib/env";
@@ -7,6 +7,11 @@ import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
   subsets: ["latin"],
 });
 
@@ -24,7 +29,7 @@ export const metadata: Metadata = {
  */
 export default function RootLayout({ children }: PropsWithChildren): ReactNode {
   return (
-    <html lang="en" className={geistSans.variable}>
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body>
         <AppThemeProvider>{children}</AppThemeProvider>
       </body>

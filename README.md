@@ -5,9 +5,24 @@ of fast, privacy-conscious online utilities. Tool processing is browser-first to
 protect user data, and keep infrastructure costs predictable.
 
 The product is currently in Phase 0: research and foundation. The application contains the
-tested platform scaffold, not the final brand, design system, navigation, or tool catalog.
+tested platform scaffold and first tool vertical slice, not the final brand or complete catalog.
 Shared scope and sequencing live in the parent [`docs`](../docs/) directory; check
 [`TRACKING.md`](../docs/TRACKING.md) before starting implementation work.
+
+## Available routes
+
+| Route | Purpose |
+|---|---|
+| `/` | Registry-backed product entry point |
+| `/categories/developer-tools` | Developer tool category and planned tool states |
+| `/tools/json-formatter` | Worker-based JSON formatting, minification, validation, and copy workflow |
+
+The tool and category pages are generated from the typed registry in `lib/tools/`. New tools
+should extend that registry and use the reusable tool-page shell rather than duplicating route
+layout and metadata logic.
+
+The JSON Formatter uses a Web Worker so parsing and serialization do not block the interface.
+Its current local-processing limit is five million characters.
 
 ## Technology
 

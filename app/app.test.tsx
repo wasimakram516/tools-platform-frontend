@@ -22,8 +22,8 @@ describe("application foundation", () => {
   it("renders the platform promise and pillars", () => {
     renderWithTheme(<HomePage />);
 
-    expect(screen.getByRole("heading", { name: /everything you need/i })).toBeInTheDocument();
-    expect(screen.getByText("Private")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /useful work/i })).toBeInTheDocument();
+    expect(screen.getByText("No file retention")).toBeInTheDocument();
   });
 
   it("renders an accessible loading state", () => {

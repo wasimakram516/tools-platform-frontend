@@ -16,7 +16,14 @@ export default defineConfig({
     setupFiles: ["./vitest.setup.ts"],
     coverage: {
       provider: "v8",
-      include: ["app/{page,loading,error,not-found}.tsx", "components/**/*.tsx", "theme/**/*.ts"],
+      include: [
+        "app/{page,loading,error,not-found}.tsx",
+        "app/categories/**/*.tsx",
+        "app/tools/**/*.tsx",
+        "components/**/*.tsx",
+        "lib/tools/**/*.ts",
+        "theme/**/*.ts",
+      ],
       thresholds: {
         branches: 70,
         functions: 70,
