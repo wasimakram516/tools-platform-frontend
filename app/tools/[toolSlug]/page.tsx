@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Base64EncoderDecoderTool } from "@/components/tools/base64-encoder-decoder-tool";
 import { JsonFormatterTool } from "@/components/tools/json-formatter-tool";
 import { ToolPageShell } from "@/components/tools/tool-page-shell";
+import { UrlEncoderDecoderTool } from "@/components/tools/url-encoder-decoder-tool";
 import {
   getRelatedTools,
   getToolBySlug,
@@ -18,6 +19,7 @@ interface ToolPageProps {
 const AVAILABLE_TOOL_COMPONENTS: Readonly<Record<string, ComponentType>> = {
   "DEV-01": JsonFormatterTool,
   "DEV-04": Base64EncoderDecoderTool,
+  "DEV-05": UrlEncoderDecoderTool,
 };
 
 /**

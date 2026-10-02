@@ -17,13 +17,15 @@ Shared scope and sequencing live in the parent [`docs`](../docs/) directory; che
 | `/categories/developer-tools` | Developer tool category and planned tool states |
 | `/tools/json-formatter` | Worker-based JSON formatting, minification, validation, and copy workflow |
 | `/tools/base64-encoder-decoder` | Worker-based UTF-8 Base64 encoding and decoding workflow |
+| `/tools/url-encoder-decoder` | Worker-based URL component encoding and decoding workflow |
 
 The tool and category pages are generated from the typed registry in `lib/tools/`. New tools
 should extend that registry and use the reusable tool-page shell rather than duplicating route
 layout and metadata logic.
 
-The JSON Formatter and Base64 Encoder / Decoder use Web Workers so large conversions do not
-block the interface. Their current local-processing limit is five million input characters.
+The JSON Formatter, Base64 Encoder / Decoder, and URL Encoder / Decoder use Web Workers so
+large conversions do not block the interface. Their current local-processing limit is five
+million input characters.
 
 ## Technology
 
