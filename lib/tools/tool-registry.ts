@@ -61,7 +61,7 @@ const TOOL_DEFINITIONS = [
     categoryId: "developer",
     keywords: ["uuid", "guid", "generator", "random"],
     processingMode: "browser",
-    status: "planned",
+    status: "available",
     relatedToolIds: ["DEV-02", "DEV-01"],
     badge: "#",
   },

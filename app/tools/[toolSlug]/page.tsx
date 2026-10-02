@@ -5,6 +5,7 @@ import { Base64EncoderDecoderTool } from "@/components/tools/base64-encoder-deco
 import { JsonFormatterTool } from "@/components/tools/json-formatter-tool";
 import { ToolPageShell } from "@/components/tools/tool-page-shell";
 import { UrlEncoderDecoderTool } from "@/components/tools/url-encoder-decoder-tool";
+import { UuidGeneratorTool } from "@/components/tools/uuid-generator-tool";
 import {
   getRelatedTools,
   getToolBySlug,
@@ -20,6 +21,7 @@ const AVAILABLE_TOOL_COMPONENTS: Readonly<Record<string, ComponentType>> = {
   "DEV-01": JsonFormatterTool,
   "DEV-04": Base64EncoderDecoderTool,
   "DEV-05": UrlEncoderDecoderTool,
+  "DEV-03": UuidGeneratorTool,
 };
 
 /**

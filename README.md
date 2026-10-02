@@ -18,6 +18,7 @@ Shared scope and sequencing live in the parent [`docs`](../docs/) directory; che
 | `/tools/json-formatter` | Worker-based JSON formatting, minification, validation, and copy workflow |
 | `/tools/base64-encoder-decoder` | Worker-based UTF-8 Base64 encoding and decoding workflow |
 | `/tools/url-encoder-decoder` | Worker-based URL component encoding and decoding workflow |
+| `/tools/uuid-generator` | Secure browser-native UUID v4 batch generator |
 
 The tool and category pages are generated from the typed registry in `lib/tools/`. New tools
 should extend that registry and use the reusable tool-page shell rather than duplicating route

@@ -39,8 +39,8 @@ describe("registry-backed routes", () => {
     renderRoute(page);
 
     expect(screen.getByRole("heading", { name: "Developer tools" })).toBeInTheDocument();
-    expect(screen.getAllByRole("link", { name: "Open tool" })).toHaveLength(3);
-    expect(screen.getAllByText("Planned")).toHaveLength(2);
+    expect(screen.getAllByRole("link", { name: "Open tool" })).toHaveLength(4);
+    expect(screen.getAllByText("Planned")).toHaveLength(1);
   });
 
   it("renders the JSON tool inside the reusable tool shell", async () => {
@@ -77,12 +77,24 @@ describe("registry-backed routes", () => {
     expect(screen.getByLabelText("URL encoder and decoder workspace")).toBeInTheDocument();
   });
 
+  it("renders the UUID tool inside the reusable tool shell", async () => {
+    const page = await ToolPage({
+      params: Promise.resolve({ toolSlug: "uuid-generator" }),
+    });
+
+    renderRoute(page);
+
+    expect(screen.getByRole("heading", { name: "UUID Generator" })).toBeInTheDocument();
+    expect(screen.getByLabelText("UUID generator workspace")).toBeInTheDocument();
+  });
+
   it("generates route params and metadata from the registry", async () => {
     expect(generateCategoryParams()).toEqual([{ categorySlug: "developer-tools" }]);
     expect(generateToolParams()).toEqual([
       { toolSlug: "json-formatter" },
       { toolSlug: "base64-encoder-decoder" },
       { toolSlug: "url-encoder-decoder" },
+      { toolSlug: "uuid-generator" },
     ]);
     await expect(
       generateCategoryMetadata({

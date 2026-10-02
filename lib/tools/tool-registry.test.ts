@@ -32,6 +32,7 @@ describe("tool registry", () => {
     expect(tool?.status).toBe("available");
     expect(getToolBySlug("base64-encoder-decoder")?.status).toBe("available");
     expect(getToolBySlug("url-encoder-decoder")?.status).toBe("available");
+    expect(getToolBySlug("uuid-generator")?.status).toBe("available");
     expect(tool ? getRelatedTools(tool).map((relatedTool) => relatedTool.id) : []).toEqual([
       "DEV-04",
       "DEV-05",
