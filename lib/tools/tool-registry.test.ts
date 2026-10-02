@@ -30,6 +30,7 @@ describe("tool registry", () => {
     const tool = getToolBySlug("json-formatter");
 
     expect(tool?.status).toBe("available");
+    expect(getToolBySlug("base64-encoder-decoder")?.status).toBe("available");
     expect(tool ? getRelatedTools(tool).map((relatedTool) => relatedTool.id) : []).toEqual([
       "DEV-04",
       "DEV-05",

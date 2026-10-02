@@ -1,6 +1,7 @@
 import type { ComponentType, ReactNode } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Base64EncoderDecoderTool } from "@/components/tools/base64-encoder-decoder-tool";
 import { JsonFormatterTool } from "@/components/tools/json-formatter-tool";
 import { ToolPageShell } from "@/components/tools/tool-page-shell";
 import {
@@ -16,6 +17,7 @@ interface ToolPageProps {
 
 const AVAILABLE_TOOL_COMPONENTS: Readonly<Record<string, ComponentType>> = {
   "DEV-01": JsonFormatterTool,
+  "DEV-04": Base64EncoderDecoderTool,
 };
 
 /**

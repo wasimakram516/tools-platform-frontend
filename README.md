@@ -5,7 +5,7 @@ of fast, privacy-conscious online utilities. Tool processing is browser-first to
 protect user data, and keep infrastructure costs predictable.
 
 The product is currently in Phase 0: research and foundation. The application contains the
-tested platform scaffold and first tool vertical slice, not the final brand or complete catalog.
+tested platform scaffold and initial tool vertical slices, not the final brand or complete catalog.
 Shared scope and sequencing live in the parent [`docs`](../docs/) directory; check
 [`TRACKING.md`](../docs/TRACKING.md) before starting implementation work.
 
@@ -16,13 +16,14 @@ Shared scope and sequencing live in the parent [`docs`](../docs/) directory; che
 | `/` | Registry-backed product entry point |
 | `/categories/developer-tools` | Developer tool category and planned tool states |
 | `/tools/json-formatter` | Worker-based JSON formatting, minification, validation, and copy workflow |
+| `/tools/base64-encoder-decoder` | Worker-based UTF-8 Base64 encoding and decoding workflow |
 
 The tool and category pages are generated from the typed registry in `lib/tools/`. New tools
 should extend that registry and use the reusable tool-page shell rather than duplicating route
 layout and metadata logic.
 
-The JSON Formatter uses a Web Worker so parsing and serialization do not block the interface.
-Its current local-processing limit is five million characters.
+The JSON Formatter and Base64 Encoder / Decoder use Web Workers so large conversions do not
+block the interface. Their current local-processing limit is five million input characters.
 
 ## Technology
 
@@ -85,10 +86,16 @@ generated `coverage/` directory is local test output and is excluded from Git.
 ```text
 app/                 App Router pages, layouts, and route-level states
 components/
-`-- providers/       Application-level React providers
-lib/                 Environment configuration and shared utilities
+|-- layout/          Shared site navigation and footer
+|-- providers/       Application-level React providers
+|-- states/          Reusable loading and error states
+`-- tools/           Tool workspaces and shared editor components
+lib/
+`-- tools/           Pure transformations, worker clients, and the tool registry
 public/              Static assets
 theme/               Typed Material UI theme configuration
+types/               Shared application and worker contracts
+workers/             Browser worker entry points for expensive processing
 ```
 
 As product work begins, shared UI, layouts, tool modules, workers, and registry code should be

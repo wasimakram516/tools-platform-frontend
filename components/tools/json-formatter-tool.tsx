@@ -11,11 +11,11 @@ import {
   Paper,
   Select,
   Stack,
-  TextField,
   Typography,
 } from "@mui/material";
 import type { ChangeEvent, ReactNode } from "react";
 import { useState } from "react";
+import { TextEditorPanel } from "@/components/tools/text-editor-panel";
 import {
   MAX_JSON_INPUT_CHARACTERS,
   type JsonIndentation,
@@ -25,125 +25,13 @@ import {
   transformJsonInWorker,
   type JsonTransformRunner,
 } from "@/lib/tools/json-formatter-worker";
+import { formatCharacterCount } from "@/lib/tools/text-metrics";
 
 const EXAMPLE_JSON = '{"project":"Tools Platform","private":true,"categories":["developer","image"]}';
-const CHARACTER_COUNT_FORMATTER = new Intl.NumberFormat("en-US");
-const CHARACTER_LIMIT_WARNING_RATIO = 0.8;
-
-interface JsonPanelProps {
-  characterLimit?: number;
-  label: string;
-  value: string;
-  onChange?: (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-  readOnly?: boolean;
-}
 
 interface JsonFormatterToolProps {
   maxCharacters?: number;
   transform?: JsonTransformRunner;
-}
-
-/**
- * Formats a character count with stable thousands separators.
- */
-function formatCharacterCount(count: number): string {
-  return CHARACTER_COUNT_FORMATTER.format(count);
-}
-
-/**
- * Renders one side of the JSON input/output workspace.
- */
-function JsonPanel({
-  characterLimit,
-  label,
-  value,
-  onChange,
-  readOnly = false,
-}: JsonPanelProps): ReactNode {
-  const characterCount = value.length;
-  const isOverLimit = characterLimit !== undefined && characterCount > characterLimit;
-  const isNearLimit =
-    characterLimit !== undefined && characterCount / characterLimit >= CHARACTER_LIMIT_WARNING_RATIO;
-  const remainingCharacters = characterLimit === undefined ? 0 : characterLimit - characterCount;
-  const usagePercentage =
-    characterLimit === undefined ? 0 : Math.min((characterCount / characterLimit) * 100, 100);
-  const countDescriptionId = `${label.toLowerCase()}-character-count`;
-  const limitStatus = isOverLimit
-    ? `${formatCharacterCount(Math.abs(remainingCharacters))} over limit`
-    : `${formatCharacterCount(remainingCharacters)} remaining`;
-
-  return (
-    <Box sx={{ minWidth: 0 }}>
-      <Stack
-        direction={{ xs: "column", sm: "row" }}
-        sx={{ alignItems: { sm: "baseline" }, gap: { xs: 0.25, sm: 1 }, justifyContent: "space-between", mb: 1 }}
-      >
-        <Typography
-          component="label"
-          htmlFor={label === "Input" ? "json-input" : "json-output"}
-          sx={{
-            fontFamily: "var(--font-geist-mono)",
-            fontSize: "0.72rem",
-            fontWeight: 700,
-            letterSpacing: "0.08em",
-            textTransform: "uppercase",
-          }}
-        >
-          {label}
-        </Typography>
-        <Typography
-          id={countDescriptionId}
-          color={isOverLimit ? "error.main" : isNearLimit ? "warning.dark" : "text.secondary"}
-          sx={{
-            fontFamily: "var(--font-geist-mono)",
-            fontSize: "0.74rem",
-            fontVariantNumeric: "tabular-nums",
-            fontWeight: isNearLimit ? 700 : 500,
-          }}
-        >
-          {formatCharacterCount(characterCount)} {characterCount === 1 ? "character" : "characters"}
-          {characterLimit === undefined ? "" : ` · ${limitStatus}`}
-        </Typography>
-      </Stack>
-      {characterLimit === undefined ? null : (
-        <LinearProgress
-          aria-label={`Input character limit: ${limitStatus}`}
-          color={isOverLimit ? "error" : isNearLimit ? "warning" : "primary"}
-          value={usagePercentage}
-          variant="determinate"
-          sx={{ height: 3, mb: 1 }}
-        />
-      )}
-      <TextField
-        id={label === "Input" ? "json-input" : "json-output"}
-        multiline
-        rows={16}
-        fullWidth
-        value={value}
-        onChange={onChange}
-        placeholder={readOnly ? "Formatted JSON appears here." : 'Paste JSON, for example {"ready":true}'}
-        slotProps={{
-          htmlInput: {
-            "aria-describedby": countDescriptionId,
-            "aria-invalid": isOverLimit || undefined,
-            readOnly,
-            spellCheck: false,
-            sx: {
-              fontFamily: "var(--font-geist-mono)",
-              fontSize: "0.86rem",
-              lineHeight: 1.65,
-            },
-          },
-        }}
-        sx={{
-          "& .MuiInputBase-root": {
-            alignItems: "start",
-            bgcolor: readOnly ? "grey.50" : "common.white",
-          },
-        }}
-      />
-    </Box>
-  );
 }
 
 /**
@@ -336,13 +224,21 @@ export function JsonFormatterTool({
             gridTemplateColumns: { xs: "1fr", xl: "repeat(2, minmax(0, 1fr))" },
           }}
         >
-          <JsonPanel
+          <TextEditorPanel
             characterLimit={maxCharacters}
+            id="json-input"
             label="Input"
             value={input}
             onChange={handleInputChange}
+            placeholder={'Paste JSON, for example {"ready":true}'}
           />
-          <JsonPanel label="Output" value={output} readOnly />
+          <TextEditorPanel
+            id="json-output"
+            label="Output"
+            value={output}
+            placeholder="Formatted JSON appears here."
+            readOnly
+          />
         </Box>
         <Stack
           direction={{ xs: "column", sm: "row" }}

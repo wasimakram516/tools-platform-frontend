@@ -39,11 +39,8 @@ describe("registry-backed routes", () => {
     renderRoute(page);
 
     expect(screen.getByRole("heading", { name: "Developer tools" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Open tool" })).toHaveAttribute(
-      "href",
-      "/tools/json-formatter",
-    );
-    expect(screen.getAllByText("Planned")).toHaveLength(4);
+    expect(screen.getAllByRole("link", { name: "Open tool" })).toHaveLength(2);
+    expect(screen.getAllByText("Planned")).toHaveLength(3);
   });
 
   it("renders the JSON tool inside the reusable tool shell", async () => {
@@ -55,12 +52,26 @@ describe("registry-backed routes", () => {
 
     expect(screen.getByRole("heading", { name: "JSON Formatter" })).toBeInTheDocument();
     expect(screen.getByLabelText("JSON formatter workspace")).toBeInTheDocument();
-    expect(screen.getByText("On this device")).toBeInTheDocument();
+    expect(screen.getByText("On this device · background worker")).toBeInTheDocument();
+  });
+
+  it("renders the Base64 tool inside the reusable tool shell", async () => {
+    const page = await ToolPage({
+      params: Promise.resolve({ toolSlug: "base64-encoder-decoder" }),
+    });
+
+    renderRoute(page);
+
+    expect(screen.getByRole("heading", { name: "Base64 Encoder / Decoder" })).toBeInTheDocument();
+    expect(screen.getByLabelText("Base64 encoder and decoder workspace")).toBeInTheDocument();
   });
 
   it("generates route params and metadata from the registry", async () => {
     expect(generateCategoryParams()).toEqual([{ categorySlug: "developer-tools" }]);
-    expect(generateToolParams()).toEqual([{ toolSlug: "json-formatter" }]);
+    expect(generateToolParams()).toEqual([
+      { toolSlug: "json-formatter" },
+      { toolSlug: "base64-encoder-decoder" },
+    ]);
     await expect(
       generateCategoryMetadata({
         params: Promise.resolve({ categorySlug: "developer-tools" }),
