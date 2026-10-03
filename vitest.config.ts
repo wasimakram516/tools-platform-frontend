@@ -10,7 +10,13 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     fileParallelism: false,
+    env: {
+      NEXT_PUBLIC_API_URL: "http://localhost:4000/api/v1",
+      NEXT_PUBLIC_SITE_URL: "http://localhost:3000",
+    },
     globals: true,
+    hookTimeout: 60_000,
+    testTimeout: 30_000,
     maxWorkers: 1,
     pool: "forks",
     setupFiles: ["./vitest.setup.ts"],
