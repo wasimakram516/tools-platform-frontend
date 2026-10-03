@@ -1,32 +1,41 @@
 import InitColorSchemeScript from "@mui/material/InitColorSchemeScript";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Comfortaa, Figtree, JetBrains_Mono } from "next/font/google";
 import type { PropsWithChildren, ReactNode } from "react";
 import { AppThemeProvider } from "@/components/providers/app-theme-provider";
 import { env } from "@/lib/env";
-import { SITE_DESCRIPTION } from "@/lib/seo";
+import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/seo";
+import { BRAND_DESCRIPTOR } from "@/lib/site-config";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const headingFont = Comfortaa({
+  variable: "--font-heading",
   subsets: ["latin"],
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const bodyFont = Figtree({
+  variable: "--font-body",
   subsets: ["latin"],
+  display: "swap",
+});
+
+const monoFont = JetBrains_Mono({
+  variable: "--font-mono",
+  subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_SITE_URL),
   title: {
-    default: "Tools Platform",
-    template: "%s | Tools Platform",
+    default: `${SITE_NAME}: ${BRAND_DESCRIPTOR}`,
+    template: `%s | ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
-  applicationName: "Tools Platform",
+  applicationName: SITE_NAME,
   robots: { follow: true, index: true },
-  openGraph: { siteName: "Tools Platform", type: "website" },
+  openGraph: { siteName: SITE_NAME, type: "website" },
 };
 
 /**
@@ -34,7 +43,7 @@ export const metadata: Metadata = {
  */
 export default function RootLayout({ children }: PropsWithChildren): ReactNode {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${headingFont.variable} ${bodyFont.variable} ${monoFont.variable}`} suppressHydrationWarning>
       <body>
         <InitColorSchemeScript attribute="data" defaultMode="light" />
         <AppThemeProvider>{children}</AppThemeProvider>

@@ -5,10 +5,12 @@ import type { ReactNode } from "react";
 import { PageFrame } from "@/components/layout/page-frame";
 import { JsonLd } from "@/components/seo/json-ld";
 import { HiddenHeading } from "@/components/ui/hidden-heading";
+import { CardGrid } from "@/components/ui/card-grid";
 import { NextLink } from "@/components/ui/next-link";
 import { ToolCard } from "@/components/ui/tool-card";
 import { ToolIcon } from "@/components/ui/tool-icon";
 import { buildPageMetadata, SITE_DESCRIPTION, websiteJsonLd } from "@/lib/seo";
+import { BRAND_DESCRIPTOR, BRAND_TAGLINE_BEATS } from "@/lib/site-config";
 import { getToolCategories, getTools } from "@/lib/tools/tool-registry";
 
 export const metadata: Metadata = buildPageMetadata({
@@ -20,6 +22,7 @@ export const metadata: Metadata = buildPageMetadata({
  * Renders the product entry point: a short promise followed directly by the tool grid.
  */
 export default function HomePage(): ReactNode {
+  const [firstBeat, secondBeat] = BRAND_TAGLINE_BEATS;
   const availableTools = getTools().filter((tool) => tool.status === "available");
   const plannedCategories = getToolCategories().filter((category) => category.status === "planned");
 
@@ -27,8 +30,11 @@ export default function HomePage(): ReactNode {
     <PageFrame>
       <JsonLd data={websiteJsonLd()} />
       <Container maxWidth="lg" sx={{ pb: { xs: 4, md: 6 }, pt: { xs: 7, md: 11 }, textAlign: "center" }}>
-        <Typography component="h1" variant="h1" sx={{ mx: "auto", maxWidth: 820 }}>
-          Free tools for everyday work.
+        <Typography component="h1" variant="h1" sx={{ mx: "auto", maxWidth: 1100, whiteSpace: { md: "nowrap" } }}>
+          {firstBeat}{" "}
+          <Box component="span" sx={{ color: "primary.main", display: { xs: "block", md: "inline" } }}>
+            {secondBeat}
+          </Box>
         </Typography>
         <Typography
           color="text.secondary"
@@ -40,7 +46,7 @@ export default function HomePage(): ReactNode {
             maxWidth: 580,
           }}
         >
-          Fast, simple utilities for developers, writers, and everyone in between. No signup, no
+          {BRAND_DESCRIPTOR} From developers to writers and everyone in between. No signup, no
           clutter.
         </Typography>
         <Typography
@@ -58,17 +64,11 @@ export default function HomePage(): ReactNode {
         sx={{ pb: { xs: 6, md: 8 } }}
       >
         <HiddenHeading>Available tools</HiddenHeading>
-        <Box
-          sx={{
-            display: "grid",
-            gap: 2.5,
-            gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)" },
-          }}
-        >
+        <CardGrid preset="tools">
           {availableTools.map((tool) => (
             <ToolCard key={tool.id} tool={tool} />
           ))}
-        </Box>
+        </CardGrid>
       </Container>
 
       <Box sx={{ borderTop: "1px solid", borderColor: "divider" }}>

@@ -35,7 +35,7 @@ describe("page metadata", () => {
     const metadata = buildPageMetadata({ description: "Home.", path: "/" });
 
     expect(metadata).not.toHaveProperty("title");
-    expect(metadata.openGraph).toMatchObject({ title: "Tools Platform" });
+    expect(metadata.openGraph).toMatchObject({ title: "QuicklySorted" });
   });
 
   it("resolves absolute URLs on the configured site origin", () => {

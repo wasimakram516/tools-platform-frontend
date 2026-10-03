@@ -1,6 +1,6 @@
-# Tools Platform Frontend
+# QuicklySorted Frontend
 
-Next.js application foundation for the Wisemen Soft Tools Platform, a consumer-facing catalog
+Next.js application foundation for QuicklySorted, a Wisemen Soft product and consumer-facing catalog
 of fast, privacy-conscious online utilities. Tool processing is browser-first to reduce latency,
 protect user data, and keep infrastructure costs predictable.
 

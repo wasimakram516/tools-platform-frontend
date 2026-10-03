@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { env } from "@/lib/env";
+import { BRAND_NAME } from "@/lib/site-config";
 import type { ToolCategory, ToolDefinition } from "@/types/tool";
 
-export const SITE_NAME = "Tools Platform";
-export const SITE_DESCRIPTION = "Free online tools for everyday work: fast, simple, and no signup required.";
+export const SITE_NAME = BRAND_NAME;
+export const SITE_DESCRIPTION = "Free online tools for everyday tasks. Simple, clear, and no signup required.";
 
 type JsonLdObject = Record<string, unknown>;
 

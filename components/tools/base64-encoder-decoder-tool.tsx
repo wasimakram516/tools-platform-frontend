@@ -26,7 +26,7 @@ const BASE64_DIRECTIONS: readonly [
     inputPlaceholder: "Enter or paste text to encode.",
     outputLabel: "Base64 output",
     outputPlaceholder: "Encoded Base64 appears here.",
-    example: "Tools Platform keeps this text on your device. ✓",
+    example: "QuicklySorted keeps this text on your device. ✓",
     processingMessage: "Encoding text locally…",
     successVerb: "Encoded",
   },

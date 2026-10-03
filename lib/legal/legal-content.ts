@@ -1,4 +1,4 @@
-import { COMPANY_NAME, COMPANY_URL } from "@/lib/site-config";
+import { BRAND_NAME, COMPANY_NAME, COMPANY_URL } from "@/lib/site-config";
 
 export const LEGAL_LAST_UPDATED = "3 October 2026";
 
@@ -25,8 +25,8 @@ const CONTACT_SECTION: LegalSection = {
 
 export const PRIVACY_POLICY: LegalDocumentContent = {
   description:
-    "How Tools Platform handles your data: tool input, browser storage, server logs, and your choices.",
-  intro: `Tools Platform is operated by ${COMPANY_NAME} ("we", "us"). This policy explains what data the site handles and why. We aim to collect as little as possible.`,
+    `How ${BRAND_NAME} handles your data: tool input, browser storage, server logs, and your choices.`,
+  intro: `${BRAND_NAME} is operated by ${COMPANY_NAME} ("we", "us"). This policy explains what data the site handles and why. We aim to collect as little as possible.`,
   sections: [
     {
       heading: "Your tool input",
@@ -38,7 +38,7 @@ export const PRIVACY_POLICY: LegalDocumentContent = {
     {
       heading: "Accounts",
       paragraphs: [
-        "You do not need an account to use Tools Platform, and we do not ask for your name, email address, or payment details.",
+        `You do not need an account to use ${BRAND_NAME}, and we do not ask for your name, email address, or payment details.`,
       ],
     },
     {
@@ -63,7 +63,7 @@ export const PRIVACY_POLICY: LegalDocumentContent = {
     {
       heading: "Children",
       paragraphs: [
-        "Tools Platform is a general-purpose utility site and is not directed at children under 13. We do not knowingly collect personal information from children.",
+        `${BRAND_NAME} is a general-purpose utility site and is not directed at children under 13. We do not knowingly collect personal information from children.`,
       ],
     },
     {
@@ -89,13 +89,13 @@ export const PRIVACY_POLICY: LegalDocumentContent = {
 
 export const TERMS_OF_USE: LegalDocumentContent = {
   description:
-    "The terms for using Tools Platform: acceptable use, no warranty, liability, and governing law.",
-  intro: `These terms govern your use of Tools Platform, operated by ${COMPANY_NAME} ("we", "us"). By using the site you agree to them.`,
+    `The terms for using ${BRAND_NAME}: acceptable use, no warranty, liability, and governing law.`,
+  intro: `These terms govern your use of ${BRAND_NAME}, operated by ${COMPANY_NAME} ("we", "us"). By using the site you agree to them.`,
   sections: [
     {
       heading: "The service",
       paragraphs: [
-        "Tools Platform provides free online utilities. We may add, change, or remove tools and features at any time, and we do not guarantee that any tool will always be available.",
+        `${BRAND_NAME} provides free online utilities. We may add, change, or remove tools and features at any time, and we do not guarantee that any tool will always be available.`,
       ],
     },
     {
