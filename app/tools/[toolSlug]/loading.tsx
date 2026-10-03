@@ -1,2 +1,1 @@
-export { ToolPageLoading as default } from "@/components/states/tool-page-loading";
-
+export { ToolLoading as default } from "@/components/states/loading-skeletons";

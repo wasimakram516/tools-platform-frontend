@@ -1,5 +1,6 @@
 "use client";
 
+import RefreshIcon from "@mui/icons-material/Refresh";
 import { Alert, Button, Container, Stack, Typography } from "@mui/material";
 import type { ReactNode } from "react";
 
@@ -19,9 +20,9 @@ export function RouteError({ reset }: RouteErrorProps): ReactNode {
             This workspace could not load
           </Typography>
           <Typography>
-            Try loading it again. Your tool input stays in this browser and was not uploaded.
+            Try loading it again. If the problem continues, reload the page.
           </Typography>
-          <Button onClick={reset} variant="contained">
+          <Button onClick={reset} startIcon={<RefreshIcon />} variant="contained">
             Try again
           </Button>
         </Stack>
@@ -29,4 +30,3 @@ export function RouteError({ reset }: RouteErrorProps): ReactNode {
     </Container>
   );
 }
-

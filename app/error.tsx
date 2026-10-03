@@ -19,7 +19,7 @@ export default function ErrorPage({ reset }: ErrorPageProps): ReactNode {
           <Typography component="h1" variant="h6">
             Something went wrong
           </Typography>
-          <Typography>Please try again. No file or tool input has been retained.</Typography>
+          <Typography>Please try again. If the problem continues, reload the page.</Typography>
           <Button onClick={reset} variant="contained">
             Try again
           </Button>
