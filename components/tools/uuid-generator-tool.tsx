@@ -1,19 +1,13 @@
 "use client";
 
-import {
-  Alert,
-  Box,
-  Button,
-  FormControlLabel,
-  Paper,
-  Stack,
-  Switch,
-  TextField,
-  Typography,
-} from "@mui/material";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import RefreshIcon from "@mui/icons-material/Refresh";
+import { Alert, Button, FormControlLabel, Stack, Switch, TextField } from "@mui/material";
 import type { ChangeEvent, ReactNode } from "react";
 import { useState } from "react";
 import { TextEditorPanel } from "@/components/tools/text-editor-panel";
+import { ToolFooter, ToolWorkspace } from "@/components/tools/tool-workspace";
 import {
   generateUuidBatch,
   MAX_UUID_BATCH_SIZE,
@@ -111,36 +105,24 @@ export function UuidGeneratorTool({
   }
 
   return (
-    <Paper
-      component="section"
-      aria-label="UUID generator workspace"
-      elevation={0}
-      sx={{ border: "1px solid", borderColor: "divider", overflow: "hidden" }}
-    >
-      <Stack
-        direction={{ xs: "column", md: "row" }}
-        sx={{
-          alignItems: { xs: "stretch", md: "center" },
-          bgcolor: "grey.50",
-          borderBottom: "1px solid",
-          borderColor: "divider",
-          gap: 1.5,
-          justifyContent: "space-between",
-          p: 2,
-        }}
-      >
-        <Stack direction="row" useFlexGap sx={{ flexWrap: "wrap", gap: 1 }}>
-          <Button onClick={handleGenerate} variant="contained">
+    <ToolWorkspace
+      actions={
+        <>
+          <Button onClick={handleGenerate} startIcon={<RefreshIcon />} variant="contained">
             Generate UUIDs
           </Button>
-          <Button disabled={!output} onClick={() => void handleCopy()} variant="outlined">
+          <Button
+            disabled={!output}
+            onClick={() => void handleCopy()}
+            startIcon={<ContentCopyIcon />}
+            variant="outlined"
+          >
             Copy all
           </Button>
-          <Button onClick={handleClear} color="inherit">
-            Clear
-          </Button>
-        </Stack>
-
+        </>
+      }
+      label="UUID generator workspace"
+      options={
         <Stack direction="row" sx={{ alignItems: "center", gap: 1.5 }}>
           <TextField
             id="uuid-quantity"
@@ -164,32 +146,36 @@ export function UuidGeneratorTool({
             label="Uppercase"
           />
         </Stack>
-      </Stack>
-
-      <Box sx={{ p: { xs: 2, md: 2.5 } }}>
-        {errorMessage ? (
-          <Alert severity="error" sx={{ mb: 2 }}>
-            {errorMessage}
-          </Alert>
-        ) : null}
-
-        <TextEditorPanel
-          id="uuid-output"
-          label="Generated UUIDs"
-          value={output}
-          placeholder="Generated UUID v4 values appear here, one per line."
-          readOnly
-        />
-
-        <Typography
-          role="status"
-          aria-live="polite"
-          color="text.secondary"
-          sx={{ fontSize: "0.82rem", mt: 2 }}
+      }
+      secondaryActions={
+        <Button
+          color="inherit"
+          onClick={handleClear}
+          size="small"
+          startIcon={<DeleteOutlinedIcon />}
         >
-          {statusMessage || `Generate between ${MIN_UUID_BATCH_SIZE} and ${MAX_UUID_BATCH_SIZE} secure UUID v4 values.`}
-        </Typography>
-      </Box>
-    </Paper>
+          Clear
+        </Button>
+      }
+    >
+      {errorMessage ? (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {errorMessage}
+        </Alert>
+      ) : null}
+      <TextEditorPanel
+        id="uuid-output"
+        label="Generated UUIDs"
+        value={output}
+        placeholder="Generated UUID v4 values appear here, one per line."
+        readOnly
+      />
+      <ToolFooter
+        message={
+          statusMessage ||
+          `Generate between ${MIN_UUID_BATCH_SIZE} and ${MAX_UUID_BATCH_SIZE} secure UUID v4 values.`
+        }
+      />
+    </ToolWorkspace>
   );
 }

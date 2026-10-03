@@ -1,9 +1,14 @@
 "use client";
 
-import { Alert, Box, Button, Chip, Paper, Stack, Typography } from "@mui/material";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import LightbulbOutlinedIcon from "@mui/icons-material/LightbulbOutlined";
+import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
+import { Alert, Box, Button, Chip, Stack } from "@mui/material";
 import type { ChangeEvent, ReactNode } from "react";
 import { useState } from "react";
 import { TextEditorPanel } from "@/components/tools/text-editor-panel";
+import { ToolFooter, ToolWorkspace } from "@/components/tools/tool-workspace";
 import {
   decodeJwt,
   MAX_JWT_INPUT_CHARACTERS,
@@ -113,126 +118,119 @@ export function JwtDecoderTool({
     : null;
 
   return (
-    <Paper
-      component="section"
-      aria-label="JWT decoder workspace"
-      elevation={0}
-      sx={{ border: "1px solid", borderColor: "divider", overflow: "hidden" }}
-    >
-      <Stack
-        direction={{ xs: "column", md: "row" }}
-        sx={{
-          alignItems: { xs: "stretch", md: "center" },
-          bgcolor: "grey.50",
-          borderBottom: "1px solid",
-          borderColor: "divider",
-          gap: 1.5,
-          justifyContent: "space-between",
-          p: 2,
-        }}
-      >
-        <Stack direction="row" useFlexGap sx={{ flexWrap: "wrap", gap: 1 }}>
-          <Button disabled={isOverLimit} onClick={handleDecode} variant="contained">
-            Decode token
-          </Button>
-          <Button onClick={handleLoadExample} variant="outlined">
+    <ToolWorkspace
+      actions={
+        <Button
+          disabled={isOverLimit}
+          onClick={handleDecode}
+          startIcon={<LockOpenOutlinedIcon />}
+          variant="contained"
+        >
+          Decode token
+        </Button>
+      }
+      label="JWT decoder workspace"
+      secondaryActions={
+        <>
+          <Button
+            color="inherit"
+            onClick={handleLoadExample}
+            size="small"
+            startIcon={<LightbulbOutlinedIcon />}
+          >
             Load example
           </Button>
-          <Button color="inherit" onClick={handleClear}>
+          <Button
+            color="inherit"
+            onClick={handleClear}
+            size="small"
+            startIcon={<DeleteOutlinedIcon />}
+          >
             Clear
           </Button>
-        </Stack>
-
-        {output ? (
-          <Stack direction="row" useFlexGap sx={{ flexWrap: "wrap", gap: 1 }}>
-            <Chip label={`Algorithm: ${output.algorithm}`} size="small" variant="outlined" />
-            <Chip
-              color={output.hasSignature ? "warning" : "default"}
-              label={output.hasSignature ? "Signature present" : "No signature"}
-              size="small"
-              variant="outlined"
-            />
-          </Stack>
-        ) : null}
-      </Stack>
-
-      <Box sx={{ p: { xs: 2, md: 2.5 } }}>
-        <Alert severity="warning" sx={{ mb: 2 }}>
-          Decoding does not verify this token&apos;s signature or authenticity. Treat all decoded
-          claims as untrusted.
+        </>
+      }
+    >
+      <Alert severity="warning" sx={{ mb: 2 }}>
+        Decoding does not verify this token&apos;s signature or authenticity. Treat all decoded
+        claims as untrusted.
+      </Alert>
+      {limitError || errorMessage ? (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {limitError ?? errorMessage}
         </Alert>
-
-        {limitError || errorMessage ? (
-          <Alert severity="error" sx={{ mb: 2 }}>
-            {limitError ?? errorMessage}
-          </Alert>
-        ) : null}
-
-        <TextEditorPanel
-          characterLimit={maxCharacters}
-          id="jwt-input"
-          label="JWT input"
-          onChange={handleInputChange}
-          placeholder="Paste a compact JWT in header.payload.signature format."
-          value={input}
-        />
-
-        <Box
-          sx={{
-            display: "grid",
-            gap: 2,
-            gridTemplateColumns: { xs: "1fr", lg: "repeat(2, minmax(0, 1fr))" },
-            mt: 2.5,
-          }}
-        >
-          <Box>
-            <TextEditorPanel
-              id="jwt-header-output"
-              label="Decoded header"
-              placeholder="Decoded JWT header appears here."
-              readOnly
-              value={output?.headerJson ?? ""}
-            />
-            <Button
-              disabled={!output}
-              onClick={() => void handleCopy(output?.headerJson ?? "", "Header")}
-              size="small"
-              sx={{ mt: 1 }}
-              variant="outlined"
-            >
-              Copy header
-            </Button>
-          </Box>
-
-          <Box>
-            <TextEditorPanel
-              id="jwt-payload-output"
-              label="Decoded payload"
-              placeholder="Decoded JWT payload appears here."
-              readOnly
-              value={output?.payloadJson ?? ""}
-            />
-            <Button
-              disabled={!output}
-              onClick={() => void handleCopy(output?.payloadJson ?? "", "Payload")}
-              size="small"
-              sx={{ mt: 1 }}
-              variant="outlined"
-            >
-              Copy payload
-            </Button>
-          </Box>
+      ) : null}
+      <TextEditorPanel
+        characterLimit={maxCharacters}
+        id="jwt-input"
+        label="JWT input"
+        onChange={handleInputChange}
+        placeholder="Paste a compact JWT in header.payload.signature format."
+        value={input}
+      />
+      {output ? (
+        <Stack direction="row" useFlexGap sx={{ flexWrap: "wrap", gap: 1, mt: 2.5 }}>
+          <Chip label={`Algorithm: ${output.algorithm}`} size="small" variant="outlined" />
+          <Chip
+            color={output.hasSignature ? "warning" : "default"}
+            label={output.hasSignature ? "Signature present" : "No signature"}
+            size="small"
+            variant="outlined"
+          />
+        </Stack>
+      ) : null}
+      <Box
+        sx={{
+          display: "grid",
+          gap: 2,
+          gridTemplateColumns: { xs: "1fr", lg: "repeat(2, minmax(0, 1fr))" },
+          mt: 2.5,
+        }}
+      >
+        <Box>
+          <TextEditorPanel
+            id="jwt-header-output"
+            label="Decoded header"
+            placeholder="Decoded JWT header appears here."
+            readOnly
+            value={output?.headerJson ?? ""}
+          />
+          <Button
+            disabled={!output}
+            onClick={() => void handleCopy(output?.headerJson ?? "", "Header")}
+            size="small"
+            startIcon={<ContentCopyIcon />}
+            sx={{ mt: 1 }}
+            variant="outlined"
+          >
+            Copy header
+          </Button>
         </Box>
-
-        <Typography
-          aria-live="polite"
-          color="text.secondary"
-          role="status"
-          sx={{ fontSize: "0.82rem", mt: 2 }}
-        >
-          {statusMessage || "JWT content stays in this browser. No signature verification is performed."}
-        </Typography>
+        <Box>
+          <TextEditorPanel
+            id="jwt-payload-output"
+            label="Decoded payload"
+            placeholder="Decoded JWT payload appears here."
+            readOnly
+            value={output?.payloadJson ?? ""}
+          />
+          <Button
+            disabled={!output}
+            onClick={() => void handleCopy(output?.payloadJson ?? "", "Payload")}
+            size="small"
+            startIcon={<ContentCopyIcon />}
+            sx={{ mt: 1 }}
+            variant="outlined"
+          >
+            Copy payload
+          </Button>
+        </Box>
       </Box>
-    </Paper>
+      <ToolFooter
+        message={
+          statusMessage || "JWT content stays in this browser. No signature verification is performed."
+        }
+      />
+    </ToolWorkspace>
   );
 }

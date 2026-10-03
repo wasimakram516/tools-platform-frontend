@@ -1,5 +1,10 @@
 "use client";
 
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import FormatAlignLeftIcon from "@mui/icons-material/FormatAlignLeft";
+import LightbulbOutlinedIcon from "@mui/icons-material/LightbulbOutlined";
+import UnfoldLessIcon from "@mui/icons-material/UnfoldLess";
 import {
   Alert,
   Box,
@@ -8,14 +13,12 @@ import {
   InputLabel,
   LinearProgress,
   MenuItem,
-  Paper,
   Select,
-  Stack,
-  Typography,
 } from "@mui/material";
 import type { ChangeEvent, ReactNode } from "react";
 import { useState } from "react";
 import { TextEditorPanel } from "@/components/tools/text-editor-panel";
+import { ToolFooter, ToolWorkspace } from "@/components/tools/tool-workspace";
 import {
   MAX_JSON_INPUT_CHARACTERS,
   type JsonIndentation,
@@ -154,28 +157,13 @@ export function JsonFormatterTool({
   }
 
   return (
-    <Paper
-      component="section"
-      aria-label="JSON formatter workspace"
-      elevation={0}
-      sx={{ border: "1px solid", borderColor: "divider", overflow: "hidden" }}
-    >
-      <Stack
-        direction={{ xs: "column", md: "row" }}
-        sx={{
-          alignItems: { xs: "stretch", md: "center" },
-          bgcolor: "grey.50",
-          borderBottom: "1px solid",
-          borderColor: "divider",
-          gap: 1,
-          justifyContent: "space-between",
-          p: 2,
-        }}
-      >
-        <Stack direction="row" useFlexGap sx={{ flexWrap: "wrap", gap: 1 }}>
+    <ToolWorkspace
+      actions={
+        <>
           <Button
             disabled={isProcessing || isInputOverLimit}
             onClick={() => void runTransform("format")}
+            startIcon={<FormatAlignLeftIcon />}
             variant="contained"
           >
             {isProcessing ? "Processing…" : "Format JSON"}
@@ -183,17 +171,15 @@ export function JsonFormatterTool({
           <Button
             disabled={isProcessing || isInputOverLimit}
             onClick={() => void runTransform("minify")}
+            startIcon={<UnfoldLessIcon />}
             variant="outlined"
           >
             Minify
           </Button>
-          <Button disabled={isProcessing} onClick={handleLoadExample} color="inherit">
-            Load example
-          </Button>
-          <Button disabled={isProcessing} onClick={handleClear} color="inherit">
-            Clear
-          </Button>
-        </Stack>
+        </>
+      }
+      label="JSON formatter workspace"
+      options={
         <FormControl size="small" sx={{ minWidth: 126 }}>
           <InputLabel id="indentation-label">Indent</InputLabel>
           <Select
@@ -207,51 +193,72 @@ export function JsonFormatterTool({
             <MenuItem value={4}>4 spaces</MenuItem>
           </Select>
         </FormControl>
-      </Stack>
-
-      {isProcessing ? <LinearProgress aria-label="Processing JSON" /> : null}
-
-      <Box sx={{ p: { xs: 2, md: 2.5 } }}>
-        {visibleErrorMessage ? (
-          <Alert severity="error" sx={{ mb: 2 }}>
-            {visibleErrorMessage}
-          </Alert>
-        ) : null}
-        <Box
-          sx={{
-            display: "grid",
-            gap: 2,
-            gridTemplateColumns: { xs: "1fr", xl: "repeat(2, minmax(0, 1fr))" },
-          }}
-        >
-          <TextEditorPanel
-            characterLimit={maxCharacters}
-            id="json-input"
-            label="Input"
-            value={input}
-            onChange={handleInputChange}
-            placeholder={'Paste JSON, for example {"ready":true}'}
-          />
-          <TextEditorPanel
-            id="json-output"
-            label="Output"
-            value={output}
-            placeholder="Formatted JSON appears here."
-            readOnly
-          />
-        </Box>
-        <Stack
-          direction={{ xs: "column", sm: "row" }}
-          sx={{ alignItems: { sm: "center" }, gap: 1.5, justifyContent: "space-between", mt: 2 }}
-        >
-          <Typography role="status" aria-live="polite" color="text.secondary" sx={{ fontSize: "0.82rem" }}>
-            {statusMessage || "Paste JSON above, then format or minify it locally in your browser."}
-          </Typography>
-          <Button disabled={!output} onClick={handleCopy} variant="outlined">
-            Copy result
+      }
+      secondaryActions={
+        <>
+          <Button
+            color="inherit"
+            disabled={isProcessing}
+            onClick={handleLoadExample}
+            size="small"
+            startIcon={<LightbulbOutlinedIcon />}
+          >
+            Load example
           </Button>
-        </Stack>
+          <Button
+            color="inherit"
+            disabled={isProcessing}
+            onClick={handleClear}
+            size="small"
+            startIcon={<DeleteOutlinedIcon />}
+          >
+            Clear
+          </Button>
+        </>
+      }
+    >
+      {isProcessing ? <LinearProgress aria-label="Processing JSON" sx={{ mb: 2 }} /> : null}
+      {visibleErrorMessage ? (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {visibleErrorMessage}
+        </Alert>
+      ) : null}
+      <Box
+        sx={{
+          display: "grid",
+          gap: 2,
+          gridTemplateColumns: { xs: "1fr", xl: "repeat(2, minmax(0, 1fr))" },
+        }}
+      >
+        <TextEditorPanel
+          characterLimit={maxCharacters}
+          id="json-input"
+          label="Input"
+          value={input}
+          onChange={handleInputChange}
+          placeholder={'Paste JSON, for example {"ready":true}'}
+        />
+        <TextEditorPanel
+          id="json-output"
+          label="Output"
+          loading={isProcessing}
+          value={output}
+          placeholder="Formatted JSON appears here."
+          readOnly
+        />
       </Box>
-    </Paper>
+      <ToolFooter
+        message={statusMessage || "Paste JSON above, then format or minify it locally in your browser."}
+      >
+        <Button
+          disabled={!output}
+          onClick={handleCopy}
+          startIcon={<ContentCopyIcon />}
+          variant="outlined"
+        >
+          Copy result
+        </Button>
+      </ToolFooter>
+    </ToolWorkspace>
   );
 }

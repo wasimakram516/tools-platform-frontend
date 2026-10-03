@@ -1,19 +1,22 @@
 "use client";
 
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import LightbulbOutlinedIcon from "@mui/icons-material/LightbulbOutlined";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
 import {
   Alert,
   Box,
   Button,
   LinearProgress,
-  Paper,
-  Stack,
   ToggleButton,
   ToggleButtonGroup,
-  Typography,
 } from "@mui/material";
 import type { ChangeEvent, MouseEvent, ReactNode } from "react";
 import { useState } from "react";
 import { TextEditorPanel } from "@/components/tools/text-editor-panel";
+import { ToolFooter, ToolWorkspace } from "@/components/tools/tool-workspace";
 import { formatCharacterCount } from "@/lib/tools/text-metrics";
 
 export interface TextTransformSuccess {
@@ -190,43 +193,19 @@ export function BidirectionalTextTool<Mode extends string>({
   }
 
   return (
-    <Paper
-      component="section"
-      aria-label={workspaceLabel}
-      elevation={0}
-      sx={{ border: "1px solid", borderColor: "divider", overflow: "hidden" }}
-    >
-      <Stack
-        direction={{ xs: "column", md: "row" }}
-        sx={{
-          alignItems: { xs: "stretch", md: "center" },
-          bgcolor: "grey.50",
-          borderBottom: "1px solid",
-          borderColor: "divider",
-          gap: 1.5,
-          justifyContent: "space-between",
-          p: 2,
-        }}
-      >
-        <Stack direction="row" useFlexGap sx={{ flexWrap: "wrap", gap: 1 }}>
-          <Button
-            disabled={isProcessing || isInputOverLimit}
-            onClick={() => void handleTransform()}
-            variant="contained"
-          >
-            {isProcessing ? "Processing…" : activeDirection.actionLabel}
-          </Button>
-          <Button disabled={isProcessing} onClick={handleLoadExample} color="inherit">
-            Load example
-          </Button>
-          <Button disabled={isProcessing || !output} onClick={handleUseResult} color="inherit">
-            Use result as input
-          </Button>
-          <Button disabled={isProcessing} onClick={handleClear} color="inherit">
-            Clear
-          </Button>
-        </Stack>
-
+    <ToolWorkspace
+      actions={
+        <Button
+          disabled={isProcessing || isInputOverLimit}
+          onClick={() => void handleTransform()}
+          startIcon={<PlayArrowIcon />}
+          variant="contained"
+        >
+          {isProcessing ? "Processing…" : activeDirection.actionLabel}
+        </Button>
+      }
+      label={workspaceLabel}
+      options={
         <ToggleButtonGroup
           aria-label={`${workspaceLabel} direction`}
           color="primary"
@@ -241,53 +220,79 @@ export function BidirectionalTextTool<Mode extends string>({
             </ToggleButton>
           ))}
         </ToggleButtonGroup>
-      </Stack>
-
-      {isProcessing ? <LinearProgress aria-label={progressLabel} /> : null}
-
-      <Box sx={{ p: { xs: 2, md: 2.5 } }}>
-        {visibleErrorMessage ? (
-          <Alert severity="error" sx={{ mb: 2 }}>
-            {visibleErrorMessage}
-          </Alert>
-        ) : null}
-
-        <Box
-          sx={{
-            display: "grid",
-            gap: 2,
-            gridTemplateColumns: { xs: "1fr", xl: "repeat(2, minmax(0, 1fr))" },
-          }}
-        >
-          <TextEditorPanel
-            characterLimit={maxCharacters}
-            id={`${inputIdPrefix}-input`}
-            label={activeDirection.inputLabel}
-            value={input}
-            onChange={handleInputChange}
-            placeholder={activeDirection.inputPlaceholder}
-          />
-          <TextEditorPanel
-            id={`${inputIdPrefix}-output`}
-            label={activeDirection.outputLabel}
-            value={output}
-            placeholder={activeDirection.outputPlaceholder}
-            readOnly
-          />
-        </Box>
-
-        <Stack
-          direction={{ xs: "column", sm: "row" }}
-          sx={{ alignItems: { sm: "center" }, gap: 1.5, justifyContent: "space-between", mt: 2 }}
-        >
-          <Typography role="status" aria-live="polite" color="text.secondary" sx={{ fontSize: "0.82rem" }}>
-            {statusMessage || idleMessage}
-          </Typography>
-          <Button disabled={!output} onClick={() => void handleCopy()} variant="outlined">
-            Copy result
+      }
+      secondaryActions={
+        <>
+          <Button
+            color="inherit"
+            disabled={isProcessing}
+            onClick={handleLoadExample}
+            size="small"
+            startIcon={<LightbulbOutlinedIcon />}
+          >
+            Load example
           </Button>
-        </Stack>
+          <Button
+            color="inherit"
+            disabled={isProcessing || !output}
+            onClick={handleUseResult}
+            size="small"
+            startIcon={<SwapHorizIcon />}
+          >
+            Use result as input
+          </Button>
+          <Button
+            color="inherit"
+            disabled={isProcessing}
+            onClick={handleClear}
+            size="small"
+            startIcon={<DeleteOutlinedIcon />}
+          >
+            Clear
+          </Button>
+        </>
+      }
+    >
+      {isProcessing ? <LinearProgress aria-label={progressLabel} sx={{ mb: 2 }} /> : null}
+      {visibleErrorMessage ? (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {visibleErrorMessage}
+        </Alert>
+      ) : null}
+      <Box
+        sx={{
+          display: "grid",
+          gap: 2,
+          gridTemplateColumns: { xs: "1fr", xl: "repeat(2, minmax(0, 1fr))" },
+        }}
+      >
+        <TextEditorPanel
+          characterLimit={maxCharacters}
+          id={`${inputIdPrefix}-input`}
+          label={activeDirection.inputLabel}
+          value={input}
+          onChange={handleInputChange}
+          placeholder={activeDirection.inputPlaceholder}
+        />
+        <TextEditorPanel
+          id={`${inputIdPrefix}-output`}
+          label={activeDirection.outputLabel}
+          loading={isProcessing}
+          value={output}
+          placeholder={activeDirection.outputPlaceholder}
+          readOnly
+        />
       </Box>
-    </Paper>
+      <ToolFooter message={statusMessage || idleMessage}>
+        <Button
+          disabled={!output}
+          onClick={() => void handleCopy()}
+          startIcon={<ContentCopyIcon />}
+          variant="outlined"
+        >
+          Copy result
+        </Button>
+      </ToolFooter>
+    </ToolWorkspace>
   );
 }
