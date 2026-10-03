@@ -1,5 +1,10 @@
+import type { IconKey } from "@/components/ui/tool-icon";
+
 export type ProcessingMode = "browser" | "worker" | "wasm" | "server";
+
 export type ToolStatus = "available" | "planned";
+
+export type CategoryStatus = "available" | "planned";
 
 export interface ToolCategory {
   id: string;
@@ -7,6 +12,8 @@ export interface ToolCategory {
   name: string;
   description: string;
   eyebrow: string;
+  icon: IconKey;
+  status: CategoryStatus;
 }
 
 export interface ToolDefinition {
@@ -20,6 +27,5 @@ export interface ToolDefinition {
   processingMode: ProcessingMode;
   status: ToolStatus;
   relatedToolIds: readonly string[];
-  badge: string;
+  icon: IconKey;
 }
-

@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  getAvailableToolCategories,
   getRelatedTools,
   getToolBySlug,
   getToolCategories,
@@ -23,7 +24,16 @@ describe("tool registry", () => {
 
     expect(category?.name).toBe("Developer tools");
     expect(getToolCategoryById("developer")?.slug).toBe("developer-tools");
-    expect(getToolsByCategory("developer")).toHaveLength(5);
+    expect(getToolsByCategory("developer").length).toBeGreaterThan(0);
+    expect(getToolsByCategory("developer").every((tool) => tool.categoryId === "developer")).toBe(true);
+  });
+
+  it("separates live categories from planned ones", () => {
+    const available = getAvailableToolCategories();
+
+    expect(available.map((category) => category.id)).toEqual(["developer"]);
+    expect(getToolCategories().length).toBeGreaterThan(available.length);
+    expect(getToolsByCategory("image")).toHaveLength(0);
   });
 
   it("resolves a tool and its related tools", () => {

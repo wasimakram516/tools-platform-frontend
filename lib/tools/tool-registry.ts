@@ -8,6 +8,71 @@ const TOOL_CATEGORIES = [
     description:
       "Format, inspect, encode, and generate development data without sending it to a server.",
     eyebrow: "Code and data",
+    icon: "developer",
+    status: "available",
+  },
+  {
+    id: "image",
+    slug: "image-tools",
+    name: "Image tools",
+    description: "Compress, resize, convert, and crop images.",
+    eyebrow: "Photos and graphics",
+    icon: "image",
+    status: "planned",
+  },
+  {
+    id: "text",
+    slug: "text-tools",
+    name: "Text tools",
+    description: "Count, clean, compare, and reshape text in one place.",
+    eyebrow: "Writing and cleanup",
+    icon: "text",
+    status: "planned",
+  },
+  {
+    id: "calculator",
+    slug: "calculators",
+    name: "Calculators",
+    description: "Percentages, loans, interest, and everyday maths with clear workings.",
+    eyebrow: "Numbers",
+    icon: "calculator",
+    status: "planned",
+  },
+  {
+    id: "datetime",
+    slug: "date-and-time-tools",
+    name: "Date and time tools",
+    description: "Work out ages, durations, business days, and time zone differences.",
+    eyebrow: "Calendars and clocks",
+    icon: "datetime",
+    status: "planned",
+  },
+  {
+    id: "generator",
+    slug: "generators",
+    name: "Generators",
+    description: "Passwords, QR codes, random values, and other things you would rather not invent.",
+    eyebrow: "Create on demand",
+    icon: "generator",
+    status: "planned",
+  },
+  {
+    id: "seo",
+    slug: "web-and-seo-tools",
+    name: "Web and SEO tools",
+    description: "Meta tags, social previews, sitemaps, and campaign links for site owners.",
+    eyebrow: "Sites and search",
+    icon: "seo",
+    status: "planned",
+  },
+  {
+    id: "data",
+    slug: "data-converters",
+    name: "Data converters",
+    description: "Move data between CSV, JSON, XML, YAML, and common number formats.",
+    eyebrow: "Formats",
+    icon: "data",
+    status: "planned",
   },
 ] as const satisfies readonly ToolCategory[];
 
@@ -24,7 +89,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "worker",
     status: "available",
     relatedToolIds: ["DEV-04", "DEV-05", "DEV-02"],
-    badge: "{ }",
+    icon: "json",
   },
   {
     id: "DEV-04",
@@ -37,7 +102,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "worker",
     status: "available",
     relatedToolIds: ["DEV-05", "DEV-01"],
-    badge: "64",
+    icon: "base64",
   },
   {
     id: "DEV-05",
@@ -50,7 +115,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "worker",
     status: "available",
     relatedToolIds: ["DEV-04", "DEV-01"],
-    badge: "%",
+    icon: "url",
   },
   {
     id: "DEV-03",
@@ -63,7 +128,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["DEV-02", "DEV-01"],
-    badge: "#",
+    icon: "uuid",
   },
   {
     id: "DEV-02",
@@ -77,7 +142,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["DEV-01", "DEV-04"],
-    badge: "JWT",
+    icon: "jwt",
   },
 ] as const satisfies readonly ToolDefinition[];
 
@@ -97,6 +162,13 @@ const toolById = new Map<string, ToolDefinition>(TOOL_DEFINITIONS.map((tool) => 
  */
 export function getToolCategories(): readonly ToolCategory[] {
   return TOOL_CATEGORIES;
+}
+
+/**
+ * Returns the categories that currently contain at least one available tool.
+ */
+export function getAvailableToolCategories(): readonly ToolCategory[] {
+  return TOOL_CATEGORIES.filter((category) => category.status === "available");
 }
 
 /**
