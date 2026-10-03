@@ -1,6 +1,7 @@
 "use client";
 
 import { createTheme } from "@mui/material/styles";
+import { FONT_BODY, FONT_HEADING } from "@/theme/typography";
 
 const CORNER_RADIUS = 10;
 
@@ -10,22 +11,28 @@ export const appTheme = createTheme({
   colorSchemes: {
     light: {
       palette: {
-        primary: { main: "#2F5CF4", dark: "#2345BA", contrastText: "#FFFFFF" },
-        secondary: { main: "#E7F6F1" },
-        background: { default: "#F6F8FB", paper: "#FFFFFF" },
-        text: { primary: "#14213A", secondary: "#55647A" },
-        divider: "#DCE3EC",
-        action: { hover: "rgba(47, 92, 244, 0.06)" },
+        primary: { main: "#1F7A5A", dark: "#176148", contrastText: "#FFFFFF" },
+        secondary: { main: "#E5F2EC" },
+        success: { main: "#1F7A5A", contrastText: "#FFFFFF" },
+        warning: { main: "#F5B942", dark: "#8A5A00", contrastText: "#14211C" },
+        error: { main: "#B3372B" },
+        background: { default: "#F6F8F7", paper: "#FFFFFF" },
+        text: { primary: "#14211C", secondary: "#55655E" },
+        divider: "#DCE5E0",
+        action: { hover: "rgba(31, 122, 90, 0.06)" },
       },
     },
     dark: {
       palette: {
-        primary: { main: "#7C9BFF", dark: "#5C7FF0", contrastText: "#0B1220" },
-        secondary: { main: "#12302B" },
-        background: { default: "#0D1320", paper: "#141C2E" },
-        text: { primary: "#E8EDF7", secondary: "#9AA8BF" },
-        divider: "#26324A",
-        action: { hover: "rgba(124, 155, 255, 0.10)" },
+        primary: { main: "#4FC08D", dark: "#3DA676", contrastText: "#07140E" },
+        secondary: { main: "#173226" },
+        success: { main: "#4FC08D", contrastText: "#07140E" },
+        warning: { main: "#F5B942", contrastText: "#14211C" },
+        error: { main: "#F0847A", contrastText: "#14211C" },
+        background: { default: "#0E1512", paper: "#141E19" },
+        text: { primary: "#E7EFEA", secondary: "#9CB0A5" },
+        divider: "#24332B",
+        action: { hover: "rgba(79, 192, 141, 0.10)" },
       },
     },
   },
@@ -33,22 +40,25 @@ export const appTheme = createTheme({
     borderRadius: CORNER_RADIUS,
   },
   typography: {
-    fontFamily: "var(--font-geist-sans), Arial, sans-serif",
+    fontFamily: FONT_BODY,
     h1: {
-      fontSize: "clamp(2.25rem, 5vw, 3.75rem)",
-      fontWeight: 760,
-      letterSpacing: "-0.04em",
-      lineHeight: 1.04,
+      fontFamily: FONT_HEADING,
+      fontSize: "clamp(2.1rem, 4.6vw, 3.5rem)",
+      fontWeight: 700,
+      letterSpacing: "-0.02em",
+      lineHeight: 1.08,
     },
     h2: {
-      fontSize: "clamp(1.6rem, 3vw, 2.1rem)",
-      fontWeight: 740,
-      letterSpacing: "-0.03em",
-      lineHeight: 1.15,
+      fontFamily: FONT_HEADING,
+      fontSize: "clamp(1.55rem, 2.8vw, 2rem)",
+      fontWeight: 700,
+      letterSpacing: "-0.015em",
+      lineHeight: 1.18,
     },
-    h4: { fontWeight: 740, letterSpacing: "-0.03em" },
-    h5: { fontWeight: 720, letterSpacing: "-0.02em" },
-    h6: { fontWeight: 700, letterSpacing: "-0.01em" },
+    h3: { fontFamily: FONT_HEADING, fontWeight: 700, letterSpacing: "-0.01em" },
+    h4: { fontFamily: FONT_HEADING, fontWeight: 700, letterSpacing: "-0.01em" },
+    h5: { fontFamily: FONT_HEADING, fontWeight: 700, letterSpacing: "-0.01em" },
+    h6: { fontFamily: FONT_HEADING, fontWeight: 700, letterSpacing: "-0.005em" },
     button: { fontWeight: 650, textTransform: "none" },
   },
   components: {

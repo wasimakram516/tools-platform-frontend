@@ -1,6 +1,7 @@
 import { Box, LinearProgress, Skeleton, Stack, TextField, Typography } from "@mui/material";
 import type { ChangeEvent, ReactNode } from "react";
 import { formatCharacterCount } from "@/lib/tools/text-metrics";
+import { FONT_MONO } from "@/theme/typography";
 
 const CHARACTER_LIMIT_WARNING_RATIO = 0.8;
 const EDITOR_ROWS = 14;
@@ -118,7 +119,7 @@ export function TextEditorPanel({
               readOnly,
               spellCheck: false,
               sx: {
-                fontFamily: "var(--font-geist-mono)",
+                fontFamily: FONT_MONO,
                 fontSize: "0.86rem",
                 lineHeight: 1.65,
               },
