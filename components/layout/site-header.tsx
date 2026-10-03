@@ -1,4 +1,8 @@
-import { Box, Container, Link, Stack, Typography } from "@mui/material";
+import ConstructionIcon from "@mui/icons-material/Construction";
+import GridViewOutlinedIcon from "@mui/icons-material/GridViewOutlined";
+import { Box, Button, Container, Stack, Typography } from "@mui/material";
+import { ColorModeToggle } from "@/components/ui/color-mode-toggle";
+import { NextLink } from "@/components/ui/next-link";
 import type { ReactNode } from "react";
 
 /**
@@ -9,62 +13,58 @@ export function SiteHeader(): ReactNode {
     <Box
       component="header"
       sx={{
-        bgcolor: "rgba(247, 249, 252, 0.92)",
+        bgcolor: "background.paper",
         borderBottom: "1px solid",
         borderColor: "divider",
-        position: "relative",
-        zIndex: 2,
+        position: "sticky",
+        top: 0,
+        zIndex: "appBar",
       }}
     >
       <Container maxWidth="xl">
         <Stack
           direction="row"
-          sx={{
-            alignItems: "center",
-            justifyContent: "space-between",
-            minHeight: 72,
-          }}
+          sx={{ alignItems: "center", justifyContent: "space-between", minHeight: 68 }}
         >
-          <Link
+          <Stack
+            aria-label="Tools Platform home"
+            component={NextLink}
+            direction="row"
             href="/"
-            color="inherit"
-            underline="none"
-            sx={{ alignItems: "center", display: "inline-flex", gap: 1.25 }}
+            sx={{ alignItems: "center", color: "inherit", gap: 1.25, textDecoration: "none" }}
           >
             <Box
               aria-hidden="true"
               sx={{
-                bgcolor: "text.primary",
-                color: "common.white",
-                display: "grid",
-                fontFamily: "var(--font-geist-mono)",
-                fontSize: "0.8rem",
-                fontWeight: 700,
-                height: 34,
-                placeItems: "center",
-                width: 34,
+                alignItems: "center",
+                bgcolor: "primary.main",
+                borderRadius: 2.5,
+                color: "primary.contrastText",
+                display: "inline-flex",
+                height: 36,
+                justifyContent: "center",
+                width: 36,
               }}
             >
-              T/
+              <ConstructionIcon sx={{ fontSize: 20 }} />
             </Box>
             <Box>
-              <Typography sx={{ fontSize: "0.96rem", fontWeight: 750, lineHeight: 1.1 }}>
+              <Typography sx={{ fontSize: "1.02rem", fontWeight: 750, lineHeight: 1.15 }}>
                 Tools Platform
               </Typography>
-              <Typography color="text.secondary" sx={{ fontSize: "0.68rem", lineHeight: 1.2 }}>
-                A Wisemen Soft product
-              </Typography>
             </Box>
-          </Link>
-
-          <Link
-            href="/categories/developer-tools"
-            color="text.primary"
-            underline="hover"
-            sx={{ fontSize: "0.88rem", fontWeight: 650 }}
-          >
-            Developer tools
-          </Link>
+          </Stack>
+          <Stack component="nav" aria-label="Primary" direction="row" sx={{ alignItems: "center", gap: 0.5 }}>
+            <Button
+              color="inherit"
+              component={NextLink}
+              href="/categories"
+              startIcon={<GridViewOutlinedIcon />}
+            >
+              Categories
+            </Button>
+            <ColorModeToggle />
+          </Stack>
         </Stack>
       </Container>
     </Box>
