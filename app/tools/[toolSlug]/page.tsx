@@ -1,12 +1,10 @@
-import type { ComponentType, ReactNode } from "react";
+import type { ReactNode } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Base64EncoderDecoderTool } from "@/components/tools/base64-encoder-decoder-tool";
-import { JsonFormatterTool } from "@/components/tools/json-formatter-tool";
-import { JwtDecoderTool } from "@/components/tools/jwt-decoder-tool";
+import { JsonLd } from "@/components/seo/json-ld";
+import { TOOL_COMPONENTS } from "@/components/tools/tool-components";
 import { ToolPageShell } from "@/components/tools/tool-page-shell";
-import { UrlEncoderDecoderTool } from "@/components/tools/url-encoder-decoder-tool";
-import { UuidGeneratorTool } from "@/components/tools/uuid-generator-tool";
+import { breadcrumbJsonLd, buildPageMetadata, toolJsonLd } from "@/lib/seo";
 import {
   getRelatedTools,
   getToolBySlug,
@@ -18,13 +16,6 @@ interface ToolPageProps {
   params: Promise<{ toolSlug: string }>;
 }
 
-const AVAILABLE_TOOL_COMPONENTS: Readonly<Record<string, ComponentType>> = {
-  "DEV-01": JsonFormatterTool,
-  "DEV-04": Base64EncoderDecoderTool,
-  "DEV-05": UrlEncoderDecoderTool,
-  "DEV-03": UuidGeneratorTool,
-  "DEV-02": JwtDecoderTool,
-};
 
 /**
  * Prebuilds every available tool route.
@@ -43,11 +34,12 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
   const tool = getToolBySlug(toolSlug);
 
   return tool
-    ? {
+    ? buildPageMetadata({
+        description: tool.description,
+        keywords: tool.keywords,
+        path: `/tools/${tool.slug}`,
         title: tool.name,
-        description: tool.shortDescription,
-        keywords: [...tool.keywords],
-      }
+      })
     : {};
 }
 
@@ -63,15 +55,28 @@ export default async function ToolPage({ params }: ToolPageProps): Promise<React
   }
 
   const category = getToolCategoryById(tool.categoryId);
-  const ToolComponent = AVAILABLE_TOOL_COMPONENTS[tool.id];
+  const ToolComponent = TOOL_COMPONENTS[tool.id];
 
   if (!category || !ToolComponent) {
     notFound();
   }
 
   return (
-    <ToolPageShell category={category} tool={tool} relatedTools={getRelatedTools(tool)}>
-      <ToolComponent />
-    </ToolPageShell>
+    <>
+      <JsonLd
+        data={[
+          toolJsonLd(tool),
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "Categories", path: "/categories" },
+            { name: category.name, path: `/categories/${category.slug}` },
+            { name: tool.name, path: `/tools/${tool.slug}` },
+          ]),
+        ]}
+      />
+      <ToolPageShell category={category} tool={tool} relatedTools={getRelatedTools(tool)}>
+        <ToolComponent />
+      </ToolPageShell>
+    </>
   );
 }

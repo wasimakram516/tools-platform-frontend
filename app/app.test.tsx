@@ -22,8 +22,12 @@ describe("application foundation", () => {
   it("renders the platform promise and pillars", () => {
     renderWithTheme(<HomePage />);
 
-    expect(screen.getByRole("heading", { name: /useful work/i })).toBeInTheDocument();
-    expect(screen.getByText("No file retention")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /free tools for everyday work/i })).toBeInTheDocument();
+    expect(screen.getByText(/every tool shows how it handles your data/i)).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /browse every category/i })).toHaveAttribute(
+      "href",
+      "/categories",
+    );
   });
 
   it("renders an accessible loading state", () => {

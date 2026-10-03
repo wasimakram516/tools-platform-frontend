@@ -5,6 +5,7 @@ import CategoryPage, {
   generateMetadata as generateCategoryMetadata,
   generateStaticParams as generateCategoryParams,
 } from "@/app/categories/[categorySlug]/page";
+import CategoriesPage from "@/app/categories/page";
 import ToolPage, {
   generateMetadata as generateToolMetadata,
   generateStaticParams as generateToolParams,
@@ -12,6 +13,7 @@ import ToolPage, {
 import { AppThemeProvider } from "@/components/providers/app-theme-provider";
 import { RouteError } from "@/components/states/route-error";
 import { ToolPageLoading } from "@/components/states/tool-page-loading";
+import { getToolCategories, getTools, getToolsByCategory } from "@/lib/tools/tool-registry";
 
 vi.mock("@mui/material-nextjs/v16-appRouter", () => ({
   AppRouterCacheProvider: ({ children }: PropsWithChildren) => children,
@@ -39,8 +41,33 @@ describe("registry-backed routes", () => {
     renderRoute(page);
 
     expect(screen.getByRole("heading", { name: "Developer tools" })).toBeInTheDocument();
-    expect(screen.getAllByRole("link", { name: "Open tool" })).toHaveLength(5);
+    const toolLinks = screen
+      .getAllByRole("link")
+      .filter((link) => link.getAttribute("href")?.startsWith("/tools/"));
+
+    expect(toolLinks).toHaveLength(getToolsByCategory("developer").length);
     expect(screen.queryByText("Planned")).not.toBeInTheDocument();
+  });
+
+  it("renders the categories hub with live and planned categories", () => {
+    renderRoute(<CategoriesPage />);
+
+    expect(screen.getByRole("heading", { level: 1, name: "All categories" })).toBeInTheDocument();
+    expect(
+      screen
+        .getAllByRole("link")
+        .some((link) => link.getAttribute("href") === "/categories/developer-tools"),
+    ).toBe(true);
+    expect(screen.getAllByText("Coming soon")).toHaveLength(
+      getToolCategories().filter((category) => category.status === "planned").length,
+    );
+    expect(screen.getByText(`${getToolsByCategory("developer").length} tools`)).toBeInTheDocument();
+  });
+
+  it("does not render a page for a planned category", async () => {
+    await expect(
+      CategoryPage({ params: Promise.resolve({ categorySlug: "image-tools" }) }),
+    ).rejects.toThrow("NEXT_NOT_FOUND");
   });
 
   it("renders the JSON tool inside the reusable tool shell", async () => {
@@ -101,13 +128,11 @@ describe("registry-backed routes", () => {
 
   it("generates route params and metadata from the registry", async () => {
     expect(generateCategoryParams()).toEqual([{ categorySlug: "developer-tools" }]);
-    expect(generateToolParams()).toEqual([
-      { toolSlug: "json-formatter" },
-      { toolSlug: "base64-encoder-decoder" },
-      { toolSlug: "url-encoder-decoder" },
-      { toolSlug: "uuid-generator" },
-      { toolSlug: "jwt-decoder" },
-    ]);
+    expect(generateToolParams()).toEqual(
+      getTools()
+        .filter((tool) => tool.status === "available")
+        .map((tool) => ({ toolSlug: tool.slug })),
+    );
     await expect(
       generateCategoryMetadata({
         params: Promise.resolve({ categorySlug: "developer-tools" }),
