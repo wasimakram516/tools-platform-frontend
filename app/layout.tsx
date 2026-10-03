@@ -1,8 +1,10 @@
+import InitColorSchemeScript from "@mui/material/InitColorSchemeScript";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import type { PropsWithChildren, ReactNode } from "react";
 import { AppThemeProvider } from "@/components/providers/app-theme-provider";
 import { env } from "@/lib/env";
+import { SITE_DESCRIPTION } from "@/lib/seo";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -21,7 +23,10 @@ export const metadata: Metadata = {
     default: "Tools Platform",
     template: "%s | Tools Platform",
   },
-  description: "Fast, private online tools that work directly in your browser.",
+  description: SITE_DESCRIPTION,
+  applicationName: "Tools Platform",
+  robots: { follow: true, index: true },
+  openGraph: { siteName: "Tools Platform", type: "website" },
 };
 
 /**
@@ -29,8 +34,9 @@ export const metadata: Metadata = {
  */
 export default function RootLayout({ children }: PropsWithChildren): ReactNode {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`} suppressHydrationWarning>
       <body>
+        <InitColorSchemeScript attribute="data" defaultMode="light" />
         <AppThemeProvider>{children}</AppThemeProvider>
       </body>
     </html>

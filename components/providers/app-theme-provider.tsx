@@ -3,6 +3,7 @@
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v16-appRouter";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import type { PropsWithChildren, ReactNode } from "react";
+import { ThemeSwitchOverlay } from "@/components/providers/theme-switch-overlay";
 import { appTheme } from "@/theme/app-theme";
 
 /**
@@ -11,9 +12,10 @@ import { appTheme } from "@/theme/app-theme";
 export function AppThemeProvider({ children }: PropsWithChildren): ReactNode {
   return (
     <AppRouterCacheProvider options={{ key: "tools" }}>
-      <ThemeProvider theme={appTheme}>
+      <ThemeProvider defaultMode="light" theme={appTheme}>
         <CssBaseline />
         {children}
+        <ThemeSwitchOverlay />
       </ThemeProvider>
     </AppRouterCacheProvider>
   );
