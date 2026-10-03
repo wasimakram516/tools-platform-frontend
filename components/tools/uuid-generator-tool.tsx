@@ -8,6 +8,7 @@ import type { ChangeEvent, ReactNode } from "react";
 import { useState } from "react";
 import { TextEditorPanel } from "@/components/tools/text-editor-panel";
 import { ToolFooter, ToolWorkspace } from "@/components/tools/tool-workspace";
+import { copyBlockedMessage, copyToClipboard } from "@/lib/tools/clipboard";
 import {
   generateUuidBatch,
   MAX_UUID_BATCH_SIZE,
@@ -95,12 +96,11 @@ export function UuidGeneratorTool({
       return;
     }
 
-    try {
-      await navigator.clipboard.writeText(output);
+    if (await copyToClipboard(output)) {
       setStatusMessage(`${generatedCount} ${generatedCount === 1 ? "UUID" : "UUIDs"} copied.`);
       setErrorMessage(null);
-    } catch {
-      setErrorMessage("Copy was blocked by the browser. Select the UUIDs and copy them manually.");
+    } else {
+      setErrorMessage(copyBlockedMessage("UUIDs", true));
     }
   }
 

@@ -155,7 +155,7 @@ describe("JsonFormatterTool", () => {
 
     await user.click(screen.getByRole("button", { name: "Load example" }));
     expect(screen.getByLabelText("Input")).toHaveValue(
-      '{"project":"Tools Platform","private":true,"categories":["developer","image"]}',
+      '{"project":"QuicklySorted","private":true,"categories":["developer","image"]}',
     );
 
     await user.click(screen.getByRole("button", { name: "Format JSON" }));

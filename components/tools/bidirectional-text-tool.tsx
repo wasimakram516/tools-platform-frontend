@@ -17,6 +17,7 @@ import type { ChangeEvent, MouseEvent, ReactNode } from "react";
 import { useState } from "react";
 import { TextEditorPanel } from "@/components/tools/text-editor-panel";
 import { ToolFooter, ToolWorkspace } from "@/components/tools/tool-workspace";
+import { copyBlockedMessage, copyToClipboard } from "@/lib/tools/clipboard";
 import { formatCharacterCount } from "@/lib/tools/text-metrics";
 
 export interface TextTransformSuccess {
@@ -183,12 +184,11 @@ export function BidirectionalTextTool<Mode extends string>({
       return;
     }
 
-    try {
-      await navigator.clipboard.writeText(output);
+    if (await copyToClipboard(output)) {
       setStatusMessage("Result copied.");
       setErrorMessage(null);
-    } catch {
-      setErrorMessage("Copy was blocked by the browser. Select the result and copy it manually.");
+    } else {
+      setErrorMessage(copyBlockedMessage("result"));
     }
   }
 

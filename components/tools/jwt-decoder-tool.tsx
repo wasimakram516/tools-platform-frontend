@@ -9,6 +9,7 @@ import type { ChangeEvent, ReactNode } from "react";
 import { useState } from "react";
 import { TextEditorPanel } from "@/components/tools/text-editor-panel";
 import { ToolFooter, ToolWorkspace } from "@/components/tools/tool-workspace";
+import { copyBlockedMessage, copyToClipboard } from "@/lib/tools/clipboard";
 import {
   decodeJwt,
   MAX_JWT_INPUT_CHARACTERS,
@@ -102,14 +103,11 @@ export function JwtDecoderTool({
    * Copies one decoded JSON section and reports clipboard failures safely.
    */
   async function handleCopy(value: string, sectionName: string): Promise<void> {
-    try {
-      await navigator.clipboard.writeText(value);
+    if (await copyToClipboard(value)) {
       setErrorMessage(null);
       setStatusMessage(`${sectionName} copied. Signature not verified.`);
-    } catch {
-      setErrorMessage(
-        `Copy was blocked by the browser. Select the decoded ${sectionName.toLowerCase()} and copy it manually.`,
-      );
+    } else {
+      setErrorMessage(copyBlockedMessage(`decoded ${sectionName.toLowerCase()}`));
     }
   }
 

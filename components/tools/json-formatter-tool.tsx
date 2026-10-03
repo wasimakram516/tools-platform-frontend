@@ -28,9 +28,10 @@ import {
   transformJsonInWorker,
   type JsonTransformRunner,
 } from "@/lib/tools/json-formatter-worker";
+import { copyBlockedMessage, copyToClipboard } from "@/lib/tools/clipboard";
 import { formatCharacterCount } from "@/lib/tools/text-metrics";
 
-const EXAMPLE_JSON = '{"project":"Tools Platform","private":true,"categories":["developer","image"]}';
+const EXAMPLE_JSON = '{"project":"QuicklySorted","private":true,"categories":["developer","image"]}';
 
 interface JsonFormatterToolProps {
   maxCharacters?: number;
@@ -147,12 +148,11 @@ export function JsonFormatterTool({
       return;
     }
 
-    try {
-      await navigator.clipboard.writeText(output);
+    if (await copyToClipboard(output)) {
       setStatusMessage("Formatted JSON copied.");
       setErrorMessage(null);
-    } catch {
-      setErrorMessage("Copy was blocked by the browser. Select the result and copy it manually.");
+    } else {
+      setErrorMessage(copyBlockedMessage("result"));
     }
   }
 
