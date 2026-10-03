@@ -55,7 +55,7 @@ Copy `.env.example` to `.env.local` before starting the application locally.
 
 | Variable | Purpose | Local example |
 |---|---|---|
-| `NEXT_PUBLIC_API_URL` | Versioned backend base URL | `http://localhost:3001/api/v1` |
+| `NEXT_PUBLIC_API_URL` | Versioned backend base URL | `http://localhost:4000/api/v1` |
 | `NEXT_PUBLIC_SITE_URL` | Canonical frontend origin | `http://localhost:3000` |
 
 Both values are public browser configuration and must be valid URLs. They are validated when
@@ -116,6 +116,41 @@ added by responsibility rather than placed directly into route files.
 - Use the typed Material UI theme and `sx` or theme variants instead of scattered style values.
 - Provide responsive loading, empty, success, and error states with accessible semantics.
 - Do not expose secrets through `NEXT_PUBLIC_*` variables.
+
+## Adding a tool or category
+
+The registry in `lib/tools/tool-registry.ts` is the single source of truth. Pages, the home
+grid, the categories hub, breadcrumbs, the footer, the sitemap, and structured data all read
+from it, so a new entry shows up everywhere with the shared visual language.
+
+### Add a category
+
+1. Add an entry to `TOOL_CATEGORIES` with a unique `id` and `slug`, a `name`, `description`,
+   `eyebrow`, an `icon` key, and `status: "planned"` until it has a tool.
+2. Set `status: "available"` once the first tool in it ships. Only available categories get a
+   page and a sitemap entry; planned ones appear on the hub as "Coming soon".
+
+### Add a tool
+
+1. Build the workspace component in `components/tools/`. Compose the shared pieces:
+   `ToolWorkspace` (toolbar and body), `TextEditorPanel`, `ToolFooter`, and for two-way text
+   converters `BidirectionalTextTool`. Put the logic in `lib/tools/` and test it.
+2. Add an entry to `TOOL_DEFINITIONS` with a unique `id` and `slug`, a short and a long
+   description (the long one becomes the meta description), `keywords`, `categoryId`,
+   `processingMode`, `relatedToolIds`, and an `icon` key. Use `status: "planned"` until it ships.
+3. Register the component against the tool `id` in `components/tools/tool-components.ts` and
+   set `status: "available"`. `tool-components.test.ts` fails if a live tool has no component.
+4. If you need a new icon, add it once to `TOOL_ICONS` in `components/ui/tool-icon.tsx`; the
+   icon key type is derived from that map.
+
+### SEO
+
+Every page sets a canonical URL, Open Graph, and Twitter metadata through
+`buildPageMetadata` in `lib/seo.ts`. Tool pages add `WebApplication` and `BreadcrumbList`
+structured data, category pages add `ItemList` and `BreadcrumbList`, and the home page adds
+`WebSite`. `app/sitemap.ts` and `app/robots.ts` are generated from the registry. Keep each page
+to a single `h1`, and use `HiddenHeading` when the design omits a section title but the
+heading outline would otherwise skip a level.
 
 ## Docker
 
