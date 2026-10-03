@@ -1,9 +1,10 @@
 import { Box, Container, Link, Stack, Typography } from "@mui/material";
 import type { ReactNode } from "react";
+import { BrandLockup } from "@/components/ui/brand-lockup";
 import { NextLink } from "@/components/ui/next-link";
 import { WisemenSoftLogo } from "@/components/ui/wisemen-soft-logo";
 import { LEGAL_DOCUMENTS } from "@/lib/legal/legal-content";
-import { COMPANY_NAME, COMPANY_URL } from "@/lib/site-config";
+import { BRAND_TAGLINE, COMPANY_NAME, COMPANY_URL } from "@/lib/site-config";
 import { getAvailableToolCategories } from "@/lib/tools/tool-registry";
 
 interface FooterLinkGroupProps {
@@ -65,10 +66,9 @@ export function SiteFooter(): ReactNode {
           }}
         >
           <Box sx={{ maxWidth: 420 }}>
-            <Typography sx={{ fontWeight: 750 }}>Tools Platform</Typography>
-            <Typography color="text.secondary" sx={{ fontSize: "0.9rem", lineHeight: 1.7, mt: 1 }}>
-              Free tools for everyday work. Each tool states where your input is processed, and
-              nothing needs an account.
+            <BrandLockup fontSize="1.05rem" markSize={28} />
+            <Typography color="text.secondary" sx={{ fontSize: "0.95rem", lineHeight: 1.6, mt: 1.5 }}>
+              {BRAND_TAGLINE}
             </Typography>
           </Box>
           <FooterLinkGroup links={browseLinks} title="Browse" />
