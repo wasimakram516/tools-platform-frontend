@@ -1,6 +1,7 @@
 import { Box, Container, Stack } from "@mui/material";
 import type { PropsWithChildren, ReactNode } from "react";
 import { PageFrame } from "@/components/layout/page-frame";
+import { CardGrid } from "@/components/ui/card-grid";
 import { categoriesCrumb, homeCrumb, PageTitle } from "@/components/ui/page-title";
 import { ProcessingBadge } from "@/components/ui/processing-badge";
 import { SectionHeading } from "@/components/ui/section-heading";
@@ -49,17 +50,12 @@ export function ToolPageShell({
           {relatedTools.length > 0 ? (
             <Box aria-labelledby="related-tools-heading" component="section" sx={{ pt: 3 }}>
               <SectionHeading id="related-tools-heading" title="Continue with" />
-              <Box
-                sx={{
-                  display: "grid",
-                  gap: 2,
-                  gridTemplateColumns: { xs: "1fr", md: "repeat(3, 1fr)" },
-                  mt: 3,
-                }}
-              >
-                {relatedTools.map((relatedTool) => (
-                  <ToolCard key={relatedTool.id} tool={relatedTool} />
-                ))}
+              <Box sx={{ mt: 3 }}>
+                <CardGrid preset="related">
+                  {relatedTools.map((relatedTool) => (
+                    <ToolCard key={relatedTool.id} tool={relatedTool} />
+                  ))}
+                </CardGrid>
               </Box>
             </Box>
           ) : null}

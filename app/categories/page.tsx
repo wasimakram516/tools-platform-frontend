@@ -1,7 +1,8 @@
-import { Box, Container, Stack } from "@mui/material";
+import { Container, Stack } from "@mui/material";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { PageFrame } from "@/components/layout/page-frame";
+import { CardGrid } from "@/components/ui/card-grid";
 import { CategoryCard } from "@/components/ui/category-card";
 import { HiddenHeading } from "@/components/ui/hidden-heading";
 import { categoriesCrumb, homeCrumb, PageTitle } from "@/components/ui/page-title";
@@ -32,15 +33,7 @@ export default function CategoriesPage(): ReactNode {
             title="All categories"
           />
           <HiddenHeading>Tool categories</HiddenHeading>
-          <Box
-            aria-label="Tool categories"
-            component="section"
-            sx={{
-              display: "grid",
-              gap: 2,
-              gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)", lg: "repeat(3, 1fr)", xl: "repeat(4, 1fr)" },
-            }}
-          >
+          <CardGrid label="Tool categories" preset="categories">
             {categories.map((category) => (
               <CategoryCard
                 category={category}
@@ -48,7 +41,7 @@ export default function CategoriesPage(): ReactNode {
                 toolCount={getToolsByCategory(category.id).length}
               />
             ))}
-          </Box>
+          </CardGrid>
         </Stack>
       </Container>
     </PageFrame>

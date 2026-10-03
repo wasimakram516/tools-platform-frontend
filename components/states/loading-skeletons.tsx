@@ -1,21 +1,22 @@
 import { Box, Container, Skeleton, Stack } from "@mui/material";
 import type { PropsWithChildren, ReactNode } from "react";
 import { PageFrame } from "@/components/layout/page-frame";
+import { CardGrid, type CardGridPreset } from "@/components/ui/card-grid";
 
 const CARD_RADIUS = 10;
 
 interface CardGridSkeletonProps {
   cardHeight: number;
-  columns: Record<string, string>;
+  preset: CardGridPreset;
   count: number;
 }
 
 /**
  * Renders placeholder cards in the same grid the loaded page will use.
  */
-function CardGridSkeleton({ cardHeight, columns, count }: CardGridSkeletonProps): ReactNode {
+function CardGridSkeleton({ cardHeight, preset, count }: CardGridSkeletonProps): ReactNode {
   return (
-    <Box sx={{ display: "grid", gap: 2.5, gridTemplateColumns: columns }}>
+    <CardGrid preset={preset}>
       {Array.from({ length: count }, (_, index) => (
         <Skeleton
           animation="wave"
@@ -25,7 +26,7 @@ function CardGridSkeleton({ cardHeight, columns, count }: CardGridSkeletonProps)
           variant="rounded"
         />
       ))}
-    </Box>
+    </CardGrid>
   );
 }
 
@@ -82,7 +83,7 @@ export function HomeLoading(): ReactNode {
       <Container maxWidth="lg" sx={{ pb: 8 }}>
         <CardGridSkeleton
           cardHeight={176}
-          columns={{ xs: "1fr", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)" }}
+          preset="tools"
           count={6}
         />
       </Container>
@@ -101,12 +102,7 @@ export function CategoriesLoading(): ReactNode {
           <PageTitleSkeleton />
           <CardGridSkeleton
             cardHeight={210}
-            columns={{
-              xs: "1fr",
-              sm: "repeat(2, 1fr)",
-              lg: "repeat(3, 1fr)",
-              xl: "repeat(4, 1fr)",
-            }}
+            preset="categories"
             count={8}
           />
         </Stack>
@@ -126,7 +122,7 @@ export function CategoryLoading(): ReactNode {
           <PageTitleSkeleton withIcon />
           <CardGridSkeleton
             cardHeight={176}
-            columns={{ xs: "1fr", md: "repeat(2, 1fr)", xl: "repeat(3, 1fr)" }}
+            preset="catalog"
             count={5}
           />
         </Stack>

@@ -1,9 +1,10 @@
-import { Box, Container, Stack } from "@mui/material";
+import { Container, Stack } from "@mui/material";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import { PageFrame } from "@/components/layout/page-frame";
 import { JsonLd } from "@/components/seo/json-ld";
+import { CardGrid } from "@/components/ui/card-grid";
 import { HiddenHeading } from "@/components/ui/hidden-heading";
 import { categoriesCrumb, homeCrumb, PageTitle } from "@/components/ui/page-title";
 import { ToolCard } from "@/components/ui/tool-card";
@@ -80,19 +81,11 @@ export default async function CategoryPage({ params }: CategoryPageProps): Promi
             title={category.name}
           />
           <HiddenHeading>{`Tools in ${category.name}`}</HiddenHeading>
-          <Box
-            aria-label={`${category.name} catalog`}
-            component="section"
-            sx={{
-              display: "grid",
-              gap: 2,
-              gridTemplateColumns: { xs: "1fr", md: "repeat(2, 1fr)", xl: "repeat(3, 1fr)" },
-            }}
-          >
+          <CardGrid label={`${category.name} catalog`} preset="catalog">
             {tools.map((tool) => (
               <ToolCard key={tool.id} tool={tool} />
             ))}
-          </Box>
+          </CardGrid>
         </Stack>
       </Container>
     </PageFrame>
