@@ -55,7 +55,7 @@ Copy `.env.example` to `.env.local` before starting the application locally.
 
 | Variable | Purpose | Local example |
 |---|---|---|
-| `NEXT_PUBLIC_API_URL` | Versioned backend base URL | `http://localhost:4000/api/v1` |
+| `NEXT_PUBLIC_API_URL` | Versioned backend base URL (optional until a backend exists) | `http://localhost:4000/api/v1` |
 | `NEXT_PUBLIC_SITE_URL` | Canonical frontend origin | `http://localhost:3000` |
 
 Both values are public browser configuration and must be valid URLs. They are validated when

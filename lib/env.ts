@@ -1,7 +1,8 @@
 import { z } from "zod";
 
 const publicEnvironmentSchema = z.object({
-  NEXT_PUBLIC_API_URL: z.url(),
+  // Optional until a backend exists; nothing reads it today.
+  NEXT_PUBLIC_API_URL: z.url().optional(),
   NEXT_PUBLIC_SITE_URL: z.url(),
 });
 
