@@ -38,7 +38,7 @@ const BASE64_DIRECTIONS: readonly [
     inputPlaceholder: "Paste Base64 text to decode.",
     outputLabel: "Decoded text",
     outputPlaceholder: "Decoded text appears here.",
-    example: "VG9vbHMgUGxhdGZvcm0ga2VlcHMgdGhpcyB0ZXh0IG9uIHlvdXIgZGV2aWNlLiDinJM=",
+    example: "UXVpY2tseVNvcnRlZCBrZWVwcyB0aGlzIHRleHQgb24geW91ciBkZXZpY2UuIOKckw==",
     processingMessage: "Decoding Base64 locally…",
     successVerb: "Decoded",
   },
