@@ -6,7 +6,7 @@ import { Alert, Box, Button, FormControlLabel, Stack, Switch, TextField, Typogra
 import type { ChangeEvent, ReactNode } from "react";
 import { useRef, useState } from "react";
 import { hintFor } from "@/components/ui/field-hint";
-import { HashResultRow } from "@/components/tools/hash-result-row";
+import { CopyableValueRow } from "@/components/tools/copyable-value-row";
 import { TextEditorPanel } from "@/components/tools/text-editor-panel";
 import { ToolFooter, ToolWorkspace } from "@/components/tools/tool-workspace";
 import { copyBlockedMessage, copyToClipboard } from "@/lib/tools/clipboard";
@@ -214,9 +214,9 @@ export function HashGeneratorTool({ hash = (text, key) => hashText(text, key) }:
         <Stack aria-label="Hashes" role="group" sx={{ gap: 1.25 }}>
           {hashes ? (
             HASH_ALGORITHMS.map((algorithm) => (
-              <HashResultRow
-                algorithm={algorithm}
-                isMatch={matches.includes(algorithm)}
+              <CopyableValueRow
+                highlighted={matches.includes(algorithm)}
+                id={algorithm}
                 key={algorithm}
                 onCopy={() => void handleCopy(algorithm)}
                 title={secretKey ? `HMAC-${algorithm}` : algorithm}

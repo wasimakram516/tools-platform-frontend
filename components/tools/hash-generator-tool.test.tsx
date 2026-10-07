@@ -37,20 +37,20 @@ function renderTool(hash = vi.fn().mockResolvedValue(FAKE_HASHES)) {
  */
 async function typeText(text: string): Promise<void> {
   fireEvent.change(screen.getByLabelText("Text to hash"), { target: { value: text } });
-  await screen.findByTestId("hash-SHA-256");
+  await screen.findByTestId("value-SHA-256");
 }
 
 describe("HashGeneratorTool", () => {
   it("shows every hash once there is text", async () => {
     const hash = renderTool();
 
-    expect(screen.queryByTestId("hash-SHA-256")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("value-SHA-256")).not.toBeInTheDocument();
 
     await typeText("hello");
 
     expect(hash).toHaveBeenCalledWith("hello", "");
-    expect(screen.getByTestId("hash-SHA-1")).toHaveTextContent("aaaa");
-    expect(screen.getByTestId("hash-SHA-512")).toHaveTextContent("dddd");
+    expect(screen.getByTestId("value-SHA-1")).toHaveTextContent("aaaa");
+    expect(screen.getByTestId("value-SHA-512")).toHaveTextContent("dddd");
   });
 
   it("switches the letter case without hashing again", async () => {
@@ -59,7 +59,7 @@ describe("HashGeneratorTool", () => {
     await typeText("hello");
     fireEvent.click(screen.getByLabelText("Uppercase"));
 
-    expect(screen.getByTestId("hash-SHA-256")).toHaveTextContent("BBBB");
+    expect(screen.getByTestId("value-SHA-256")).toHaveTextContent("BBBB");
     expect(hash).toHaveBeenCalledTimes(1);
   });
 
@@ -92,7 +92,7 @@ describe("HashGeneratorTool", () => {
     fireEvent.change(screen.getByLabelText("Text to hash"), { target: { value: "hello" } });
 
     expect(await screen.findByText("The text could not be hashed. Try again.")).toBeInTheDocument();
-    expect(screen.queryByTestId("hash-SHA-256")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("value-SHA-256")).not.toBeInTheDocument();
   });
 
   it("hashes again with the secret key and labels the results as HMACs", async () => {
@@ -113,6 +113,6 @@ describe("HashGeneratorTool", () => {
     fireEvent.click(screen.getByRole("button", { name: "Clear" }));
 
     expect(screen.getByLabelText("Text to hash")).toHaveValue("");
-    expect(screen.queryByTestId("hash-SHA-256")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("value-SHA-256")).not.toBeInTheDocument();
   });
 });
