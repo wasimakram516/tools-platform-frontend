@@ -30,6 +30,7 @@ import { createIco } from "@/lib/tools/image/ico";
 import { browserImageProcessor, type ImageProcessor, type LoadedImage } from "@/lib/tools/image/image-processing";
 import { createZip } from "@/lib/tools/image/zip";
 import { FONT_MONO } from "@/theme/typography";
+import { CONTROL_RADIUS, SURFACE_RADIUS } from "@/theme/surface";
 
 const DEBOUNCE_MS = 250;
 const DEFAULT_PADDING = 8;
@@ -335,7 +336,7 @@ export function FaviconGeneratorTool({
                   const made = icons[file.size];
 
                   return (
-                    <Box key={file.fileName} sx={{ border: "1px solid", borderColor: "divider", borderRadius: 2.5, p: 1.5 }}>
+                    <Box key={file.fileName} sx={{ border: "1px solid", borderColor: "divider", borderRadius: SURFACE_RADIUS, p: 1.5 }}>
                       <Stack direction="row" sx={{ alignItems: "center", gap: 1.5 }}>
                         <Box
                           sx={{
@@ -345,7 +346,7 @@ export function FaviconGeneratorTool({
                               "linear-gradient(45deg, rgba(128,128,128,.18) 25%, transparent 25%, transparent 75%, rgba(128,128,128,.18) 75%), linear-gradient(45deg, rgba(128,128,128,.18) 25%, transparent 25%, transparent 75%, rgba(128,128,128,.18) 75%)",
                             backgroundPosition: "0 0, 6px 6px",
                             backgroundSize: "12px 12px",
-                            borderRadius: 1.5,
+                            borderRadius: CONTROL_RADIUS,
                             display: "flex",
                             flexShrink: 0,
                             height: 84,
@@ -399,7 +400,7 @@ export function FaviconGeneratorTool({
                   onFiles={(files) => void handleFiles(files)}
                 />
               </Stack>
-              <Box sx={{ border: "1px solid", borderColor: "divider", borderRadius: 2.5, p: 2 }}>
+              <Box sx={{ border: "1px solid", borderColor: "divider", borderRadius: SURFACE_RADIUS, p: 2 }}>
                 <Stack direction="row" sx={{ alignItems: "center", justifyContent: "space-between", mb: 1 }}>
                   <Typography component="h3" sx={{ fontSize: "0.95rem", fontWeight: 700 }}>
                     Add these tags to your page&apos;s head

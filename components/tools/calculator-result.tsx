@@ -6,6 +6,7 @@ import type { ReactNode } from "react";
 import { useState } from "react";
 import { copyBlockedMessage, copyToClipboard } from "@/lib/tools/clipboard";
 import { FONT_HEADING } from "@/theme/typography";
+import { SURFACE_RADIUS } from "@/theme/surface";
 
 export interface ResultRow {
   label: string;
@@ -50,7 +51,7 @@ export function CalculatorResult({
       sx={{
         border: "1px solid",
         borderColor: "divider",
-        borderRadius: 2.5,
+        borderRadius: SURFACE_RADIUS,
         minHeight: 200,
         p: { xs: 2, md: 3 },
       }}

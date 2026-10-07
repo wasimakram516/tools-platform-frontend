@@ -20,6 +20,7 @@ import {
   type HashResult,
   type HashSet,
 } from "@/lib/tools/hash-generator";
+import { SURFACE_RADIUS } from "@/theme/surface";
 
 interface HashGeneratorToolProps {
   hash?: (text: string, secretKey: string) => Promise<HashResult>;
@@ -226,7 +227,7 @@ export function HashGeneratorTool({ hash = (text, key) => hashText(text, key) }:
           ) : (
             <Typography
               color="text.secondary"
-              sx={{ border: "1px dashed", borderColor: "divider", borderRadius: 2, p: 3 }}
+              sx={{ border: "1px dashed", borderColor: "divider", borderRadius: SURFACE_RADIUS, p: 3 }}
             >
               The hashes appear here as you type.
             </Typography>

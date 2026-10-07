@@ -4,6 +4,7 @@ import CloudUploadOutlinedIcon from "@mui/icons-material/CloudUploadOutlined";
 import { Box, Stack, Typography } from "@mui/material";
 import type { ChangeEvent, DragEvent, KeyboardEvent, ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
+import { SURFACE_RADIUS } from "@/theme/surface";
 
 interface FileDropZoneProps {
   /** File types the picker offers, such as "image/*" or a list of MIME types. */
@@ -98,7 +99,7 @@ export function FileDropZone({ accept, hint, id, label, multiple = false, onFile
         bgcolor: isDragging ? "action.hover" : "transparent",
         border: "2px dashed",
         borderColor: isDragging ? "primary.main" : "divider",
-        borderRadius: 3,
+        borderRadius: SURFACE_RADIUS,
         cursor: "pointer",
         outlineOffset: 2,
         p: { xs: 3, md: 5 },

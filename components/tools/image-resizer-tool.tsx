@@ -57,6 +57,7 @@ import {
   type RenderedImage,
 } from "@/lib/tools/image/image-processing";
 import { presetById, SIZE_PRESETS } from "@/lib/tools/image/presets";
+import { CONTROL_RADIUS, SURFACE_RADIUS } from "@/theme/surface";
 
 const DEBOUNCE_MS = 200;
 /** The longest side of the picture the crop box is drawn on. */
@@ -672,7 +673,7 @@ export function ImageResizerTool({
                       value={activeCrop}
                     />
                   ) : (
-                    <Skeleton animation="wave" height={300} sx={{ borderRadius: 1.5 }} variant="rounded" />
+                    <Skeleton animation="wave" height={300} sx={{ borderRadius: CONTROL_RADIUS }} variant="rounded" />
                   )}
                 </Stack>
               ) : null}
@@ -703,7 +704,7 @@ export function ImageResizerTool({
                   backgroundSize: "16px 16px",
                   border: "1px solid",
                   borderColor: "divider",
-                  borderRadius: 2.5,
+                  borderRadius: SURFACE_RADIUS,
                   display: "flex",
                   justifyContent: "center",
                   minHeight: 240,

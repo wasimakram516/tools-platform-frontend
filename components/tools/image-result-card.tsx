@@ -3,6 +3,7 @@ import DownloadIcon from "@mui/icons-material/Download";
 import { Alert, Box, Button, Chip, CircularProgress, IconButton, Skeleton, Stack, Tooltip, Typography } from "@mui/material";
 import type { ReactNode } from "react";
 import { formatBytes, percentSaved } from "@/lib/tools/image/format";
+import { CONTROL_RADIUS, SURFACE_RADIUS } from "@/theme/surface";
 
 interface ImageResultCardProps {
   /** True while the image is being made again with new settings. Hides the old result. */
@@ -43,13 +44,13 @@ export function ImageResultCard({
   const saved = showResult ? percentSaved(originalBytes, newBytes) : null;
 
   return (
-    <Box sx={{ border: "1px solid", borderColor: "divider", borderRadius: 2.5, p: 1.5 }}>
+    <Box sx={{ border: "1px solid", borderColor: "divider", borderRadius: SURFACE_RADIUS, p: 1.5 }}>
       <Stack direction="row" sx={{ alignItems: "center", gap: 1.5 }}>
         <Box
           sx={{
             alignItems: "center",
             bgcolor: "action.hover",
-            borderRadius: 1.5,
+            borderRadius: CONTROL_RADIUS,
             display: "flex",
             flexShrink: 0,
             height: 64,

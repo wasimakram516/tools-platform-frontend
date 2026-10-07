@@ -17,6 +17,7 @@ import {
   type DiceResult,
 } from "@/lib/tools/generators/random-tools";
 import { FONT_HEADING } from "@/theme/typography";
+import { SURFACE_RADIUS } from "@/theme/surface";
 
 const DICE_PRESETS = [4, 6, 8, 10, 12, 20, 100] as const;
 /** Showing thousands of flips as chips would swamp the page, so only the first are listed. */
@@ -59,7 +60,7 @@ export function DiceCoinPanel({ onStatus, source }: DiceCoinPanelProps): ReactNo
 
   return (
     <Box sx={{ display: "grid", gap: 3, gridTemplateColumns: { xs: "1fr", lg: "repeat(2, minmax(0, 1fr))" } }}>
-      <Stack sx={{ border: "1px solid", borderColor: "divider", borderRadius: 2.5, gap: 2, p: 2.5 }}>
+      <Stack sx={{ border: "1px solid", borderColor: "divider", borderRadius: SURFACE_RADIUS, gap: 2, p: 2.5 }}>
         <Typography component="h2" sx={{ fontFamily: FONT_HEADING, fontSize: "1.2rem", fontWeight: 700 }}>
           Dice
         </Typography>
@@ -100,7 +101,7 @@ export function DiceCoinPanel({ onStatus, source }: DiceCoinPanelProps): ReactNo
         ) : null}
       </Stack>
 
-      <Stack sx={{ border: "1px solid", borderColor: "divider", borderRadius: 2.5, gap: 2, p: 2.5 }}>
+      <Stack sx={{ border: "1px solid", borderColor: "divider", borderRadius: SURFACE_RADIUS, gap: 2, p: 2.5 }}>
         <Typography component="h2" sx={{ fontFamily: FONT_HEADING, fontSize: "1.2rem", fontWeight: 700 }}>
           Coin
         </Typography>

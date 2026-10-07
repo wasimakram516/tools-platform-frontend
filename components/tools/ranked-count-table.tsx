@@ -2,6 +2,7 @@ import { Box, LinearProgress, Typography } from "@mui/material";
 import type { ReactNode } from "react";
 import { formatCharacterCount } from "@/lib/tools/text-metrics";
 import { FONT_MONO } from "@/theme/typography";
+import { SURFACE_RADIUS } from "@/theme/surface";
 
 export interface RankedCount {
   count: number;
@@ -24,7 +25,7 @@ interface RankedCountTableProps {
  */
 export function RankedCountTable({ emptyMessage, labelHeading, rows, title }: RankedCountTableProps): ReactNode {
   return (
-    <Box sx={{ border: "1px solid", borderColor: "divider", borderRadius: 2.5, p: 2 }}>
+    <Box sx={{ border: "1px solid", borderColor: "divider", borderRadius: SURFACE_RADIUS, p: 2 }}>
       <Typography component="h3" sx={{ fontSize: "0.95rem", fontWeight: 700, mb: 1 }}>
         {title}
       </Typography>

@@ -41,6 +41,7 @@ import {
 } from "@/lib/tools/generators/qr-payloads";
 import { renderQrPng, type PngOptions } from "@/lib/tools/generators/qr-render";
 import { FONT_MONO } from "@/theme/typography";
+import { SURFACE_RADIUS } from "@/theme/surface";
 
 type Kind = "url" | "text" | "wifi" | "contact" | "email" | "phone" | "sms" | "whatsapp";
 
@@ -358,7 +359,7 @@ export function QrCodeTool({ download = downloadBlob, renderPng = renderQrPng }:
                     bgcolor: background,
                     border: "1px solid",
                     borderColor: "divider",
-                    borderRadius: 2.5,
+                    borderRadius: SURFACE_RADIUS,
                     display: "flex",
                     justifyContent: "center",
                     p: 2,
@@ -386,7 +387,7 @@ export function QrCodeTool({ download = downloadBlob, renderPng = renderQrPng }:
                   </Button>
                 </Stack>
                 {payload.ok ? (
-                  <Box sx={{ border: "1px solid", borderColor: "divider", borderRadius: 2.5, p: 2 }}>
+                  <Box sx={{ border: "1px solid", borderColor: "divider", borderRadius: SURFACE_RADIUS, p: 2 }}>
                     <Typography component="h3" sx={{ fontSize: "0.9rem", fontWeight: 700, mb: 0.5 }}>
                       What this code contains
                     </Typography>

@@ -20,6 +20,7 @@ import {
   type NumbersResult,
 } from "@/lib/tools/generators/random-tools";
 import { FONT_MONO } from "@/theme/typography";
+import { SURFACE_RADIUS } from "@/theme/surface";
 
 const SORT_OPTIONS = [
   { label: "As drawn", tooltip: "Keep the order the numbers were drawn in", value: "none" },
@@ -145,7 +146,7 @@ export function RandomNumbersPanel({ onStatus, source }: RandomNumbersPanelProps
                 sx={{
                   border: "1px solid",
                   borderColor: "divider",
-                  borderRadius: 2.5,
+                  borderRadius: SURFACE_RADIUS,
                   fontFamily: FONT_MONO,
                   fontSize: "1rem",
                   lineHeight: 1.9,

@@ -24,6 +24,7 @@ import {
   type TeamsResult,
 } from "@/lib/tools/generators/random-tools";
 import { FONT_HEADING } from "@/theme/typography";
+import { SURFACE_RADIUS } from "@/theme/surface";
 
 type Action = "pick" | "shuffle" | "teams";
 type SplitBy = "teams" | "size";
@@ -155,7 +156,7 @@ export function ListPickerPanel({ onStatus, source }: ListPickerPanelProps): Rea
         {teams?.ok ? (
           <Box aria-label="Teams" role="group" sx={{ display: "grid", gap: 1.5, gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)" } }}>
             {teams.teams.map((team, index) => (
-              <Box key={index} sx={{ border: "1px solid", borderColor: "divider", borderRadius: 2.5, p: 2 }}>
+              <Box key={index} sx={{ border: "1px solid", borderColor: "divider", borderRadius: SURFACE_RADIUS, p: 2 }}>
                 <Typography component="h3" sx={{ fontFamily: FONT_HEADING, fontSize: "1rem", fontWeight: 700 }}>
                   Team {index + 1} ({team.length})
                 </Typography>

@@ -2,6 +2,7 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { Box, IconButton, Stack, Tooltip, Typography } from "@mui/material";
 import type { ReactNode } from "react";
 import { FONT_MONO } from "@/theme/typography";
+import { SURFACE_RADIUS } from "@/theme/surface";
 
 interface CopyableValueRowProps {
   /** Marks the row with the brand colour, for example when a pasted hash matches. */
@@ -24,7 +25,7 @@ export function CopyableValueRow({ highlighted = false, id, onCopy, title = id, 
       sx={{
         border: "1px solid",
         borderColor: highlighted ? "primary.main" : "divider",
-        borderRadius: 2,
+        borderRadius: SURFACE_RADIUS,
         p: 1.5,
       }}
     >

@@ -2,6 +2,7 @@ import { Box, Typography } from "@mui/material";
 import type { ReactNode } from "react";
 import { formatCharacterCount } from "@/lib/tools/text-metrics";
 import { FONT_HEADING } from "@/theme/typography";
+import { SURFACE_RADIUS } from "@/theme/surface";
 
 export interface Stat {
   label: string;
@@ -41,7 +42,7 @@ export function StatGrid({ featureFirst = true, stats }: StatGridProps): ReactNo
             sx={{
               border: "1px solid",
               borderColor: isFeatured ? "primary.main" : "divider",
-              borderRadius: 2.5,
+              borderRadius: SURFACE_RADIUS,
               gridColumn: isFeatured ? "1 / -1" : undefined,
               p: 2,
             }}

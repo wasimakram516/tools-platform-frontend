@@ -5,6 +5,7 @@ import type { KeyboardEvent, PointerEvent, ReactNode } from "react";
 import { useRef } from "react";
 import { clampCrop, dragCrop, type CropHandle, type CropRect } from "@/lib/tools/image/crop";
 import type { Size } from "@/lib/tools/image/dimensions";
+import { CONTROL_RADIUS } from "@/theme/surface";
 
 const HANDLE_SIZE = 14;
 const NUDGE = 1;
@@ -111,7 +112,7 @@ export function CropBox({ imageUrl, onChange, ratio, size, value }: CropBoxProps
       sx={{
         aspectRatio: `${size.width} / ${size.height}`,
         backgroundColor: "action.hover",
-        borderRadius: 1.5,
+        borderRadius: CONTROL_RADIUS,
         lineHeight: 0,
         margin: "0 auto",
         maxHeight: 420,
