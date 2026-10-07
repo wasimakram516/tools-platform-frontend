@@ -10,6 +10,7 @@ import { useState } from "react";
 import { CalculatorLayout } from "@/components/tools/calculator-layout";
 import { CalculatorResult, type ResultRow } from "@/components/tools/calculator-result";
 import { DateField, TimeField } from "@/components/tools/form-fields";
+import { hintFor } from "@/components/ui/field-hint";
 import { ModeToggle } from "@/components/tools/mode-toggle";
 import { ResetButton } from "@/components/tools/reset-button";
 import { ToolWorkspace } from "@/components/tools/tool-workspace";
@@ -138,7 +139,7 @@ export function ExcelDateTool(): ReactNode {
             ) : (
               <TextField
                 fullWidth
-                helperText="A whole number is a date. A decimal also carries the time of day."
+                helperText={hintFor("A whole number is a date. A decimal also carries the time of day.")}
                 id="excel-serial"
                 label="Excel serial number"
                 onChange={(event) => setSerial(event.target.value)}

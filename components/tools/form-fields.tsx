@@ -2,6 +2,7 @@ import { TextField } from "@mui/material";
 import { DatePicker, DateTimePicker, TimePicker } from "@mui/x-date-pickers";
 import dayjs, { type Dayjs } from "dayjs";
 import type { ReactNode } from "react";
+import { hintFor } from "@/components/ui/field-hint";
 
 interface FieldProps {
   helperText?: string;
@@ -45,7 +46,7 @@ function toToolValue(value: Dayjs | null, format: string): string {
  * Props every picker shares: full width, the helper text, and a stable id for the input.
  */
 function pickerSlotProps({ helperText, id }: Pick<FieldProps, "helperText" | "id">) {
-  return { textField: { fullWidth: true, helperText, id } };
+  return { textField: { fullWidth: true, helperText: hintFor(helperText), id } };
 }
 
 /**
@@ -115,7 +116,7 @@ export function NumberField({
   return (
     <TextField
       fullWidth
-      helperText={helperText}
+      helperText={hintFor(helperText)}
       id={id}
       label={label}
       onChange={(event) => onChange(event.target.value)}

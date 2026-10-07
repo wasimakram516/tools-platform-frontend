@@ -10,6 +10,7 @@ import { useState } from "react";
 import { CalculatorLayout } from "@/components/tools/calculator-layout";
 import { CalculatorResult, type ResultRow } from "@/components/tools/calculator-result";
 import { DateTimeField } from "@/components/tools/form-fields";
+import { hintFor } from "@/components/ui/field-hint";
 import { ModeToggle } from "@/components/tools/mode-toggle";
 import { ResetButton } from "@/components/tools/reset-button";
 import { ToolWorkspace } from "@/components/tools/tool-workspace";
@@ -112,7 +113,7 @@ export function UnixTimestampTool(): ReactNode {
           mode === "toDate" ? (
             <TextField
               fullWidth
-              helperText="Values of 12 digits or more are read as milliseconds."
+              helperText={hintFor("Values of 12 digits or more are read as milliseconds.")}
               id="unix-timestamp-input"
               label="Unix timestamp"
               onChange={(event) => setTimestamp(event.target.value)}
