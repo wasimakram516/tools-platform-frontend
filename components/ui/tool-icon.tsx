@@ -7,13 +7,18 @@ import CalculateIcon from "@mui/icons-material/Calculate";
 import DataObjectIcon from "@mui/icons-material/DataObject";
 import EventIcon from "@mui/icons-material/Event";
 import FingerprintIcon from "@mui/icons-material/Fingerprint";
+import FormatSizeIcon from "@mui/icons-material/FormatSize";
 import ImageIcon from "@mui/icons-material/Image";
+import NotesIcon from "@mui/icons-material/Notes";
 import KeyIcon from "@mui/icons-material/Key";
 import LinkIcon from "@mui/icons-material/Link";
+import PlaylistRemoveIcon from "@mui/icons-material/PlaylistRemove";
 import ScheduleIcon from "@mui/icons-material/Schedule";
+import SortByAlphaIcon from "@mui/icons-material/SortByAlpha";
 import TableChartOutlinedIcon from "@mui/icons-material/TableChartOutlined";
 import TagIcon from "@mui/icons-material/Tag";
 import TerminalIcon from "@mui/icons-material/Terminal";
+import TitleIcon from "@mui/icons-material/Title";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import TransformIcon from "@mui/icons-material/Transform";
 import TravelExploreIcon from "@mui/icons-material/TravelExplore";
@@ -45,6 +50,11 @@ const TOOL_ICONS = {
   hoursWorked: ScheduleIcon,
   timestamp: UpdateIcon,
   spreadsheet: TableChartOutlinedIcon,
+  wordCount: NotesIcon,
+  characterCount: FormatSizeIcon,
+  caseConverter: TitleIcon,
+  sortLines: SortByAlphaIcon,
+  duplicateLines: PlaylistRemoveIcon,
 } as const satisfies Record<string, ComponentType<SvgIconProps>>;
 
 export type IconKey = keyof typeof TOOL_ICONS;
