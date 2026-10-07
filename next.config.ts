@@ -21,6 +21,8 @@ const contentSecurityPolicy = [
 ].join("; ");
 
 const nextConfig: NextConfig = {
+  // A second build folder, so a production build can run while the dev server is using .next.
+  distDir: process.env.NEXT_DIST_DIR ?? ".next",
   output: "standalone",
   reactCompiler: true,
   poweredByHeader: false,
