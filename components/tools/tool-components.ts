@@ -15,6 +15,9 @@ import { JsonFormatterTool } from "@/components/tools/json-formatter-tool";
 import { JwtDecoderTool } from "@/components/tools/jwt-decoder-tool";
 import { RemoveDuplicateLinesTool } from "@/components/tools/remove-duplicate-lines-tool";
 import { SortLinesTool } from "@/components/tools/sort-lines-tool";
+import { PasswordGeneratorTool } from "@/components/tools/password-generator-tool";
+import { QrCodeTool } from "@/components/tools/qr-code-tool";
+import { RandomGeneratorTool } from "@/components/tools/random-generator-tool";
 import { UnixTimestampTool } from "@/components/tools/unix-timestamp-tool";
 import { UrlEncoderDecoderTool } from "@/components/tools/url-encoder-decoder-tool";
 import { UuidGeneratorTool } from "@/components/tools/uuid-generator-tool";
@@ -40,6 +43,9 @@ export const TOOL_COMPONENTS: Readonly<Record<string, ComponentType>> = {
   "IMG-01": ImageCompressorTool,
   "IMG-02": ImageResizerTool,
   "IMG-12": FaviconGeneratorTool,
+  "GEN-01": PasswordGeneratorTool,
+  "GEN-02": QrCodeTool,
+  "GEN-03": RandomGeneratorTool,
   "TXT-01": WordCounterTool,
   "TXT-02": CharacterCounterTool,
   "TXT-03": CaseConverterTool,

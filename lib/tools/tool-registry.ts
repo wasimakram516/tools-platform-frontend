@@ -54,7 +54,7 @@ const TOOL_CATEGORIES = [
     description: "Passwords, QR codes, random values, and other things you would rather not invent.",
     eyebrow: "Create on demand",
     icon: "generator",
-    status: "planned",
+    status: "available",
   },
   {
     id: "seo",
@@ -353,6 +353,48 @@ const TOOL_DEFINITIONS = [
     status: "available",
     relatedToolIds: ["IMG-01", "IMG-02", "DEV-04"],
     icon: "favicon",
+  },
+  {
+    id: "GEN-01",
+    slug: "password-generator",
+    name: "Password Generator",
+    shortDescription: "Make strong passwords, passphrases, PINs, and tokens.",
+    description:
+      "Generate random passwords with the character kinds you choose, easy-to-remember passphrases, PINs, and keys for apps and APIs, with a strength estimate for each. Made on your device with your browser's secure random generator.",
+    categoryId: "generator",
+    keywords: ["password generator", "random password", "passphrase generator", "pin generator", "api key generator", "strong password", "random string generator"],
+    processingMode: "browser",
+    status: "available",
+    relatedToolIds: ["DEV-03", "DEV-08", "GEN-03"],
+    icon: "password",
+  },
+  {
+    id: "GEN-02",
+    slug: "qr-code-generator",
+    name: "QR Code Generator",
+    shortDescription: "Make QR codes for links, Wi-Fi, contacts, and messages.",
+    description:
+      "Create QR codes for web addresses, text, Wi-Fi networks, contact cards, email, phone numbers, SMS, and WhatsApp, with error correction levels, colours, and a contrast check. Download PNG or SVG. Nothing is uploaded.",
+    categoryId: "generator",
+    keywords: ["qr code generator", "wifi qr code", "vcard qr code", "qr code maker", "whatsapp qr code", "url to qr code", "free qr code"],
+    processingMode: "browser",
+    status: "available",
+    relatedToolIds: ["IMG-12", "DEV-05", "GEN-01"],
+    icon: "qrCode",
+  },
+  {
+    id: "GEN-03",
+    slug: "random-number-generator",
+    name: "Random Number Generator",
+    shortDescription: "Random numbers, dice, coin flips, and a list picker.",
+    description:
+      "Draw random numbers from any range with no repeats if you like, roll dice, flip coins, and pick winners, shuffle a list, or split people into fair teams. Drawn on your device with your browser's secure random generator.",
+    categoryId: "generator",
+    keywords: ["random number generator", "dice roller", "coin flip", "random picker", "team generator", "random name picker", "lottery number generator"],
+    processingMode: "browser",
+    status: "available",
+    relatedToolIds: ["GEN-01", "TXT-07", "TXT-08"],
+    icon: "random",
   },
 ] as const satisfies readonly ToolDefinition[];
 

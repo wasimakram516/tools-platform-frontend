@@ -1,4 +1,5 @@
 import AbcIcon from "@mui/icons-material/Abc";
+import CasinoIcon from "@mui/icons-material/Casino";
 import CakeOutlinedIcon from "@mui/icons-material/CakeOutlined";
 import DateRangeIcon from "@mui/icons-material/DateRange";
 import EventRepeatIcon from "@mui/icons-material/EventRepeat";
@@ -13,8 +14,10 @@ import ImageIcon from "@mui/icons-material/Image";
 import NotesIcon from "@mui/icons-material/Notes";
 import KeyIcon from "@mui/icons-material/Key";
 import LinkIcon from "@mui/icons-material/Link";
+import PasswordIcon from "@mui/icons-material/Password";
 import PhotoSizeSelectLargeIcon from "@mui/icons-material/PhotoSizeSelectLarge";
 import PlaylistRemoveIcon from "@mui/icons-material/PlaylistRemove";
+import QrCode2Icon from "@mui/icons-material/QrCode2";
 import ScheduleIcon from "@mui/icons-material/Schedule";
 import SortByAlphaIcon from "@mui/icons-material/SortByAlpha";
 import TableChartOutlinedIcon from "@mui/icons-material/TableChartOutlined";
@@ -61,6 +64,9 @@ const TOOL_ICONS = {
   imageCompress: CompressIcon,
   imageResize: PhotoSizeSelectLargeIcon,
   favicon: WebIcon,
+  password: PasswordIcon,
+  qrCode: QrCode2Icon,
+  random: CasinoIcon,
 } as const satisfies Record<string, ComponentType<SvgIconProps>>;
 
 export type IconKey = keyof typeof TOOL_ICONS;
