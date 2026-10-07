@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { describe, expect, it } from "vitest";
-import { transformUnixTimestamp } from "@/lib/tools/dates/unix-timestamp";
+import { pickerValueToTimestamp, transformUnixTimestamp } from "@/lib/tools/dates/unix-timestamp";
 
 /**
  * Returns the output text of a successful conversion, or fails the test.
@@ -20,7 +20,8 @@ describe("timestamp to date", () => {
     expect(output).toContain("Detected unit: seconds");
     expect(output).toContain("Seconds: 1760000000");
     expect(output).toContain("Milliseconds: 1760000000000");
-    expect(output).toContain("UTC: 2025-10-09T08:53:20.000Z");
+    expect(output).toContain("ISO 8601: 2025-10-09T08:53:20.000Z");
+    expect(output).toContain("UTC: 09 Oct 2025, 08:53:20 am UTC");
     expect(output).toContain("Local (UTC):");
     expect(output).toContain("08:53:20");
   });
@@ -30,7 +31,7 @@ describe("timestamp to date", () => {
 
     expect(output).toContain("Detected unit: milliseconds");
     expect(output).toContain("Seconds: 1760000000");
-    expect(output).toContain("UTC: 2025-10-09T08:53:20.123Z");
+    expect(output).toContain("ISO 8601: 2025-10-09T08:53:20.123Z");
   });
 
   it("applies the requested time zone to the local line", () => {
@@ -44,10 +45,10 @@ describe("timestamp to date", () => {
 
   it("handles zero and negative timestamps", () => {
     expect(outputOf(transformUnixTimestamp("0", "toDate", { timeZone: "UTC" }))).toContain(
-      "UTC: 1970-01-01T00:00:00.000Z",
+      "ISO 8601: 1970-01-01T00:00:00.000Z",
     );
     expect(outputOf(transformUnixTimestamp("-86400", "toDate", { timeZone: "UTC" }))).toContain(
-      "UTC: 1969-12-31T00:00:00.000Z",
+      "ISO 8601: 1969-12-31T00:00:00.000Z",
     );
   });
 
@@ -71,7 +72,7 @@ describe("date to timestamp", () => {
 
     expect(output).toContain("Seconds: 1791376200");
     expect(output).toContain("Milliseconds: 1791376200000");
-    expect(output).toContain("UTC: 2026-10-07T12:30:00.000Z");
+    expect(output).toContain("ISO 8601: 2026-10-07T12:30:00.000Z");
     expect(output).not.toContain("Note:");
   });
 
@@ -104,7 +105,7 @@ describe("date to timestamp", () => {
     const toDate = outputOf(transformUnixTimestamp("2147483647", "toDate", { timeZone: "UTC" }));
     const toTimestamp = outputOf(transformUnixTimestamp("2038-01-19T03:14:07Z", "toTimestamp"));
 
-    expect(toDate).toContain("UTC: 2038-01-19T03:14:07.000Z");
+    expect(toDate).toContain("ISO 8601: 2038-01-19T03:14:07.000Z");
     expect(toTimestamp).toContain("Seconds: 2147483647");
   });
 
@@ -121,6 +122,33 @@ describe("date to timestamp", () => {
     });
     expect(transformUnixTimestamp("", "toTimestamp")).toEqual({
       message: "Enter a date and time to convert.",
+      ok: false,
+    });
+  });
+});
+
+describe("pickerValueToTimestamp", () => {
+  it("reads the picked time as UTC", () => {
+    // Expected values were computed independently with Python's datetime module.
+    const result = pickerValueToTimestamp("2026-10-07T15:30", "utc");
+
+    expect(outputOf(result)).toContain("Seconds: 1791387000");
+    expect(outputOf(result)).toContain("ISO 8601: 2026-10-07T15:30:00.000Z");
+  });
+
+  it("reads the picked time in the browser's time zone", () => {
+    const east = pickerValueToTimestamp("2026-10-07T15:30", "local", () => 300);
+    const west = pickerValueToTimestamp("2026-10-07T15:30", "local", () => -210);
+
+    expect(outputOf(east)).toContain("Seconds: 1791369000");
+    expect(outputOf(east)).toContain("Time zone used: +05:00");
+    expect(outputOf(west)).toContain("Seconds: 1791399600");
+    expect(outputOf(west)).toContain("Time zone used: -03:30");
+  });
+
+  it("asks for a value when nothing is picked", () => {
+    expect(pickerValueToTimestamp("", "utc")).toEqual({
+      message: "Pick a date and time to convert.",
       ok: false,
     });
   });

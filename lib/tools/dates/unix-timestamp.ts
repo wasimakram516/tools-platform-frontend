@@ -34,6 +34,24 @@ export interface TimestampOptions {
   timeZone?: string;
 }
 
+const READABLE_UTC_FORMAT = new Intl.DateTimeFormat("en-GB", {
+  day: "2-digit",
+  hour: "2-digit",
+  hour12: true,
+  minute: "2-digit",
+  month: "short",
+  second: "2-digit",
+  timeZone: "UTC",
+  year: "numeric",
+});
+
+/**
+ * Formats an instant for people in UTC, for example "09 Oct 2025, 08:53:20 am UTC".
+ */
+function formatReadableUtc(instant: Date): string {
+  return `${READABLE_UTC_FORMAT.format(instant)} UTC`;
+}
+
 /**
  * Wraps lines of output in the success shape the converter UI expects.
  */
@@ -84,7 +102,8 @@ function timestampToDate(input: string, options: TimestampOptions): TimestampTra
     `Detected unit: ${isMilliseconds ? "milliseconds" : "seconds"}`,
     `Seconds: ${Math.floor(milliseconds / MS_PER_SECOND)}`,
     `Milliseconds: ${milliseconds}`,
-    `UTC: ${instant.toISOString()}`,
+    `UTC: ${formatReadableUtc(instant)}`,
+    `ISO 8601: ${instant.toISOString()}`,
     `Local (${timeZone}): ${local}`,
   ]);
 }
@@ -156,7 +175,8 @@ function dateToTimestamp(input: string): TimestampTransformResult {
   const lines = [
     `Seconds: ${Math.floor(milliseconds / MS_PER_SECOND)}`,
     `Milliseconds: ${milliseconds}`,
-    `UTC: ${new Date(milliseconds).toISOString()}`,
+    `UTC: ${formatReadableUtc(new Date(milliseconds))}`,
+    `ISO 8601: ${new Date(milliseconds).toISOString()}`,
   ];
 
   return success(zone ? lines : [...lines, "Note: no time zone was given, so it was read as UTC."]);
@@ -171,6 +191,64 @@ export function transformUnixTimestamp(
   options: TimestampOptions = {},
 ): TimestampTransformResult {
   return mode === "toDate" ? timestampToDate(input, options) : dateToTimestamp(input);
+}
+
+export type TimestampZone = "utc" | "local";
+
+const PICKER_VALUE_PATTERN = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})$/;
+
+/**
+ * Minutes east of UTC for the browser's own time zone at the given wall-clock time.
+ */
+function browserOffsetMinutes(year: number, month: number, day: number, hour: number, minute: number): number {
+  const wallClock = new Date(0);
+
+  wallClock.setFullYear(year, month - 1, day);
+  wallClock.setHours(hour, minute, 0, 0);
+
+  return -wallClock.getTimezoneOffset();
+}
+
+/**
+ * Formats minutes east of UTC as a designator such as "+05:00" or "-03:30".
+ */
+function formatOffset(offsetMinutes: number): string {
+  const sign = offsetMinutes < 0 ? "-" : "+";
+  const absolute = Math.abs(offsetMinutes);
+  const hours = String(Math.floor(absolute / 60)).padStart(2, "0");
+  const minutes = String(absolute % 60).padStart(2, "0");
+
+  return `${sign}${hours}:${minutes}`;
+}
+
+/**
+ * Converts the value of a date-time picker (YYYY-MM-DDTHH:MM) to Unix timestamps, reading it
+ * as UTC or as the browser's own time zone.
+ */
+export function pickerValueToTimestamp(
+  value: string,
+  zone: TimestampZone,
+  localOffsetMinutes: typeof browserOffsetMinutes = browserOffsetMinutes,
+): TimestampTransformResult {
+  const match = PICKER_VALUE_PATTERN.exec(value);
+
+  if (!match) {
+    return fail("Pick a date and time to convert.");
+  }
+
+  const [year, month, day, hour, minute] = match.slice(1).map(Number) as [
+    number,
+    number,
+    number,
+    number,
+    number,
+  ];
+  const designator = zone === "utc" ? "Z" : formatOffset(localOffsetMinutes(year, month, day, hour, minute));
+  const result = dateToTimestamp(`${value}:00${designator}`);
+
+  return result.ok && zone === "local"
+    ? success([...result.output.split("\n"), `Time zone used: ${designator} (your browser's time zone)`])
+    : result;
 }
 
 /**
