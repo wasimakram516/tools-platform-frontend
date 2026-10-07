@@ -10,11 +10,10 @@ import {
   Box,
   Button,
   LinearProgress,
-  ToggleButton,
-  ToggleButtonGroup,
 } from "@mui/material";
-import type { ChangeEvent, MouseEvent, ReactNode } from "react";
+import type { ChangeEvent, ReactNode } from "react";
 import { useState } from "react";
+import { ModeToggle } from "@/components/tools/mode-toggle";
 import { TextEditorPanel } from "@/components/tools/text-editor-panel";
 import { ToolFooter, ToolWorkspace } from "@/components/tools/tool-workspace";
 import { copyBlockedMessage, copyToClipboard } from "@/lib/tools/clipboard";
@@ -36,6 +35,7 @@ export type TextTransformResult = TextTransformSuccess | TextTransformFailure;
 export interface TextConversionDirection<Mode extends string> {
   mode: Mode;
   toggleLabel: string;
+  toggleIcon?: ReactNode;
   actionLabel: string;
   inputLabel: string;
   inputPlaceholder: string;
@@ -91,8 +91,8 @@ export function BidirectionalTextTool<Mode extends string>({
   const visibleErrorMessage = limitErrorMessage ?? errorMessage;
 
   /** Updates the conversion mode and clears stale output. */
-  function handleModeChange(_event: MouseEvent<HTMLElement>, nextMode: Mode | null): void {
-    if (!nextMode || nextMode === mode) {
+  function handleModeChange(nextMode: Mode): void {
+    if (nextMode === mode) {
       return;
     }
 
@@ -206,20 +206,17 @@ export function BidirectionalTextTool<Mode extends string>({
       }
       label={workspaceLabel}
       options={
-        <ToggleButtonGroup
-          aria-label={`${workspaceLabel} direction`}
-          color="primary"
-          exclusive
-          size="small"
-          value={mode}
+        <ModeToggle
+          label={`${workspaceLabel} direction`}
           onChange={handleModeChange}
-        >
-          {directions.map((direction) => (
-            <ToggleButton key={direction.mode} value={direction.mode}>
-              {direction.toggleLabel}
-            </ToggleButton>
-          ))}
-        </ToggleButtonGroup>
+          options={directions.map((direction) => ({
+            icon: direction.toggleIcon,
+            label: direction.toggleLabel,
+            tooltip: direction.actionLabel,
+            value: direction.mode,
+          }))}
+          value={mode}
+        />
       }
       secondaryActions={
         <>

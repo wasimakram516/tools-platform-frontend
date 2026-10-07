@@ -1,5 +1,7 @@
 "use client";
 
+import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import type { ReactNode } from "react";
 import {
   BidirectionalTextTool,
@@ -20,6 +22,7 @@ const BASE64_DIRECTIONS: readonly [
 ] = [
   {
     mode: "encode",
+    toggleIcon: <LockOutlinedIcon />,
     toggleLabel: "Encode",
     actionLabel: "Encode text",
     inputLabel: "Plain text",
@@ -32,6 +35,7 @@ const BASE64_DIRECTIONS: readonly [
   },
   {
     mode: "decode",
+    toggleIcon: <LockOpenOutlinedIcon />,
     toggleLabel: "Decode",
     actionLabel: "Decode Base64",
     inputLabel: "Base64 input",

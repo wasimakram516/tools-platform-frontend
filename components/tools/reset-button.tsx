@@ -1,5 +1,5 @@
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
-import { Button } from "@mui/material";
+import { Button, Tooltip } from "@mui/material";
 import type { ReactNode } from "react";
 
 interface ResetButtonProps {
@@ -11,8 +11,10 @@ interface ResetButtonProps {
  */
 export function ResetButton({ onClick }: ResetButtonProps): ReactNode {
   return (
-    <Button color="inherit" onClick={onClick} size="small" startIcon={<RestartAltIcon />}>
-      Reset
-    </Button>
+    <Tooltip arrow describeChild title="Clear every field and start again">
+      <Button color="inherit" onClick={onClick} size="small" startIcon={<RestartAltIcon />}>
+        Reset
+      </Button>
+    </Tooltip>
   );
 }

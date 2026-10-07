@@ -1,7 +1,7 @@
 "use client";
 
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { Alert, Box, Button, Stack, Typography } from "@mui/material";
+import { Alert, Box, Button, Stack, Tooltip, Typography } from "@mui/material";
 import type { ReactNode } from "react";
 import { useState } from "react";
 import { copyBlockedMessage, copyToClipboard } from "@/lib/tools/clipboard";
@@ -95,9 +95,11 @@ export function CalculatorResult({
             </Box>
           ) : null}
           <Stack direction="row" sx={{ alignItems: "center", gap: 2 }}>
-            <Button onClick={() => void handleCopy()} startIcon={<ContentCopyIcon />} variant="outlined">
-              Copy result
-            </Button>
+            <Tooltip arrow describeChild title="Copy the result as text">
+              <Button onClick={() => void handleCopy()} startIcon={<ContentCopyIcon />} variant="outlined">
+                Copy result
+              </Button>
+            </Tooltip>
             <Typography color="text.secondary" sx={{ fontSize: "0.85rem" }}>
               {copyStatus}
             </Typography>
