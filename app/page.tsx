@@ -14,7 +14,7 @@ import { BRAND_DESCRIPTOR, BRAND_TAGLINE_BEATS } from "@/lib/site-config";
 import { getToolCategories, getTools } from "@/lib/tools/tool-registry";
 
 export const metadata: Metadata = buildPageMetadata({
-  description: `${SITE_DESCRIPTION} Starting with developer tools like a JSON formatter and JWT decoder.`,
+  description: `${SITE_DESCRIPTION} Developer tools like a JSON formatter and JWT decoder, plus date and time calculators.`,
   path: "/",
 });
 

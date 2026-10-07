@@ -1,4 +1,7 @@
 import AbcIcon from "@mui/icons-material/Abc";
+import CakeOutlinedIcon from "@mui/icons-material/CakeOutlined";
+import DateRangeIcon from "@mui/icons-material/DateRange";
+import EventRepeatIcon from "@mui/icons-material/EventRepeat";
 import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
 import CalculateIcon from "@mui/icons-material/Calculate";
 import DataObjectIcon from "@mui/icons-material/DataObject";
@@ -6,11 +9,13 @@ import EventIcon from "@mui/icons-material/Event";
 import ImageIcon from "@mui/icons-material/Image";
 import KeyIcon from "@mui/icons-material/Key";
 import LinkIcon from "@mui/icons-material/Link";
+import ScheduleIcon from "@mui/icons-material/Schedule";
 import TagIcon from "@mui/icons-material/Tag";
 import TerminalIcon from "@mui/icons-material/Terminal";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import TransformIcon from "@mui/icons-material/Transform";
 import TravelExploreIcon from "@mui/icons-material/TravelExplore";
+import UpdateIcon from "@mui/icons-material/Update";
 import type { SvgIconProps } from "@mui/material";
 import type { ComponentType, ReactNode } from "react";
 
@@ -31,6 +36,11 @@ const TOOL_ICONS = {
   url: LinkIcon,
   uuid: TagIcon,
   jwt: KeyIcon,
+  age: CakeOutlinedIcon,
+  dateDifference: DateRangeIcon,
+  dateMath: EventRepeatIcon,
+  hoursWorked: ScheduleIcon,
+  timestamp: UpdateIcon,
 } as const satisfies Record<string, ComponentType<SvgIconProps>>;
 
 export type IconKey = keyof typeof TOOL_ICONS;

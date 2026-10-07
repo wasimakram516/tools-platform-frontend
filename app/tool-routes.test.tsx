@@ -13,7 +13,12 @@ import ToolPage, {
 import { AppThemeProvider } from "@/components/providers/app-theme-provider";
 import { RouteError } from "@/components/states/route-error";
 import { ToolPageLoading } from "@/components/states/tool-page-loading";
-import { getToolCategories, getTools, getToolsByCategory } from "@/lib/tools/tool-registry";
+import {
+  getAvailableToolCategories,
+  getToolCategories,
+  getTools,
+  getToolsByCategory,
+} from "@/lib/tools/tool-registry";
 
 vi.mock("@mui/material-nextjs/v16-appRouter", () => ({
   AppRouterCacheProvider: ({ children }: PropsWithChildren) => children,
@@ -61,7 +66,7 @@ describe("registry-backed routes", () => {
     expect(screen.getAllByText("Coming soon")).toHaveLength(
       getToolCategories().filter((category) => category.status === "planned").length,
     );
-    expect(screen.getByText(`${getToolsByCategory("developer").length} tools`)).toBeInTheDocument();
+    expect(screen.getAllByText(/^\d+ tools$/)).toHaveLength(getAvailableToolCategories().length);
   });
 
   it("does not render a page for a planned category", async () => {
@@ -115,6 +120,33 @@ describe("registry-backed routes", () => {
     expect(screen.getByLabelText("UUID generator workspace")).toBeInTheDocument();
   });
 
+  it("renders the date and time category with all five of its tools", async () => {
+    const page = await CategoryPage({
+      params: Promise.resolve({ categorySlug: "date-and-time-tools" }),
+    });
+
+    renderRoute(page);
+
+    expect(screen.getByRole("heading", { level: 1, name: "Date and time tools" })).toBeInTheDocument();
+    const toolLinks = screen
+      .getAllByRole("link")
+      .filter((link) => link.getAttribute("href")?.startsWith("/tools/"));
+
+    expect(toolLinks).toHaveLength(getToolsByCategory("datetime").length);
+    expect(getToolsByCategory("datetime")).toHaveLength(5);
+  });
+
+  it("renders the age calculator inside the reusable tool shell", async () => {
+    const page = await ToolPage({
+      params: Promise.resolve({ toolSlug: "age-calculator" }),
+    });
+
+    renderRoute(page);
+
+    expect(screen.getByRole("heading", { level: 1, name: "Age Calculator" })).toBeInTheDocument();
+    expect(screen.getByLabelText("Age calculator workspace")).toBeInTheDocument();
+  });
+
   it("renders the JWT tool inside the reusable tool shell", async () => {
     const page = await ToolPage({
       params: Promise.resolve({ toolSlug: "jwt-decoder" }),
@@ -127,7 +159,9 @@ describe("registry-backed routes", () => {
   });
 
   it("generates route params and metadata from the registry", async () => {
-    expect(generateCategoryParams()).toEqual([{ categorySlug: "developer-tools" }]);
+    expect(generateCategoryParams()).toEqual(
+      getAvailableToolCategories().map((category) => ({ categorySlug: category.slug })),
+    );
     expect(generateToolParams()).toEqual(
       getTools()
         .filter((tool) => tool.status === "available")

@@ -31,7 +31,7 @@ describe("tool registry", () => {
   it("separates live categories from planned ones", () => {
     const available = getAvailableToolCategories();
 
-    expect(available.map((category) => category.id)).toEqual(["developer"]);
+    expect(available.map((category) => category.id)).toEqual(["developer", "datetime"]);
     expect(getToolCategories().length).toBeGreaterThan(available.length);
     expect(getToolsByCategory("image")).toHaveLength(0);
   });
