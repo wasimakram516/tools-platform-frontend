@@ -1,11 +1,9 @@
-import { Box, Container, Stack } from "@mui/material";
+import { Container, Stack } from "@mui/material";
 import type { PropsWithChildren, ReactNode } from "react";
 import { PageFrame } from "@/components/layout/page-frame";
-import { CardGrid } from "@/components/ui/card-grid";
 import { categoriesCrumb, homeCrumb, PageTitle } from "@/components/ui/page-title";
 import { ProcessingBadge } from "@/components/ui/processing-badge";
-import { SectionHeading } from "@/components/ui/section-heading";
-import { ToolCard } from "@/components/ui/tool-card";
+import { RelatedToolLinks } from "@/components/ui/related-tool-links";
 import { ToolIcon } from "@/components/ui/tool-icon";
 import type { ToolCategory, ToolDefinition } from "@/types/tool";
 
@@ -16,7 +14,7 @@ interface ToolPageShellProps extends PropsWithChildren {
 }
 
 /**
- * Renders the consistent context, privacy details, workspace, and related links for a tool.
+ * Renders the consistent context, privacy details, workspace, and a quiet line of related tools.
  */
 export function ToolPageShell({
   category,
@@ -47,18 +45,7 @@ export function ToolPageShell({
             {children}
             <ProcessingBadge mode={tool.processingMode} />
           </Stack>
-          {relatedTools.length > 0 ? (
-            <Box aria-labelledby="related-tools-heading" component="section" sx={{ pt: 3 }}>
-              <SectionHeading id="related-tools-heading" title="Continue with" />
-              <Box sx={{ mt: 3 }}>
-                <CardGrid preset="related">
-                  {relatedTools.map((relatedTool) => (
-                    <ToolCard key={relatedTool.id} tool={relatedTool} />
-                  ))}
-                </CardGrid>
-              </Box>
-            </Box>
-          ) : null}
+          <RelatedToolLinks tools={relatedTools} />
         </Stack>
       </Container>
     </PageFrame>

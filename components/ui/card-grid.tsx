@@ -12,7 +12,6 @@ export const CARD_GRID_COLUMNS = {
   tools: { xs: "1fr", sm: "repeat(2, 1fr)", md: `repeat(${TOOLS_GRID_COLUMNS}, 1fr)` },
   catalog: { xs: "1fr", md: "repeat(2, 1fr)", xl: "repeat(3, 1fr)" },
   categories: { xs: "1fr", sm: "repeat(2, 1fr)", lg: "repeat(3, 1fr)", xl: "repeat(4, 1fr)" },
-  related: { xs: "1fr", md: "repeat(3, 1fr)" },
 } as const;
 
 export type CardGridPreset = keyof typeof CARD_GRID_COLUMNS;
