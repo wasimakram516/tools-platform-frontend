@@ -80,6 +80,9 @@ export function HomeLoading(): ReactNode {
           <Skeleton height={28} sx={{ mt: 1 }} width="min(560px, 90%)" />
         </Stack>
       </Container>
+      <Container maxWidth="lg" sx={{ pb: 3 }}>
+        <Skeleton height={56} sx={{ borderRadius: 1, mx: "auto" }} width="min(560px, 100%)" />
+      </Container>
       <Container maxWidth="lg" sx={{ pb: 8 }}>
         <CardGridSkeleton
           cardHeight={176}

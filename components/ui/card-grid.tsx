@@ -5,8 +5,11 @@ import type { PropsWithChildren, ReactNode } from "react";
  * Named column layouts for card grids. Pages and their loading skeletons reference the same
  * preset, so a loading state can never drift from the page it stands in for.
  */
+/** Columns of the tools grid on wide screens. A preview of one row is this many tools. */
+export const TOOLS_GRID_COLUMNS = 3;
+
 export const CARD_GRID_COLUMNS = {
-  tools: { xs: "1fr", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)" },
+  tools: { xs: "1fr", sm: "repeat(2, 1fr)", md: `repeat(${TOOLS_GRID_COLUMNS}, 1fr)` },
   catalog: { xs: "1fr", md: "repeat(2, 1fr)", xl: "repeat(3, 1fr)" },
   categories: { xs: "1fr", sm: "repeat(2, 1fr)", lg: "repeat(3, 1fr)", xl: "repeat(4, 1fr)" },
   related: { xs: "1fr", md: "repeat(3, 1fr)" },

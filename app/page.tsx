@@ -1,35 +1,53 @@
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { Box, Button, Chip, Container, Stack, Typography } from "@mui/material";
+import { Box, Button, Container, Typography } from "@mui/material";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { ToolBrowser, type BrowsableCategory } from "@/components/home/tool-browser";
 import { PageFrame } from "@/components/layout/page-frame";
 import { JsonLd } from "@/components/seo/json-ld";
 import { HiddenHeading } from "@/components/ui/hidden-heading";
-import { CardGrid } from "@/components/ui/card-grid";
 import { NextLink } from "@/components/ui/next-link";
-import { ToolCard } from "@/components/ui/tool-card";
-import { ToolIcon } from "@/components/ui/tool-icon";
 import { buildPageMetadata, SITE_DESCRIPTION, websiteJsonLd } from "@/lib/seo";
 import { BRAND_DESCRIPTOR, BRAND_TAGLINE_BEATS } from "@/lib/site-config";
-import { getToolCategories, getTools } from "@/lib/tools/tool-registry";
-
-export const metadata: Metadata = buildPageMetadata({
-  description: `${SITE_DESCRIPTION} Developer tools like a JSON formatter and JWT decoder, plus date and time calculators.`,
-  path: "/",
-});
+import { getAvailableToolCategories, getToolsByCategory } from "@/lib/tools/tool-registry";
 
 /**
- * Renders the product entry point: a short promise followed directly by the tool grid.
+ * Lists the categories and tools a visitor can use today, ready for the search box to filter.
+ */
+function browsableCategories(): BrowsableCategory[] {
+  return getAvailableToolCategories()
+    .map((category) => ({
+      category,
+      tools: getToolsByCategory(category.id).filter((tool) => tool.status === "available"),
+    }))
+    .filter((entry) => entry.tools.length > 0);
+}
+
+/**
+ * Builds the page description from the registry, so it names the tools that exist today.
+ */
+export function generateMetadata(): Metadata {
+  const categories = browsableCategories();
+  const categoryNames = categories.map((entry) => entry.category.name.toLowerCase()).join(" and ");
+  const toolNames = categories.flatMap((entry) => entry.tools.map((tool) => tool.name)).slice(0, 6);
+
+  return buildPageMetadata({
+    description: `${SITE_DESCRIPTION} Includes ${categoryNames}, such as the ${toolNames.join(", ")}.`,
+    path: "/",
+  });
+}
+
+/**
+ * Renders the product entry point: a short promise, a search box, and every category's tools.
  */
 export default function HomePage(): ReactNode {
   const [firstBeat, secondBeat] = BRAND_TAGLINE_BEATS;
-  const availableTools = getTools().filter((tool) => tool.status === "available");
-  const plannedCategories = getToolCategories().filter((category) => category.status === "planned");
+  const categories = browsableCategories();
 
   return (
     <PageFrame>
       <JsonLd data={websiteJsonLd()} />
-      <Container maxWidth="lg" sx={{ pb: { xs: 4, md: 6 }, pt: { xs: 7, md: 11 }, textAlign: "center" }}>
+      <Container maxWidth="lg" sx={{ pb: { xs: 4, md: 5 }, pt: { xs: 7, md: 11 }, textAlign: "center" }}>
         <Typography component="h1" variant="h1" sx={{ mx: "auto", maxWidth: 1100, whiteSpace: { md: "nowrap" } }}>
           {firstBeat}{" "}
           <Box component="span" sx={{ color: "primary.main", display: { xs: "block", md: "inline" } }}>
@@ -46,14 +64,7 @@ export default function HomePage(): ReactNode {
             maxWidth: 580,
           }}
         >
-          {BRAND_DESCRIPTOR} From developers to writers and everyone in between. No signup, no
-          clutter.
-        </Typography>
-        <Typography
-          color="text.secondary"
-          sx={{ fontSize: "0.85rem", fontWeight: 600, mt: 2 }}
-        >
-          Free to use. No signup. Every tool shows how it handles your data.
+          {BRAND_DESCRIPTOR} Free to use, no signup, and every tool shows how it handles your data.
         </Typography>
       </Container>
 
@@ -64,11 +75,7 @@ export default function HomePage(): ReactNode {
         sx={{ pb: { xs: 6, md: 8 } }}
       >
         <HiddenHeading>Available tools</HiddenHeading>
-        <CardGrid preset="tools">
-          {availableTools.map((tool) => (
-            <ToolCard key={tool.id} tool={tool} />
-          ))}
-        </CardGrid>
+        <ToolBrowser categories={categories} />
       </Container>
 
       <Box sx={{ borderTop: "1px solid", borderColor: "divider" }}>
@@ -81,26 +88,7 @@ export default function HomePage(): ReactNode {
           <Typography component="h2" id="home-coming-soon" variant="h5">
             More categories are on the way
           </Typography>
-          <Stack
-            direction="row"
-            useFlexGap
-            sx={{ flexWrap: "wrap", gap: 1, justifyContent: "center", mt: 3 }}
-          >
-            {plannedCategories.map((category) => (
-              <Chip
-                icon={<ToolIcon name={category.icon} />}
-                key={category.id}
-                label={category.name}
-                variant="outlined"
-              />
-            ))}
-          </Stack>
-          <Button
-            component={NextLink}
-            endIcon={<ArrowForwardIcon />}
-            href="/categories"
-            sx={{ mt: 3 }}
-          >
+          <Button component={NextLink} endIcon={<ArrowForwardIcon />} href="/categories" sx={{ mt: 2 }}>
             Browse every category
           </Button>
         </Container>
