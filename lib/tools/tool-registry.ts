@@ -145,6 +145,20 @@ const TOOL_DEFINITIONS = [
     icon: "jwt",
   },
   {
+    id: "DEV-08",
+    slug: "hash-generator",
+    name: "Hash Generator",
+    shortDescription: "Generate SHA-256 and other hashes from text.",
+    description:
+      "Hash text with SHA-1, SHA-256, SHA-384, and SHA-512 on your device, add a secret key for HMAC, and check the result against a checksum you already have.",
+    categoryId: "developer",
+    keywords: ["hash generator", "sha256", "sha-256 hash", "sha512", "checksum", "sha1", "hmac sha256"],
+    processingMode: "browser",
+    status: "available",
+    relatedToolIds: ["DEV-04", "DEV-03", "DEV-02"],
+    icon: "hash",
+  },
+  {
     id: "DTM-01",
     slug: "age-calculator",
     name: "Age Calculator",

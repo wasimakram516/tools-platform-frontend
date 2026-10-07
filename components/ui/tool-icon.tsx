@@ -6,6 +6,7 @@ import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
 import CalculateIcon from "@mui/icons-material/Calculate";
 import DataObjectIcon from "@mui/icons-material/DataObject";
 import EventIcon from "@mui/icons-material/Event";
+import FingerprintIcon from "@mui/icons-material/Fingerprint";
 import ImageIcon from "@mui/icons-material/Image";
 import KeyIcon from "@mui/icons-material/Key";
 import LinkIcon from "@mui/icons-material/Link";
@@ -37,6 +38,7 @@ const TOOL_ICONS = {
   url: LinkIcon,
   uuid: TagIcon,
   jwt: KeyIcon,
+  hash: FingerprintIcon,
   age: CakeOutlinedIcon,
   dateDifference: DateRangeIcon,
   dateMath: EventRepeatIcon,
