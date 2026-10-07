@@ -2,8 +2,8 @@ import { Box, Container, Skeleton, Stack } from "@mui/material";
 import type { PropsWithChildren, ReactNode } from "react";
 import { PageFrame } from "@/components/layout/page-frame";
 import { CardGrid, type CardGridPreset } from "@/components/ui/card-grid";
+import { SURFACE_RADIUS } from "@/theme/surface";
 
-const CARD_RADIUS = 10;
 
 interface CardGridSkeletonProps {
   cardHeight: number;
@@ -22,7 +22,7 @@ function CardGridSkeleton({ cardHeight, preset, count }: CardGridSkeletonProps):
           animation="wave"
           height={cardHeight}
           key={index}
-          sx={{ borderRadius: `${CARD_RADIUS}px` }}
+          sx={{ borderRadius: SURFACE_RADIUS }}
           variant="rounded"
         />
       ))}
@@ -170,7 +170,7 @@ export function ToolLoading(): ReactNode {
             sx={{
               border: "1px solid",
               borderColor: "divider",
-              borderRadius: `${CARD_RADIUS}px`,
+              borderRadius: SURFACE_RADIUS,
               overflow: "hidden",
             }}
           >

@@ -3,6 +3,7 @@ import { Card, CardActionArea, Stack, Typography } from "@mui/material";
 import type { ReactNode } from "react";
 import { IconTile } from "@/components/ui/icon-tile";
 import { NextLink } from "@/components/ui/next-link";
+import { CARD_HOVER_SX } from "@/theme/surface";
 import type { ToolDefinition } from "@/types/tool";
 
 interface ToolCardProps {
@@ -15,7 +16,7 @@ interface ToolCardProps {
 export function ToolCard({ tool }: ToolCardProps): ReactNode {
   const isAvailable = tool.status === "available";
   const content = (
-    <Stack sx={{ gap: 2, height: "100%", p: 3 }}>
+    <Stack sx={{ gap: 2.25, height: "100%", p: 3.25 }}>
       <IconTile icon={tool.icon} muted={!isAvailable} size={52} />
       <Stack sx={{ flexGrow: 1 }}>
         <Typography component="h3" variant="h6">
@@ -47,10 +48,7 @@ export function ToolCard({ tool }: ToolCardProps): ReactNode {
       variant="outlined"
       sx={{
         height: "100%",
-        transition: "border-color 150ms ease, transform 150ms ease",
-        ...(isAvailable && {
-          "&:hover": { borderColor: "primary.main", transform: "translateY(-2px)" },
-        }),
+        ...(isAvailable && CARD_HOVER_SX),
       }}
     >
       {isAvailable ? (

@@ -3,6 +3,7 @@ import { Box, Card, CardActionArea, Chip, Stack, Typography } from "@mui/materia
 import { NextLink } from "@/components/ui/next-link";
 import type { ReactNode } from "react";
 import { IconTile } from "@/components/ui/icon-tile";
+import { CARD_HOVER_SX } from "@/theme/surface";
 import type { ToolCategory } from "@/types/tool";
 
 interface CategoryCardProps {
@@ -16,7 +17,7 @@ interface CategoryCardProps {
 export function CategoryCard({ category, toolCount }: CategoryCardProps): ReactNode {
   const isAvailable = category.status === "available";
   const content = (
-    <Stack sx={{ gap: 2, height: "100%", p: 3 }}>
+    <Stack sx={{ gap: 2.25, height: "100%", p: 3.25 }}>
       <Stack direction="row" sx={{ alignItems: "flex-start", justifyContent: "space-between" }}>
         <IconTile icon={category.icon} muted={!isAvailable} size={52} />
         <Chip
@@ -58,10 +59,7 @@ export function CategoryCard({ category, toolCount }: CategoryCardProps): ReactN
       variant="outlined"
       sx={{
         height: "100%",
-        transition: "border-color 150ms ease, transform 150ms ease",
-        ...(isAvailable && {
-          "&:hover": { borderColor: "primary.main", transform: "translateY(-2px)" },
-        }),
+        ...(isAvailable && CARD_HOVER_SX),
       }}
     >
       {isAvailable ? (

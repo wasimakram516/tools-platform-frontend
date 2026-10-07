@@ -1,5 +1,6 @@
 import { Box, Paper, Stack, Typography } from "@mui/material";
 import type { PropsWithChildren, ReactNode } from "react";
+import { SURFACE_SHADOW } from "@/theme/surface";
 
 interface ToolWorkspaceProps extends PropsWithChildren {
   /** The main call to action, shown beside the options. Optional for live calculators. */
@@ -26,7 +27,7 @@ export function ToolWorkspace({
     <Paper
       aria-label={label}
       component="section"
-      sx={{ border: "1px solid", borderColor: "divider", overflow: "hidden" }}
+      sx={{ border: "1px solid", borderColor: "divider", boxShadow: SURFACE_SHADOW, overflow: "hidden" }}
     >
       <Stack
         direction={{ xs: "column", md: "row" }}
