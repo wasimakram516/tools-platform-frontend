@@ -14,6 +14,7 @@ describe("calculateDateMath", () => {
     // 2026-10-07 + 1 year 2 months = 2027-12-07, then + 25 days = 2028-01-01 (Saturday)
     expect(calculateDateMath(input({ days: 4, months: 2, weeks: 3, years: 1 }))).toEqual({
       date: "2028-01-01",
+      shortDate: "01 Jan 2028",
       daysFromStart: 451,
       longDate: "Saturday, 1 January 2028",
       ok: true,

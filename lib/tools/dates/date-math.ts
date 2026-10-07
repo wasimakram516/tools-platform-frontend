@@ -4,6 +4,7 @@ import {
   daysBetween,
   formatIsoDate,
   formatLongDate,
+  formatShortDate,
   isSupportedDate,
   parseIsoDate,
 } from "@/lib/tools/dates/calendar";
@@ -29,6 +30,7 @@ export interface DateMathSuccess {
   /** The result as YYYY-MM-DD. */
   date: string;
   longDate: string;
+  shortDate: string;
   daysFromStart: number;
 }
 
@@ -76,5 +78,6 @@ export function calculateDateMath(input: DateMathInput): DateMathResult {
     daysFromStart: daysBetween(start, result),
     longDate: formatLongDate(result),
     ok: true,
+    shortDate: formatShortDate(result),
   };
 }

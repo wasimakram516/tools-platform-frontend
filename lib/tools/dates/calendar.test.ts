@@ -4,6 +4,7 @@ import {
   addDays,
   addMonths,
   compareDates,
+  formatShortDate,
   daysBetween,
   daysInMonth,
   differenceInYmd,
@@ -180,5 +181,12 @@ describe("differences in years, months, and days", () => {
       months: 0,
       years: 24,
     });
+  });
+});
+
+describe("formatShortDate", () => {
+  it("names the month so day and month cannot be confused", () => {
+    expect(formatShortDate({ day: 7, month: 10, year: 2026 })).toBe("07 Oct 2026");
+    expect(formatShortDate({ day: 29, month: 4, year: 2032 })).toBe("29 Apr 2032");
   });
 });

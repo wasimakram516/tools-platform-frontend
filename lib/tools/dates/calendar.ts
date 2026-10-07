@@ -166,6 +166,16 @@ export function formatLongDate(date: CalendarDate): string {
 }
 
 /**
+ * Formats a date compactly with a named month, for example "09 Oct 2026". The month is never a
+ * number, so day and month cannot be confused.
+ */
+export function formatShortDate(date: CalendarDate): string {
+  const month = (MONTHS[date.month - 1] ?? "").slice(0, 3);
+
+  return `${String(date.day).padStart(2, "0")} ${month} ${date.year}`;
+}
+
+/**
  * Splits the span between two dates (from on or before to) into whole years, months, and days.
  * Months are counted with month-end clamping, so the answer agrees with addMonths: from
  * 31 January to 1 March is 1 month and 1 day.
