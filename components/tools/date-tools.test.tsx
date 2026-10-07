@@ -1,10 +1,11 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import type { PropsWithChildren, ReactElement } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { AppThemeProvider } from "@/components/providers/app-theme-provider";
 import { AgeCalculatorTool } from "@/components/tools/age-calculator-tool";
 import { DateDifferenceTool } from "@/components/tools/date-difference-tool";
 import { DateMathTool } from "@/components/tools/date-math-tool";
+import { ExcelDateTool } from "@/components/tools/excel-date-tool";
 import { HoursWorkedTool } from "@/components/tools/hours-worked-tool";
 import { UnixTimestampTool } from "@/components/tools/unix-timestamp-tool";
 
@@ -12,18 +13,54 @@ vi.mock("@mui/material-nextjs/v16-appRouter", () => ({
   AppRouterCacheProvider: ({ children }: PropsWithChildren) => children,
 }));
 
+vi.mock("@/components/tools/form-fields", () => {
+  /**
+   * Stands in for the real pickers so these tests can type ISO values directly; the pickers
+   * themselves are covered in form-fields.test.tsx.
+   */
+  const fieldFor =
+    (type: string) =>
+    ({
+      id,
+      label,
+      max,
+      min,
+      onChange,
+      value,
+    }: {
+      id: string;
+      label: string;
+      max?: number;
+      min?: number;
+      onChange: (value: string) => void;
+      value: string;
+    }) => (
+      <label htmlFor={id}>
+        {label}
+        <input
+          id={id}
+          max={max}
+          min={min}
+          onChange={(event) => onChange(event.target.value)}
+          type={type}
+          value={value}
+        />
+      </label>
+    );
+
+  return {
+    DateField: fieldFor("date"),
+    DateTimeField: fieldFor("datetime-local"),
+    NumberField: fieldFor("number"),
+    TimeField: fieldFor("time"),
+  };
+});
+
 /**
  * Renders a tool inside the production theme.
  */
 function renderTool(tool: ReactElement): void {
   render(<AppThemeProvider>{tool}</AppThemeProvider>);
-}
-
-/**
- * Reads the text of a labelled textarea.
- */
-function valueOf(label: string): string {
-  return (screen.getByLabelText(label) as HTMLTextAreaElement).value;
 }
 
 /**
@@ -190,22 +227,94 @@ describe("HoursWorkedTool", () => {
 });
 
 describe("UnixTimestampTool", () => {
-  it("converts the example timestamp to a date", async () => {
+  it("starts on the date picker and asks for a date and time", () => {
     renderTool(<UnixTimestampTool />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Load example" }));
-    fireEvent.click(screen.getByRole("button", { name: "Convert to date" }));
-
-    await waitFor(() => expect(valueOf("Date and time")).toContain("UTC: 2025-10-09T08:53:20.000Z"));
+    expect(screen.getByLabelText("Date and time")).toBeInTheDocument();
+    expect(screen.getByText("Pick a date and time to see the Unix timestamp.")).toBeInTheDocument();
   });
 
-  it("converts a date to a timestamp after switching direction", async () => {
+  it("converts a timestamp to a date as you type", () => {
     renderTool(<UnixTimestampTool />);
 
-    fireEvent.click(screen.getByRole("button", { name: "Date to timestamp" }));
-    fireEvent.click(screen.getByRole("button", { name: "Load example" }));
-    fireEvent.click(screen.getByRole("button", { name: "Convert to timestamp" }));
+    fireEvent.click(screen.getByRole("button", { name: "Timestamp to date" }));
 
-    await waitFor(() => expect(valueOf("Unix timestamp")).toContain("Seconds: 1791376200"));
+    expect(screen.getByText("Enter a Unix timestamp to see the date.")).toBeInTheDocument();
+
+    fill("Unix timestamp", "1760000000");
+
+    expect(screen.getByText("09 Oct 2025, 08:53:20 am UTC")).toBeInTheDocument();
+    expect(screen.getByText("seconds")).toBeInTheDocument();
+  });
+
+  it("rejects a timestamp that is not a number", () => {
+    renderTool(<UnixTimestampTool />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Timestamp to date" }));
+
+    fill("Unix timestamp", "tomorrow");
+
+    expect(screen.getByText(/Enter digits only/)).toBeInTheDocument();
+  });
+
+  it("converts a picked date and time, as UTC or in the browser's time zone", () => {
+    renderTool(<UnixTimestampTool />);
+
+    fill("Date and time", "2026-10-07T12:30");
+
+    expect(screen.getByText("1791376200")).toBeInTheDocument();
+    expect(screen.getByText("ISO 8601")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "My time zone" }));
+
+    expect(screen.getByText("Time zone used")).toBeInTheDocument();
+  });
+});
+
+describe("ExcelDateTool", () => {
+  it("turns a picked date into its Excel serial number", () => {
+    renderTool(<ExcelDateTool />);
+
+    expect(screen.getByText("Pick a date to see its Excel number.")).toBeInTheDocument();
+
+    fill("Date", "2026-10-07");
+
+    expect(screen.getAllByText("46302")).toHaveLength(2);
+  });
+
+  it("adds the time as a fraction and follows the date system", () => {
+    renderTool(<ExcelDateTool />);
+
+    fill("Date", "2026-10-07");
+    fill("Time", "12:00");
+
+    expect(screen.getByText("46302.5")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Mac (1904)" }));
+
+    expect(screen.getByText("44840.5")).toBeInTheDocument();
+  });
+
+  it("turns a serial number back into a date, and flags the 1900 leap-year quirk", () => {
+    renderTool(<ExcelDateTool />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Excel number to date" }));
+    fill("Excel serial number", "46302");
+
+    expect(screen.getByText("Wednesday, 7 October 2026")).toBeInTheDocument();
+
+    fill("Excel serial number", "60");
+
+    expect(screen.getByText("29 February 1900")).toBeInTheDocument();
+    expect(screen.getByText(/never existed/)).toBeInTheDocument();
+  });
+
+  it("clears everything with Reset", () => {
+    renderTool(<ExcelDateTool />);
+
+    fill("Date", "2026-10-07");
+    fireEvent.click(screen.getByRole("button", { name: "Reset" }));
+
+    expect(screen.getByText("Pick a date to see its Excel number.")).toBeInTheDocument();
   });
 });
