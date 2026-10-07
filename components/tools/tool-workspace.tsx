@@ -2,8 +2,8 @@ import { Box, Paper, Stack, Typography } from "@mui/material";
 import type { PropsWithChildren, ReactNode } from "react";
 
 interface ToolWorkspaceProps extends PropsWithChildren {
-  /** The main call to action, shown beside the options. */
-  actions: ReactNode;
+  /** The main call to action, shown beside the options. Optional for live calculators. */
+  actions?: ReactNode;
   label: string;
   /** Settings that shape the result, such as direction or indentation. Shown first. */
   options?: ReactNode;
@@ -45,9 +45,11 @@ export function ToolWorkspace({
           sx={{ alignItems: { xs: "stretch", sm: "center" }, flexWrap: "wrap", gap: 1.5 }}
         >
           {options}
-          <Stack direction="row" useFlexGap sx={{ flexWrap: "wrap", gap: 1 }}>
-            {actions}
-          </Stack>
+          {actions ? (
+            <Stack direction="row" useFlexGap sx={{ flexWrap: "wrap", gap: 1 }}>
+              {actions}
+            </Stack>
+          ) : null}
         </Stack>
         {secondaryActions ? (
           <Stack
