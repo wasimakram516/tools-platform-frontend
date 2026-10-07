@@ -30,10 +30,16 @@ describe("tool registry", () => {
 
   it("separates live categories from planned ones", () => {
     const available = getAvailableToolCategories();
+    const planned = getToolCategories().filter((category) => category.status === "planned");
 
-    expect(available.map((category) => category.id)).toEqual(["developer", "datetime"]);
-    expect(getToolCategories().length).toBeGreaterThan(available.length);
-    expect(getToolsByCategory("image")).toHaveLength(0);
+    expect(available.length).toBeGreaterThan(0);
+    // A live category must have something to open, and a planned one must not offer tools yet.
+    for (const category of available) {
+      expect(getToolsByCategory(category.id).some((tool) => tool.status === "available")).toBe(true);
+    }
+    for (const category of planned) {
+      expect(getToolsByCategory(category.id).some((tool) => tool.status === "available")).toBe(false);
+    }
   });
 
   it("resolves a tool and its related tools", () => {
