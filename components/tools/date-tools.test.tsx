@@ -1,0 +1,211 @@
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import type { PropsWithChildren, ReactElement } from "react";
+import { describe, expect, it, vi } from "vitest";
+import { AppThemeProvider } from "@/components/providers/app-theme-provider";
+import { AgeCalculatorTool } from "@/components/tools/age-calculator-tool";
+import { DateDifferenceTool } from "@/components/tools/date-difference-tool";
+import { DateMathTool } from "@/components/tools/date-math-tool";
+import { HoursWorkedTool } from "@/components/tools/hours-worked-tool";
+import { UnixTimestampTool } from "@/components/tools/unix-timestamp-tool";
+
+vi.mock("@mui/material-nextjs/v16-appRouter", () => ({
+  AppRouterCacheProvider: ({ children }: PropsWithChildren) => children,
+}));
+
+/**
+ * Renders a tool inside the production theme.
+ */
+function renderTool(tool: ReactElement): void {
+  render(<AppThemeProvider>{tool}</AppThemeProvider>);
+}
+
+/**
+ * Reads the text of a labelled textarea.
+ */
+function valueOf(label: string): string {
+  return (screen.getByLabelText(label) as HTMLTextAreaElement).value;
+}
+
+/**
+ * Types a value into a labelled field.
+ */
+function fill(label: string, value: string): void {
+  fireEvent.change(screen.getByLabelText(label), { target: { value } });
+}
+
+describe("AgeCalculatorTool", () => {
+  it("asks for a date of birth before showing anything", () => {
+    renderTool(<AgeCalculatorTool getToday={() => "2026-10-07"} />);
+
+    expect(screen.getByText("Enter a date of birth to see the exact age.")).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Copy result" })).not.toBeInTheDocument();
+  });
+
+  it("shows the exact age, the totals, and the next birthday", () => {
+    renderTool(<AgeCalculatorTool getToday={() => "2026-10-07"} />);
+
+    fill("Date of birth", "1990-05-15");
+
+    expect(screen.getByText("36 years, 4 months, 22 days")).toBeInTheDocument();
+    expect(screen.getByText("13,294")).toBeInTheDocument();
+    expect(screen.getByText("Tuesday")).toBeInTheDocument();
+    expect(screen.getByText("Saturday, 15 May 2027")).toBeInTheDocument();
+    expect(screen.getByText("220 days")).toBeInTheDocument();
+  });
+
+  it("uses the chosen date instead of today, and explains a birth date in the future", () => {
+    renderTool(<AgeCalculatorTool getToday={() => "2026-10-07"} />);
+
+    fill("Date of birth", "2000-10-07");
+    fill("Age at date", "2026-10-07");
+    expect(screen.getByText("26 years")).toBeInTheDocument();
+    expect(screen.getByText("Today")).toBeInTheDocument();
+
+    fill("Date of birth", "2030-01-01");
+    expect(
+      screen.getByText("The date of birth is after the date to calculate the age at."),
+    ).toBeInTheDocument();
+  });
+
+  it("clears everything with Reset", () => {
+    renderTool(<AgeCalculatorTool getToday={() => "2026-10-07"} />);
+
+    fill("Date of birth", "1990-05-15");
+    fireEvent.click(screen.getByRole("button", { name: "Reset" }));
+
+    expect(screen.getByLabelText("Date of birth")).toHaveValue("");
+    expect(screen.getByText("Enter a date of birth to see the exact age.")).toBeInTheDocument();
+  });
+
+  it("copies the result and says so", async () => {
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, "clipboard", { configurable: true, value: { writeText } });
+    renderTool(<AgeCalculatorTool getToday={() => "2026-10-07"} />);
+
+    fill("Date of birth", "1990-05-15");
+    fireEvent.click(screen.getByRole("button", { name: "Copy result" }));
+
+    expect(await screen.findByText("Result copied.")).toBeInTheDocument();
+    expect(writeText).toHaveBeenCalledWith(expect.stringContaining("36 years, 4 months, 22 days"));
+  });
+});
+
+describe("DateDifferenceTool", () => {
+  it("shows the span and the total days, and counts the end date when asked", () => {
+    renderTool(<DateDifferenceTool />);
+
+    fill("Start date", "2026-01-01");
+    fill("End date", "2026-12-31");
+
+    expect(screen.getByText("11 months, 30 days")).toBeInTheDocument();
+    expect(screen.getByText("364")).toBeInTheDocument();
+    expect(screen.getByText("The end date is after the start date")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByLabelText("Include the end date"));
+
+    expect(screen.getByText("365")).toBeInTheDocument();
+  });
+
+  it("reports when the end date comes first", () => {
+    renderTool(<DateDifferenceTool />);
+
+    fill("Start date", "2026-03-01");
+    fill("End date", "2026-01-01");
+
+    expect(screen.getByText("The end date is before the start date")).toBeInTheDocument();
+  });
+});
+
+describe("DateMathTool", () => {
+  it("adds years, months, weeks, and days", () => {
+    renderTool(<DateMathTool getToday={() => "2026-10-07"} />);
+
+    fill("Years", "1");
+    fill("Months", "2");
+    fill("Weeks", "3");
+    fill("Days", "4");
+
+    expect(screen.getByText("Saturday, 1 January 2028")).toBeInTheDocument();
+    expect(screen.getByText("451 days later")).toBeInTheDocument();
+  });
+
+  it("subtracts with month-end clamping when switched to Subtract", () => {
+    renderTool(<DateMathTool getToday={() => "2026-10-07"} />);
+
+    fill("Start date", "2026-03-31");
+    fill("Months", "1");
+    fireEvent.click(screen.getByRole("button", { name: "Subtract" }));
+
+    expect(screen.getByText("Saturday, 28 February 2026")).toBeInTheDocument();
+    expect(screen.getByText("31 days earlier")).toBeInTheDocument();
+  });
+
+  it("waits for an amount, and rejects a negative one", () => {
+    renderTool(<DateMathTool getToday={() => "2026-10-07"} />);
+
+    expect(
+      screen.getByText("Enter an amount of years, months, weeks, or days to see the new date."),
+    ).toBeInTheDocument();
+
+    fill("Days", "-3");
+
+    expect(screen.getByText("Amounts must be whole numbers from 0 to 1,000,000.")).toBeInTheDocument();
+  });
+});
+
+describe("HoursWorkedTool", () => {
+  it("subtracts the break and shows decimal hours", () => {
+    renderTool(<HoursWorkedTool />);
+
+    fill("Start time", "09:00");
+    fill("End time", "17:30");
+    fill("Break (minutes)", "30");
+
+    expect(screen.getByText("8h 00m")).toBeInTheDocument();
+    expect(screen.getByText("8.00")).toBeInTheDocument();
+    expect(screen.queryByText("The next day")).not.toBeInTheDocument();
+  });
+
+  it("recognises a shift that runs past midnight", () => {
+    renderTool(<HoursWorkedTool />);
+
+    fill("Start time", "22:00");
+    fill("End time", "06:00");
+
+    // The net time and the shift before the break are both 8h 00m with no break taken.
+    expect(screen.getAllByText("8h 00m")).toHaveLength(2);
+    expect(screen.getByText("The next day")).toBeInTheDocument();
+  });
+
+  it("explains equal times", () => {
+    renderTool(<HoursWorkedTool />);
+
+    fill("Start time", "09:00");
+    fill("End time", "09:00");
+
+    expect(
+      screen.getByText("The start and end times are the same. Change one of them."),
+    ).toBeInTheDocument();
+  });
+});
+
+describe("UnixTimestampTool", () => {
+  it("converts the example timestamp to a date", async () => {
+    renderTool(<UnixTimestampTool />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Load example" }));
+    fireEvent.click(screen.getByRole("button", { name: "Convert to date" }));
+
+    await waitFor(() => expect(valueOf("Date and time")).toContain("UTC: 2025-10-09T08:53:20.000Z"));
+  });
+
+  it("converts a date to a timestamp after switching direction", async () => {
+    renderTool(<UnixTimestampTool />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Date to timestamp" }));
+    fireEvent.click(screen.getByRole("button", { name: "Load example" }));
+    fireEvent.click(screen.getByRole("button", { name: "Convert to timestamp" }));
+
+    await waitFor(() => expect(valueOf("Unix timestamp")).toContain("Seconds: 1791376200"));
+  });
+});
