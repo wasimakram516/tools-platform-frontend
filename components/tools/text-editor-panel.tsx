@@ -1,4 +1,4 @@
-import { Box, LinearProgress, Skeleton, Stack, TextField, Typography } from "@mui/material";
+import { Box, Skeleton, Stack, TextField, Typography } from "@mui/material";
 import type { ChangeEvent, ReactNode } from "react";
 import { formatCharacterCount } from "@/lib/tools/text-metrics";
 import { FONT_MONO } from "@/theme/typography";
@@ -36,8 +36,6 @@ export function TextEditorPanel({
   const isNearLimit =
     characterLimit !== undefined && characterCount / characterLimit >= CHARACTER_LIMIT_WARNING_RATIO;
   const remainingCharacters = characterLimit === undefined ? 0 : characterLimit - characterCount;
-  const usagePercentage =
-    characterLimit === undefined ? 0 : Math.min((characterCount / characterLimit) * 100, 100);
   const countDescriptionId = `${id}-character-count`;
   const limitStatus = isOverLimit
     ? `${formatCharacterCount(Math.abs(remainingCharacters))} over limit`
@@ -75,25 +73,6 @@ export function TextEditorPanel({
         </Typography>
       </Stack>
       <Box sx={{ position: "relative" }}>
-        {characterLimit === undefined ? null : (
-          <LinearProgress
-            aria-label={`${label} character limit: ${limitStatus}`}
-            color={isOverLimit ? "error" : isNearLimit ? "warning" : "primary"}
-            value={usagePercentage}
-            variant="determinate"
-            sx={{
-              borderTopLeftRadius: 10,
-              borderTopRightRadius: 10,
-              height: 3,
-              left: 0,
-              pointerEvents: "none",
-              position: "absolute",
-              right: 0,
-              top: 0,
-              zIndex: 1,
-            }}
-          />
-        )}
         {loading ? (
           <Stack
             aria-hidden="true"
