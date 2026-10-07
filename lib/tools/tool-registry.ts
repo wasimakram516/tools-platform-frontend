@@ -214,6 +214,20 @@ const TOOL_DEFINITIONS = [
     relatedToolIds: ["DEV-02", "DTM-02", "DTM-04"],
     icon: "timestamp",
   },
+  {
+    id: "DTM-11",
+    slug: "excel-date-converter",
+    name: "Excel Date Converter",
+    shortDescription: "Convert dates to Excel serial numbers and back.",
+    description:
+      "Turn a date and time into the number Excel stores, or turn an Excel serial number back into a date, in the Windows (1900) or Mac (1904) date system.",
+    categoryId: "datetime",
+    keywords: ["excel date converter", "excel serial number", "excel date to number", "convert number to date excel"],
+    processingMode: "browser",
+    status: "available",
+    relatedToolIds: ["DTM-08", "DTM-02", "DTM-04"],
+    icon: "spreadsheet",
+  },
 ] as const satisfies readonly ToolDefinition[];
 
 const categoryBySlug = new Map<string, ToolCategory>(

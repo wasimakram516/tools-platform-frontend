@@ -10,6 +10,7 @@ import ImageIcon from "@mui/icons-material/Image";
 import KeyIcon from "@mui/icons-material/Key";
 import LinkIcon from "@mui/icons-material/Link";
 import ScheduleIcon from "@mui/icons-material/Schedule";
+import TableChartOutlinedIcon from "@mui/icons-material/TableChartOutlined";
 import TagIcon from "@mui/icons-material/Tag";
 import TerminalIcon from "@mui/icons-material/Terminal";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
@@ -41,6 +42,7 @@ const TOOL_ICONS = {
   dateMath: EventRepeatIcon,
   hoursWorked: ScheduleIcon,
   timestamp: UpdateIcon,
+  spreadsheet: TableChartOutlinedIcon,
 } as const satisfies Record<string, ComponentType<SvgIconProps>>;
 
 export type IconKey = keyof typeof TOOL_ICONS;

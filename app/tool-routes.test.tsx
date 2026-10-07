@@ -120,7 +120,7 @@ describe("registry-backed routes", () => {
     expect(screen.getByLabelText("UUID generator workspace")).toBeInTheDocument();
   });
 
-  it("renders the date and time category with all five of its tools", async () => {
+  it("renders the date and time category with all six of its tools", async () => {
     const page = await CategoryPage({
       params: Promise.resolve({ categorySlug: "date-and-time-tools" }),
     });
@@ -133,7 +133,7 @@ describe("registry-backed routes", () => {
       .filter((link) => link.getAttribute("href")?.startsWith("/tools/"));
 
     expect(toolLinks).toHaveLength(getToolsByCategory("datetime").length);
-    expect(getToolsByCategory("datetime")).toHaveLength(5);
+    expect(getToolsByCategory("datetime")).toHaveLength(6);
   });
 
   it("renders the age calculator inside the reusable tool shell", async () => {
