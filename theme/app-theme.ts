@@ -1,9 +1,10 @@
 "use client";
 
 import { createTheme } from "@mui/material/styles";
+import { RADIUS, SURFACE_RADIUS, SURFACE_SHADOW } from "@/theme/surface";
 import { FONT_BODY, FONT_HEADING } from "@/theme/typography";
 
-const CORNER_RADIUS = 10;
+const CORNER_RADIUS = RADIUS.control;
 
 export const appTheme = createTheme({
   cssVariables: { colorSchemeSelector: "data" },
@@ -85,7 +86,31 @@ export const appTheme = createTheme({
     MuiPaper: {
       defaultProps: { elevation: 0 },
       styleOverrides: {
-        root: { backgroundImage: "none" },
+        root: { backgroundImage: "none", borderRadius: SURFACE_RADIUS },
+      },
+    },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          borderRadius: SURFACE_RADIUS,
+          boxShadow: SURFACE_SHADOW,
+          overflow: "hidden",
+        },
+      },
+    },
+    MuiPopover: {
+      styleOverrides: {
+        paper: { borderRadius: RADIUS.control + 2 },
+      },
+    },
+    MuiTooltip: {
+      styleOverrides: {
+        tooltip: { borderRadius: 8, fontSize: "0.8rem", fontWeight: 600, padding: "6px 10px" },
+      },
+    },
+    MuiAlert: {
+      styleOverrides: {
+        root: { borderRadius: CORNER_RADIUS },
       },
     },
     MuiOutlinedInput: {
