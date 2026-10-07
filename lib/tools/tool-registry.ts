@@ -18,7 +18,7 @@ const TOOL_CATEGORIES = [
     description: "Compress, resize, convert, and crop images.",
     eyebrow: "Photos and graphics",
     icon: "image",
-    status: "planned",
+    status: "available",
   },
   {
     id: "text",
@@ -311,6 +311,48 @@ const TOOL_DEFINITIONS = [
     status: "available",
     relatedToolIds: ["TXT-07", "TXT-01", "TXT-03"],
     icon: "duplicateLines",
+  },
+  {
+    id: "IMG-01",
+    slug: "image-compressor-converter",
+    name: "Image Compressor and Converter",
+    shortDescription: "Compress images and convert between JPG, PNG, and WebP.",
+    description:
+      "Make images smaller and convert them between JPEG, PNG, and WebP, several at a time, with a quality slider, a maximum width, and the size before and after for each file. Download one image or all as a zip. Nothing is uploaded.",
+    categoryId: "image",
+    keywords: ["image compressor", "compress jpg", "compress png", "png to jpg", "jpg to png", "webp converter", "convert image format", "reduce image size"],
+    processingMode: "browser",
+    status: "available",
+    relatedToolIds: ["IMG-02", "IMG-12", "DEV-04"],
+    icon: "imageCompress",
+  },
+  {
+    id: "IMG-02",
+    slug: "image-resizer",
+    name: "Image Resizer and Cropper",
+    shortDescription: "Resize, crop, rotate, and flip an image.",
+    description:
+      "Resize an image by pixels or percent, crop it to an exact size from the part you choose, or use a common size for social posts, banners, and thumbnails. Rotate, flip, and preview the result before you download it. Nothing is uploaded.",
+    categoryId: "image",
+    keywords: ["image resizer", "resize image", "crop image", "rotate image", "flip image", "resize for instagram", "change image dimensions"],
+    processingMode: "browser",
+    status: "available",
+    relatedToolIds: ["IMG-01", "IMG-12", "TXT-02"],
+    icon: "imageResize",
+  },
+  {
+    id: "IMG-12",
+    slug: "favicon-generator",
+    name: "Favicon Generator",
+    shortDescription: "Make a full favicon set and favicon.ico from one image.",
+    description:
+      "Turn one image into every favicon size browsers and phones need, a real favicon.ico, a web manifest, and the tags to paste into your page, ready to download as one zip. Nothing is uploaded.",
+    categoryId: "image",
+    keywords: ["favicon generator", "favicon.ico", "apple touch icon", "png to ico", "app icon generator", "website icon"],
+    processingMode: "browser",
+    status: "available",
+    relatedToolIds: ["IMG-01", "IMG-02", "DEV-04"],
+    icon: "favicon",
   },
 ] as const satisfies readonly ToolDefinition[];
 

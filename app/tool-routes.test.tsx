@@ -70,8 +70,15 @@ describe("registry-backed routes", () => {
   });
 
   it("does not render a page for a planned category", async () => {
+    const planned = getToolCategories().find((category) => category.status === "planned");
+
+    // Once every category is live there is nothing planned left to check.
+    if (!planned) {
+      return;
+    }
+
     await expect(
-      CategoryPage({ params: Promise.resolve({ categorySlug: "image-tools" }) }),
+      CategoryPage({ params: Promise.resolve({ categorySlug: planned.slug }) }),
     ).rejects.toThrow("NEXT_NOT_FOUND");
   });
 

@@ -4,6 +4,7 @@ import DateRangeIcon from "@mui/icons-material/DateRange";
 import EventRepeatIcon from "@mui/icons-material/EventRepeat";
 import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
 import CalculateIcon from "@mui/icons-material/Calculate";
+import CompressIcon from "@mui/icons-material/Compress";
 import DataObjectIcon from "@mui/icons-material/DataObject";
 import EventIcon from "@mui/icons-material/Event";
 import FingerprintIcon from "@mui/icons-material/Fingerprint";
@@ -12,6 +13,7 @@ import ImageIcon from "@mui/icons-material/Image";
 import NotesIcon from "@mui/icons-material/Notes";
 import KeyIcon from "@mui/icons-material/Key";
 import LinkIcon from "@mui/icons-material/Link";
+import PhotoSizeSelectLargeIcon from "@mui/icons-material/PhotoSizeSelectLarge";
 import PlaylistRemoveIcon from "@mui/icons-material/PlaylistRemove";
 import ScheduleIcon from "@mui/icons-material/Schedule";
 import SortByAlphaIcon from "@mui/icons-material/SortByAlpha";
@@ -23,6 +25,7 @@ import TextFieldsIcon from "@mui/icons-material/TextFields";
 import TransformIcon from "@mui/icons-material/Transform";
 import TravelExploreIcon from "@mui/icons-material/TravelExplore";
 import UpdateIcon from "@mui/icons-material/Update";
+import WebIcon from "@mui/icons-material/Web";
 import type { SvgIconProps } from "@mui/material";
 import type { ComponentType, ReactNode } from "react";
 
@@ -55,6 +58,9 @@ const TOOL_ICONS = {
   caseConverter: TitleIcon,
   sortLines: SortByAlphaIcon,
   duplicateLines: PlaylistRemoveIcon,
+  imageCompress: CompressIcon,
+  imageResize: PhotoSizeSelectLargeIcon,
+  favicon: WebIcon,
 } as const satisfies Record<string, ComponentType<SvgIconProps>>;
 
 export type IconKey = keyof typeof TOOL_ICONS;

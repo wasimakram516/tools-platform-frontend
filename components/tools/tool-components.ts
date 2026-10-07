@@ -6,8 +6,11 @@ import { CharacterCounterTool } from "@/components/tools/character-counter-tool"
 import { DateDifferenceTool } from "@/components/tools/date-difference-tool";
 import { DateMathTool } from "@/components/tools/date-math-tool";
 import { ExcelDateTool } from "@/components/tools/excel-date-tool";
+import { FaviconGeneratorTool } from "@/components/tools/favicon-generator-tool";
 import { HashGeneratorTool } from "@/components/tools/hash-generator-tool";
 import { HoursWorkedTool } from "@/components/tools/hours-worked-tool";
+import { ImageCompressorTool } from "@/components/tools/image-compressor-tool";
+import { ImageResizerTool } from "@/components/tools/image-resizer-tool";
 import { JsonFormatterTool } from "@/components/tools/json-formatter-tool";
 import { JwtDecoderTool } from "@/components/tools/jwt-decoder-tool";
 import { RemoveDuplicateLinesTool } from "@/components/tools/remove-duplicate-lines-tool";
@@ -34,6 +37,9 @@ export const TOOL_COMPONENTS: Readonly<Record<string, ComponentType>> = {
   "DTM-06": HoursWorkedTool,
   "DTM-08": UnixTimestampTool,
   "DTM-11": ExcelDateTool,
+  "IMG-01": ImageCompressorTool,
+  "IMG-02": ImageResizerTool,
+  "IMG-12": FaviconGeneratorTool,
   "TXT-01": WordCounterTool,
   "TXT-02": CharacterCounterTool,
   "TXT-03": CaseConverterTool,
