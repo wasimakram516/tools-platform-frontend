@@ -25,6 +25,7 @@ import {
   ACCEPTED_IMAGE_TYPES,
   formatBytes,
   formatById,
+  MAX_BATCH_FILES,
   outputFileName,
   percentSaved,
   type ImageFormatId,
@@ -33,7 +34,6 @@ import {
 import { browserImageProcessor, type ImageProcessor, type LoadedImage } from "@/lib/tools/image/image-processing";
 import { createZip } from "@/lib/tools/image/zip";
 
-const MAX_FILES = 50;
 const DEBOUNCE_MS = 250;
 const DEFAULT_QUALITY = 80;
 const FORMAT_OPTIONS = [
@@ -199,9 +199,9 @@ export function ImageCompressorTool({
    * Reads the chosen files, keeps the ones that load, and lists the ones that do not.
    */
   async function handleFiles(files: File[]): Promise<void> {
-    const room = MAX_FILES - sources.length;
+    const room = MAX_BATCH_FILES - sources.length;
     const added: Source[] = [];
-    const problems: string[] = files.length > room ? [`Only ${MAX_FILES} images can be added at a time.`] : [];
+    const problems: string[] = files.length > room ? [`Only ${MAX_BATCH_FILES} images can be added at a time.`] : [];
 
     for (const file of files.slice(0, Math.max(room, 0))) {
       const loaded = await processor.load(file);
@@ -356,7 +356,7 @@ export function ImageCompressorTool({
           <Stack sx={{ gap: 2 }}>
             <FileDropZone
               accept={ACCEPTED_IMAGE_TYPES.join(",")}
-              hint={`PNG, JPEG, WebP, GIF, BMP, AVIF, or SVG. Up to ${MAX_FILES} images of 50 MB. Nothing is uploaded.`}
+              hint={`PNG, JPEG, WebP, GIF, BMP, AVIF, or SVG. Up to ${MAX_BATCH_FILES} images of 50 MB. Nothing is uploaded.`}
               id="image-files"
               label="Choose images"
               multiple

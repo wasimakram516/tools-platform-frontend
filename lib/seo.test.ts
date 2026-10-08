@@ -11,6 +11,7 @@ import {
 import {
   getToolBySlug,
   getToolCategoryBySlug,
+  getToolCategories,
   getTools,
   getToolsByCategory,
 } from "@/lib/tools/tool-registry";
@@ -93,7 +94,10 @@ describe("crawler files", () => {
     expect(urls).toContain("http://localhost:3000/");
     expect(urls).toContain("http://localhost:3000/categories");
     expect(urls).toContain("http://localhost:3000/categories/developer-tools");
-    expect(urls).not.toContain("http://localhost:3000/categories/image-tools");
+    // A category that is still planned must stay out of the sitemap, whichever one that is today.
+    for (const category of getToolCategories().filter((entry) => entry.status === "planned")) {
+      expect(urls).not.toContain(`http://localhost:3000/categories/${category.slug}`);
+    }
     expect(urls).toContain("http://localhost:3000/privacy");
     expect(urls).toContain("http://localhost:3000/terms");
     expect(urls.filter((url) => url.includes("/tools/"))).toHaveLength(availableTools.length);

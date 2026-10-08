@@ -36,10 +36,15 @@ function FooterLinkGroup({ links, title }: FooterLinkGroupProps): ReactNode {
   );
 }
 
+interface SiteFooterProps {
+  /** Sit directly against the content above, with no gap, for pages that end in a full-width band. */
+  flush?: boolean;
+}
+
 /**
  * Renders the product footer: brand blurb, browse and legal links, and company attribution.
  */
-export function SiteFooter(): ReactNode {
+export function SiteFooter({ flush = false }: SiteFooterProps = {}): ReactNode {
   const browseLinks = [
     { href: "/categories", label: "All categories" },
     ...getAvailableToolCategories().map((category) => ({
@@ -55,7 +60,7 @@ export function SiteFooter(): ReactNode {
   return (
     <Box
       component="footer"
-      sx={{ bgcolor: "background.paper", borderTop: "1px solid", borderColor: "divider", mt: 8 }}
+      sx={{ bgcolor: "background.paper", borderTop: "1px solid", borderColor: "divider", mt: flush ? 0 : 8 }}
     >
       <Container maxWidth="xl" sx={{ py: { xs: 5, md: 6 } }}>
         <Box

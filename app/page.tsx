@@ -1,15 +1,18 @@
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { Box, Button, Container, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import type { Metadata } from "next";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
+import { AboutSection } from "@/components/home/about-section";
+import { FaqSection } from "@/components/home/faq-section";
+import { SuggestToolSection } from "@/components/home/suggest-tool-section";
 import { ToolBrowser, type BrowsableCategory } from "@/components/home/tool-browser";
+import { WhySection } from "@/components/home/why-section";
 import { PageFrame } from "@/components/layout/page-frame";
 import { JsonLd } from "@/components/seo/json-ld";
 import { HiddenHeading } from "@/components/ui/hidden-heading";
-import { NextLink } from "@/components/ui/next-link";
-import { buildPageMetadata, SITE_DESCRIPTION, websiteJsonLd } from "@/lib/seo";
+import { FAQ_ITEMS } from "@/lib/home-content";
+import { buildPageMetadata, faqJsonLd, SITE_DESCRIPTION, websiteJsonLd } from "@/lib/seo";
 import { BRAND_DESCRIPTOR, BRAND_TAGLINE_BEATS } from "@/lib/site-config";
-import { getAvailableToolCategories, getToolsByCategory } from "@/lib/tools/tool-registry";
+import { getAvailableToolCategories, getFeaturedTools, getToolsByCategory } from "@/lib/tools/tool-registry";
 
 /**
  * Lists the categories and tools a visitor can use today, ready for the search box to filter.
@@ -28,8 +31,8 @@ function browsableCategories(): BrowsableCategory[] {
  */
 export function generateMetadata(): Metadata {
   const categories = browsableCategories();
-  const categoryNames = categories.map((entry) => entry.category.name.toLowerCase()).join(" and ");
-  const toolNames = categories.flatMap((entry) => entry.tools.map((tool) => tool.name)).slice(0, 6);
+  const categoryNames = categories.map((entry) => entry.category.name.toLowerCase()).join(", ");
+  const toolNames = getFeaturedTools().map((tool) => tool.name);
 
   return buildPageMetadata({
     description: `${SITE_DESCRIPTION} Includes ${categoryNames}, such as the ${toolNames.join(", ")}.`,
@@ -38,24 +41,30 @@ export function generateMetadata(): Metadata {
 }
 
 /**
- * Renders the product entry point: a short promise, a search box, and every category's tools.
+ * Renders the home page: what the site is, a search box, popular tools, one tile per category,
+ * who it is for, why to use it, the frequently asked questions, and a way to suggest a tool.
  */
 export default function HomePage(): ReactNode {
   const [firstBeat, secondBeat] = BRAND_TAGLINE_BEATS;
   const categories = browsableCategories();
 
   return (
-    <PageFrame>
-      <JsonLd data={websiteJsonLd()} />
+    <PageFrame flushFooter>
+      <JsonLd data={[websiteJsonLd(), faqJsonLd(FAQ_ITEMS)]} />
+      <Box
+        sx={{ backgroundImage: "radial-gradient(60% 90% at 50% 0%, var(--hero-glow), transparent 75%)" }}
+      >
       <Container maxWidth="lg" sx={{ pb: { xs: 4, md: 5 }, pt: { xs: 7, md: 11 }, textAlign: "center" }}>
-        <Typography component="h1" variant="h1" sx={{ mx: "auto", maxWidth: 1100, whiteSpace: { md: "nowrap" } }}>
+        <Typography className="rise-in" component="h1" variant="h1" sx={{ mx: "auto", maxWidth: 1100, whiteSpace: { md: "nowrap" } }}>
           {firstBeat}{" "}
           <Box component="span" sx={{ color: "primary.main", display: { xs: "block", md: "inline" } }}>
             {secondBeat}
           </Box>
         </Typography>
         <Typography
+          className="rise-in"
           color="text.secondary"
+          style={{ "--rise-delay": "140ms" } as CSSProperties}
           sx={{
             fontSize: { xs: "1.05rem", md: "1.2rem" },
             lineHeight: 1.65,
@@ -67,32 +76,22 @@ export default function HomePage(): ReactNode {
           {BRAND_DESCRIPTOR} Free to use, no signup, and every tool shows how it handles your data.
         </Typography>
       </Container>
+      </Box>
 
       <Container
-        aria-label="Available tools"
+        aria-label="Find a tool"
         component="section"
         maxWidth="lg"
-        sx={{ pb: { xs: 6, md: 8 } }}
+        sx={{ pb: { xs: 6, md: 9 } }}
       >
-        <HiddenHeading>Available tools</HiddenHeading>
-        <ToolBrowser categories={categories} />
+        <HiddenHeading>Find a tool</HiddenHeading>
+        <ToolBrowser categories={categories} featuredTools={getFeaturedTools()} />
       </Container>
 
-      <Box sx={{ borderTop: "1px solid", borderColor: "divider" }}>
-        <Container
-          aria-labelledby="home-coming-soon"
-          component="section"
-          maxWidth="lg"
-          sx={{ py: { xs: 5, md: 7 }, textAlign: "center" }}
-        >
-          <Typography component="h2" id="home-coming-soon" variant="h5">
-            More categories are on the way
-          </Typography>
-          <Button component={NextLink} endIcon={<ArrowForwardIcon />} href="/categories" sx={{ mt: 2 }}>
-            Browse every category
-          </Button>
-        </Container>
-      </Box>
+      <AboutSection />
+      <WhySection />
+      <FaqSection />
+      <SuggestToolSection />
     </PageFrame>
   );
 }

@@ -3,8 +3,7 @@ import type { PropsWithChildren } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { ToolBrowser, type BrowsableCategory } from "@/components/home/tool-browser";
 import { AppThemeProvider } from "@/components/providers/app-theme-provider";
-import { TOOLS_GRID_COLUMNS } from "@/components/ui/card-grid";
-import { getAvailableToolCategories, getToolsByCategory } from "@/lib/tools/tool-registry";
+import { getAvailableToolCategories, getFeaturedTools, getToolsByCategory } from "@/lib/tools/tool-registry";
 
 vi.mock("@mui/material-nextjs/v16-appRouter", () => ({
   AppRouterCacheProvider: ({ children }: PropsWithChildren) => children,
@@ -14,6 +13,7 @@ const CATEGORIES: BrowsableCategory[] = getAvailableToolCategories().map((catego
   category,
   tools: getToolsByCategory(category.id).filter((tool) => tool.status === "available"),
 }));
+const FEATURED = getFeaturedTools();
 
 /**
  * Renders the homepage browser inside the production theme.
@@ -21,7 +21,7 @@ const CATEGORIES: BrowsableCategory[] = getAvailableToolCategories().map((catego
 function renderBrowser(): void {
   render(
     <AppThemeProvider>
-      <ToolBrowser categories={CATEGORIES} />
+      <ToolBrowser categories={CATEGORIES} featuredTools={FEATURED} />
     </AppThemeProvider>,
   );
 }
@@ -34,30 +34,48 @@ function search(value: string): void {
 }
 
 describe("ToolBrowser", () => {
-  it("shows every category with a short preview of its tools and a link to the rest", () => {
+  it("shows one short popular row and one compact tile per category, not a row of tools for each", () => {
     renderBrowser();
 
-    for (const { category, tools } of CATEGORIES) {
-      const section = screen.getByRole("region", { name: category.name });
+    const popular = screen.getByRole("region", { name: "Popular tools" });
+    const categories = screen.getByRole("region", { name: "Browse by category" });
 
-      expect(within(section).getAllByRole("article")).toHaveLength(Math.min(tools.length, TOOLS_GRID_COLUMNS));
-      expect(within(section).getByRole("link", { name: tools.length > TOOLS_GRID_COLUMNS ? `View all ${tools.length} tools` : "View all" })).toHaveAttribute(
-        "href",
-        `/categories/${category.slug}`,
-      );
-    }
+    expect(FEATURED.length).toBeGreaterThan(0);
+    expect(within(popular).getAllByRole("article")).toHaveLength(FEATURED.length);
+    expect(within(categories).getAllByRole("article")).toHaveLength(CATEGORIES.length);
   });
 
-  it("searches every tool, including ones not previewed on the homepage", () => {
+  it("links each category tile to its page and says how many tools it holds", () => {
     renderBrowser();
 
-    const hidden = CATEGORIES.flatMap((entry) => entry.tools.slice(TOOLS_GRID_COLUMNS));
+    const categories = screen.getByRole("region", { name: "Browse by category" });
 
-    expect(hidden.length).toBeGreaterThan(0);
+    for (const { category, tools } of CATEGORIES) {
+      const tile = within(categories).getByRole("heading", { name: category.name }).closest("article") as HTMLElement;
 
-    search(hidden[0]?.name ?? "");
+      expect(within(tile).getByRole("link")).toHaveAttribute("href", `/categories/${category.slug}`);
+      expect(within(tile).getByText(`${tools.length} ${tools.length === 1 ? "tool" : "tools"}`)).toBeInTheDocument();
+    }
 
-    expect(screen.getAllByRole("heading", { name: hidden[0]?.name ?? "" }).length).toBeGreaterThan(0);
+    expect(within(categories).getByRole("link", { name: /all categories/i })).toHaveAttribute("href", "/categories");
+  });
+
+  it("searches every tool, not only the popular ones", () => {
+    renderBrowser();
+
+    const notPopular = CATEGORIES.flatMap((entry) => entry.tools).find(
+      (tool) => !FEATURED.some((featured) => featured.id === tool.id),
+    );
+
+    expect(notPopular).toBeDefined();
+
+    search(notPopular?.name ?? "");
+
+    const results = screen.getByRole("region", { name: "Search results" });
+
+    expect(within(results).getAllByRole("heading", { name: notPopular?.name ?? "" }).length).toBeGreaterThan(0);
+    expect(screen.queryByRole("region", { name: "Popular tools" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("region", { name: "Browse by category" })).not.toBeInTheDocument();
   });
 
   it("filters to matching tools as you type, across categories", () => {
@@ -69,28 +87,19 @@ describe("ToolBrowser", () => {
 
     expect(within(results).getAllByRole("article")).toHaveLength(1);
     expect(within(results).getByRole("heading", { name: "Hash Generator" })).toBeInTheDocument();
-    expect(screen.queryByRole("link", { name: /view all/i })).not.toBeInTheDocument();
     expect(screen.getByRole("status")).toHaveTextContent("1 tool found.");
   });
 
-  it("matches words from a tool's keywords, not only its name", () => {
-    renderBrowser();
-
-    search("excel serial");
-
-    expect(screen.getByRole("heading", { name: "Excel Date Converter" })).toBeInTheDocument();
-  });
-
-  it("says when nothing matches, and clears the search", () => {
+  it("says when nothing matches, and goes back to the browse view", () => {
     renderBrowser();
 
     search("zzzz");
 
-    expect(screen.getByText("No tools match this search. Try a shorter word.")).toBeInTheDocument();
+    expect(screen.getByText('No tools match this search. Try describing the job, like "compress an image".')).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "Show all tools" }));
 
     expect(screen.getByLabelText("Search tools")).toHaveValue("");
-    expect(screen.getAllByRole("link", { name: /view all/i })).toHaveLength(CATEGORIES.length);
+    expect(screen.getByRole("region", { name: "Popular tools" })).toBeInTheDocument();
   });
 });

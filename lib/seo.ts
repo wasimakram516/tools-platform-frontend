@@ -73,6 +73,26 @@ export function websiteJsonLd(): JsonLdObject {
   };
 }
 
+export interface FaqEntry {
+  answer: string;
+  question: string;
+}
+
+/**
+ * Describes a list of questions and answers, enabling FAQ rich results.
+ */
+export function faqJsonLd(entries: readonly FaqEntry[]): JsonLdObject {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: entries.map((entry) => ({
+      "@type": "Question",
+      acceptedAnswer: { "@type": "Answer", text: entry.answer },
+      name: entry.question,
+    })),
+  };
+}
+
 /**
  * Describes the page's position in the site hierarchy, enabling breadcrumb rich results.
  */

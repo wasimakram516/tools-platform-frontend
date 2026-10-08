@@ -1,5 +1,7 @@
 export const COMPANY_NAME = "Wisemen Soft (SMC-Private) Limited";
 export const COMPANY_URL = "https://wisemensoft.com";
+/** Where people send tool ideas and problem reports: the company contact form. */
+export const CONTACT_URL = `${COMPANY_URL}/contact`;
 
 export const BRAND_NAME_PARTS = ["Quickly", "Sorted"] as const;
 export const BRAND_NAME = BRAND_NAME_PARTS.join("");

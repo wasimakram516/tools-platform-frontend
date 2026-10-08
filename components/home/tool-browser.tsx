@@ -6,11 +6,13 @@ import SearchIcon from "@mui/icons-material/Search";
 import { Box, Button, IconButton, InputAdornment, Stack, TextField, Typography } from "@mui/material";
 import type { ChangeEvent, ReactNode } from "react";
 import { useState } from "react";
-import { CardGrid, TOOLS_GRID_COLUMNS } from "@/components/ui/card-grid";
-import { IconTile } from "@/components/ui/icon-tile";
+import { CardGrid } from "@/components/ui/card-grid";
+import { CategoryTile } from "@/components/ui/category-tile";
 import { NextLink } from "@/components/ui/next-link";
+import { Reveal } from "@/components/ui/reveal";
+import { revealDelay } from "@/lib/reveal-delay";
 import { ToolCard } from "@/components/ui/tool-card";
-import { searchTools } from "@/lib/tools/tool-search";
+import { searchToolsDetailed } from "@/lib/tools/tool-search";
 import type { ToolCategory, ToolDefinition } from "@/types/tool";
 
 export interface BrowsableCategory {
@@ -20,18 +22,20 @@ export interface BrowsableCategory {
 
 interface ToolBrowserProps {
   categories: readonly BrowsableCategory[];
+  /** The tools worth leading with. Shown as one short row, however many tools exist. */
+  featuredTools: readonly ToolDefinition[];
 }
 
 /**
  * The homepage's way into the tools: a search box that filters live, and, when nothing is
- * typed, every available category with a one-row preview of its tools. Search and the
- * "View all" link reach the rest, so the page stays short as the catalogue grows.
+ * typed, a short row of popular tools and one compact tile for each category. The page stays
+ * short and tidy as the catalogue grows, because each category costs one small tile.
  */
-export function ToolBrowser({ categories }: ToolBrowserProps): ReactNode {
+export function ToolBrowser({ categories, featuredTools }: ToolBrowserProps): ReactNode {
   const [query, setQuery] = useState("");
   const allTools = categories.flatMap((entry) => entry.tools);
   const isSearching = query.trim().length > 0;
-  const results = searchTools(
+  const { approximate, tools: results } = searchToolsDetailed(
     allTools,
     query,
     (categoryId) => categories.find((entry) => entry.category.id === categoryId)?.category.name ?? "",
@@ -45,14 +49,14 @@ export function ToolBrowser({ categories }: ToolBrowserProps): ReactNode {
   }
 
   return (
-    <Stack sx={{ gap: { xs: 4, md: 5 } }}>
+    <Stack sx={{ gap: { xs: 5, md: 7 } }}>
       <Box sx={{ mx: "auto", maxWidth: 560, width: "100%" }}>
         <TextField
           fullWidth
           id="tool-search"
           label="Search tools"
           onChange={handleChange}
-          placeholder="Try excel date, json, or sha256"
+          placeholder="Try excel date, sha256, or make my image smaller"
           slotProps={{
             htmlInput: { autoComplete: "off", maxLength: 80 },
             input: {
@@ -85,15 +89,22 @@ export function ToolBrowser({ categories }: ToolBrowserProps): ReactNode {
 
       {isSearching ? (
         results.length > 0 ? (
-          <CardGrid label="Search results" preset="tools">
-            {results.map((tool) => (
-              <ToolCard key={tool.id} tool={tool} />
-            ))}
-          </CardGrid>
+          <Stack sx={{ gap: 2 }}>
+            {approximate ? (
+              <Typography color="text.secondary" role="note">
+                No tool matches every word, so these are the closest matches.
+              </Typography>
+            ) : null}
+            <CardGrid label="Search results" preset="tools">
+              {results.map((tool) => (
+                <ToolCard key={tool.id} tool={tool} />
+              ))}
+            </CardGrid>
+          </Stack>
         ) : (
           <Stack sx={{ alignItems: "center", gap: 1 }}>
             <Typography color="text.secondary" role="status">
-              No tools match this search. Try a shorter word.
+              No tools match this search. Try describing the job, like "compress an image".
             </Typography>
             <Button onClick={() => setQuery("")} size="small">
               Show all tools
@@ -101,34 +112,43 @@ export function ToolBrowser({ categories }: ToolBrowserProps): ReactNode {
           </Stack>
         )
       ) : (
-        categories.map(({ category, tools }) => (
-          <Box aria-labelledby={`home-${category.id}`} component="section" key={category.id}>
+        <>
+          {featuredTools.length > 0 ? (
+            <Box aria-labelledby="home-popular-heading" component="section">
+              <Typography component="h2" id="home-popular-heading" sx={{ mb: 2.5 }} variant="h4">
+                Popular tools
+              </Typography>
+              <CardGrid preset="tools">
+                {featuredTools.map((tool, index) => (
+                  <Reveal delay={revealDelay(index % 3)} key={tool.id} sx={{ display: "grid" }}>
+                    <ToolCard tool={tool} />
+                  </Reveal>
+                ))}
+              </CardGrid>
+            </Box>
+          ) : null}
+
+          <Box aria-labelledby="home-categories-heading" component="section">
             <Stack
               direction="row"
-              sx={{ alignItems: "center", gap: 1.5, justifyContent: "space-between", mb: 2.5 }}
+              sx={{ alignItems: "baseline", gap: 2, justifyContent: "space-between", mb: 2.5 }}
             >
-              <Stack direction="row" sx={{ alignItems: "center", gap: 1.5 }}>
-                <IconTile icon={category.icon} size={40} />
-                <Typography component="h2" id={`home-${category.id}`} variant="h5">
-                  {category.name}
-                </Typography>
-              </Stack>
-              <Button
-                component={NextLink}
-                endIcon={<ArrowForwardIcon />}
-                href={`/categories/${category.slug}`}
-                size="small"
-              >
-                {tools.length > TOOLS_GRID_COLUMNS ? `View all ${tools.length} tools` : "View all"}
+              <Typography component="h2" id="home-categories-heading" variant="h4">
+                Browse by category
+              </Typography>
+              <Button component={NextLink} endIcon={<ArrowForwardIcon />} href="/categories" size="small">
+                All categories
               </Button>
             </Stack>
-            <CardGrid preset="tools">
-              {tools.slice(0, TOOLS_GRID_COLUMNS).map((tool) => (
-                <ToolCard key={tool.id} tool={tool} />
+            <CardGrid preset="categories">
+              {categories.map(({ category, tools }, index) => (
+                <Reveal delay={revealDelay(index % 4)} key={category.id} sx={{ display: "grid" }}>
+                  <CategoryTile category={category} toolCount={tools.length} />
+                </Reveal>
               ))}
             </CardGrid>
           </Box>
-        ))
+        </>
       )}
     </Stack>
   );

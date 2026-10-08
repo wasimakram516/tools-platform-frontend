@@ -18,6 +18,8 @@ export const ACCEPTED_IMAGE_TYPES = [
   "image/svg+xml",
 ] as const;
 
+/** The most images the compressor takes at once. */
+export const MAX_BATCH_FILES = 50;
 /** Bigger files are refused up front, because decoding them can exhaust a device's memory. */
 export const MAX_IMAGE_FILE_BYTES = 50 * 1024 * 1024;
 /** Largest source image, in pixels. Larger images can crash a browser tab. */
