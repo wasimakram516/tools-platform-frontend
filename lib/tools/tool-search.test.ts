@@ -101,6 +101,11 @@ describe("searchTools on the real tools", () => {
     ["pick a winner", "random-number-generator"],
     ["see what is inside a login token", "jwt-decoder"],
     ["turn my logo into an ico file", "favicon-generator"],
+    ["split the bill with friends", "tip-and-bill-split-calculator"],
+    ["monthly payment on my car loan", "loan-calculator"],
+    ["compound interest on my savings", "interest-calculator"],
+    ["what is my bmi", "bmi-calculator"],
+    ["how much is 20 percent off", "percentage-calculator"],
   ])("finds the right tool for %s", (query, slug) => {
     expect(first(query)).toBe(slug);
   });

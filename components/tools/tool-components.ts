@@ -1,6 +1,7 @@
 import type { ComponentType } from "react";
 import { AgeCalculatorTool } from "@/components/tools/age-calculator-tool";
 import { Base64EncoderDecoderTool } from "@/components/tools/base64-encoder-decoder-tool";
+import { BmiCalculatorTool } from "@/components/tools/bmi-calculator-tool";
 import { CaseConverterTool } from "@/components/tools/case-converter-tool";
 import { CharacterCounterTool } from "@/components/tools/character-counter-tool";
 import { DateDifferenceTool } from "@/components/tools/date-difference-tool";
@@ -11,13 +12,17 @@ import { HashGeneratorTool } from "@/components/tools/hash-generator-tool";
 import { HoursWorkedTool } from "@/components/tools/hours-worked-tool";
 import { ImageCompressorTool } from "@/components/tools/image-compressor-tool";
 import { ImageResizerTool } from "@/components/tools/image-resizer-tool";
+import { InterestCalculatorTool } from "@/components/tools/interest-calculator-tool";
 import { JsonFormatterTool } from "@/components/tools/json-formatter-tool";
 import { JwtDecoderTool } from "@/components/tools/jwt-decoder-tool";
+import { LoanCalculatorTool } from "@/components/tools/loan-calculator-tool";
+import { PercentageCalculatorTool } from "@/components/tools/percentage-calculator-tool";
 import { RemoveDuplicateLinesTool } from "@/components/tools/remove-duplicate-lines-tool";
 import { SortLinesTool } from "@/components/tools/sort-lines-tool";
 import { PasswordGeneratorTool } from "@/components/tools/password-generator-tool";
 import { QrCodeTool } from "@/components/tools/qr-code-tool";
 import { RandomGeneratorTool } from "@/components/tools/random-generator-tool";
+import { TipSplitTool } from "@/components/tools/tip-split-tool";
 import { UnixTimestampTool } from "@/components/tools/unix-timestamp-tool";
 import { UrlEncoderDecoderTool } from "@/components/tools/url-encoder-decoder-tool";
 import { UuidGeneratorTool } from "@/components/tools/uuid-generator-tool";
@@ -34,6 +39,11 @@ export const TOOL_COMPONENTS: Readonly<Record<string, ComponentType>> = {
   "DEV-03": UuidGeneratorTool,
   "DEV-02": JwtDecoderTool,
   "DEV-08": HashGeneratorTool,
+  "CAL-01": PercentageCalculatorTool,
+  "CAL-05": LoanCalculatorTool,
+  "CAL-07": InterestCalculatorTool,
+  "CAL-04": BmiCalculatorTool,
+  "CAL-10": TipSplitTool,
   "DTM-01": AgeCalculatorTool,
   "DTM-02": DateDifferenceTool,
   "DTM-04": DateMathTool,

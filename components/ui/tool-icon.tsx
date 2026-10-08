@@ -1,4 +1,5 @@
 import AbcIcon from "@mui/icons-material/Abc";
+import AccountBalanceOutlinedIcon from "@mui/icons-material/AccountBalanceOutlined";
 import CasinoIcon from "@mui/icons-material/Casino";
 import CakeOutlinedIcon from "@mui/icons-material/CakeOutlined";
 import DateRangeIcon from "@mui/icons-material/DateRange";
@@ -11,13 +12,17 @@ import EventIcon from "@mui/icons-material/Event";
 import FingerprintIcon from "@mui/icons-material/Fingerprint";
 import FormatSizeIcon from "@mui/icons-material/FormatSize";
 import ImageIcon from "@mui/icons-material/Image";
+import MonitorWeightOutlinedIcon from "@mui/icons-material/MonitorWeightOutlined";
 import NotesIcon from "@mui/icons-material/Notes";
+import PercentIcon from "@mui/icons-material/Percent";
 import KeyIcon from "@mui/icons-material/Key";
 import LinkIcon from "@mui/icons-material/Link";
 import PasswordIcon from "@mui/icons-material/Password";
 import PhotoSizeSelectLargeIcon from "@mui/icons-material/PhotoSizeSelectLarge";
 import PlaylistRemoveIcon from "@mui/icons-material/PlaylistRemove";
 import QrCode2Icon from "@mui/icons-material/QrCode2";
+import ReceiptLongOutlinedIcon from "@mui/icons-material/ReceiptLongOutlined";
+import SavingsOutlinedIcon from "@mui/icons-material/SavingsOutlined";
 import ScheduleIcon from "@mui/icons-material/Schedule";
 import SortByAlphaIcon from "@mui/icons-material/SortByAlpha";
 import TableChartOutlinedIcon from "@mui/icons-material/TableChartOutlined";
@@ -67,6 +72,11 @@ const TOOL_ICONS = {
   password: PasswordIcon,
   qrCode: QrCode2Icon,
   random: CasinoIcon,
+  percentage: PercentIcon,
+  loan: AccountBalanceOutlinedIcon,
+  interest: SavingsOutlinedIcon,
+  bmi: MonitorWeightOutlinedIcon,
+  tip: ReceiptLongOutlinedIcon,
 } as const satisfies Record<string, ComponentType<SvgIconProps>>;
 
 export type IconKey = keyof typeof TOOL_ICONS;
