@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   getAvailableToolCategories,
+  getFeaturedTools,
   getRelatedTools,
   getToolBySlug,
   getToolCategories,
@@ -60,5 +61,15 @@ describe("tool registry", () => {
   it("returns undefined for unknown public slugs", () => {
     expect(getToolBySlug("missing-tool")).toBeUndefined();
     expect(getToolCategoryBySlug("missing-category")).toBeUndefined();
+  });
+
+  it("keeps the homepage's popular tools few, available, and spread over categories", () => {
+    const featured = getFeaturedTools();
+
+    // A short row: at least one, and no more than a few rows of the grid.
+    expect(featured.length).toBeGreaterThan(0);
+    expect(featured.length).toBeLessThanOrEqual(9);
+    expect(featured.every((tool) => tool.status === "available")).toBe(true);
+    expect(new Set(featured.map((tool) => tool.categoryId)).size).toBeGreaterThan(1);
   });
 });

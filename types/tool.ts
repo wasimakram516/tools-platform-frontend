@@ -24,6 +24,10 @@ export interface ToolDefinition {
   description: string;
   categoryId: string;
   keywords: readonly string[];
+  /** Single everyday words that mean this tool, so a visitor who does not know its name can still find it. */
+  searchTerms: readonly string[];
+  /** Shown in the homepage's popular tools row. Keep this to the few tools worth leading with. */
+  featured?: boolean;
   processingMode: ProcessingMode;
   status: ToolStatus;
   relatedToolIds: readonly string[];

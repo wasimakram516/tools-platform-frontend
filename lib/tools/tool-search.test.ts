@@ -1,6 +1,7 @@
 // @vitest-environment node
 import { describe, expect, it } from "vitest";
-import { searchTools } from "@/lib/tools/tool-search";
+import { searchTools, searchToolsDetailed } from "@/lib/tools/tool-search";
+import { getToolCategoryById, getTools } from "@/lib/tools/tool-registry";
 import type { ToolDefinition } from "@/types/tool";
 
 function tool(overrides: Partial<ToolDefinition> & Pick<ToolDefinition, "id" | "name">): ToolDefinition {
@@ -8,6 +9,7 @@ function tool(overrides: Partial<ToolDefinition> & Pick<ToolDefinition, "id" | "
     categoryId: "developer",
     description: "",
     icon: "json",
+    searchTerms: [],
     keywords: [],
     processingMode: "browser",
     relatedToolIds: [],
@@ -45,9 +47,10 @@ describe("searchTools", () => {
     expect(ids("SHA-256")).toEqual(["A"]);
   });
 
-  it("requires every word to match", () => {
+  it("puts tools that match every word first, then the closest partial matches", () => {
     expect(ids("excel date")).toEqual(["C"]);
-    expect(ids("excel hash")).toEqual([]);
+    expect(ids("excel hash")).toEqual(["C", "A"]);
+    expect(searchToolsDetailed(TOOLS, "excel hash", categoryName).approximate).toBe(true);
   });
 
   it("ranks name matches above description matches", () => {
@@ -57,5 +60,58 @@ describe("searchTools", () => {
 
   it("matches the category name", () => {
     expect(ids("developer")).toEqual(["A"]);
+  });
+
+  it("matches the everyday words a tool lists, even when its name does not contain them", () => {
+    const withTerms = [tool({ id: "I", name: "Image Tool", searchTerms: ["photo", "upload"] }), ...TOOLS];
+
+    expect(searchTools(withTerms, "my photo is too big to upload", categoryName)[0]?.id).toBe("I");
+  });
+
+  it("ignores filler words and understands everyday synonyms", () => {
+    const tools = [tool({ id: "I", name: "Image Compressor", keywords: ["compress image"] }), ...TOOLS];
+
+    expect(searchTools(tools, "how do I make my picture smaller", categoryName).map((match) => match.id)).toEqual(["I"]);
+  });
+
+  it("does not mark a full match as approximate", () => {
+    expect(searchToolsDetailed(TOOLS, "excel date", categoryName).approximate).toBe(false);
+  });
+
+  it("returns nothing, not everything, when no word matches at all", () => {
+    expect(searchToolsDetailed(TOOLS, "zebra giraffe", categoryName)).toEqual({ approximate: false, tools: [] });
+  });
+});
+
+describe("searchTools on the real tools", () => {
+  const available = getTools().filter((entry) => entry.status === "available");
+  const first = (query: string): string | undefined =>
+    searchTools(available, query, (id) => getToolCategoryById(id)?.name ?? "")[0]?.slug;
+
+  it.each([
+    ["my image is too big to upload", "image-compressor-converter"],
+    ["how do I make a photo smaller", "image-compressor-converter"],
+    ["how old am I", "age-calculator"],
+    ["excel shows a number instead of a date", "excel-date-converter"],
+    ["how many words is my essay", "word-counter"],
+    ["i need a strong password", "password-generator"],
+    ["share my wifi with a scan", "qr-code-generator"],
+    ["my list has repeated items", "remove-duplicate-lines"],
+    ["make my json readable", "json-formatter"],
+    ["pick a winner", "random-number-generator"],
+    ["see what is inside a login token", "jwt-decoder"],
+    ["turn my logo into an ico file", "favicon-generator"],
+  ])("finds the right tool for %s", (query, slug) => {
+    expect(first(query)).toBe(slug);
+  });
+
+  it("lists several single search words for every available tool", () => {
+    for (const entry of available) {
+      expect(entry.searchTerms.length, entry.slug).toBeGreaterThanOrEqual(6);
+
+      for (const term of entry.searchTerms) {
+        expect(term, `${entry.slug}: ${term}`).toMatch(/^[a-z0-9]+$/);
+      }
+    }
   });
 });
