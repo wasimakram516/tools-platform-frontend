@@ -341,7 +341,7 @@ export const TOOL_CONTENT: Readonly<Record<string, ToolContent>> = {
     ],
     metaDescription:
       "Free age calculator: exact age in years, months, and days, plus total days lived and your next birthday. Works for any date of birth.",
-    seoTitle: "Age Calculator: Exact Age in Years, Months, Days",
+    seoTitle: "Age Calculator: Years, Months and Days",
     steps: [
       "Enter the Date of birth.",
       "Optionally enter Age at date to see the age on a different day.",
@@ -554,7 +554,7 @@ export const TOOL_CONTENT: Readonly<Record<string, ToolContent>> = {
     ],
     metaDescription:
       "Free case converter: change text to uppercase, lowercase, title case, sentence case, camelCase, snake_case, kebab-case, or a URL slug.",
-    seoTitle: "Case Converter: Uppercase, Lowercase, Title Case",
+    seoTitle: "Case Converter: Uppercase, Lowercase, Title",
     steps: [
       "Type or paste your text.",
       "Choose a style from Convert to.",
@@ -637,7 +637,7 @@ export const TOOL_CONTENT: Readonly<Record<string, ToolContent>> = {
     ],
     metaDescription:
       "Compress images and convert between JPG, PNG, and WebP online for free. Process several at once with a quality slider. Nothing is uploaded.",
-    seoTitle: "Image Compressor and Converter (JPG, PNG, WebP)",
+    seoTitle: "Image Compressor: JPG, PNG, WebP Converter",
     steps: [
       "Choose images, or drop them anywhere on the page.",
       "Pick the Output format and set the quality.",

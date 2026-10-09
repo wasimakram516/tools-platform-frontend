@@ -35,7 +35,9 @@ function FaqRow({ index, isOpen, item, onToggle }: FaqRowProps): ReactNode {
       elevation={0}
       expanded={isOpen}
       onChange={(_event, expanded) => onToggle(expanded)}
-      slotProps={{ transition: { timeout: 220 } }}
+      // MUI wraps the button in an h3 by default. The question is already an h3, so the wrapper
+      // becomes a plain div and there is no heading inside a heading.
+      slotProps={{ heading: { component: "div" }, transition: { timeout: 220 } }}
       sx={{
         "&::before": { display: "none" },
         bgcolor: "background.paper",

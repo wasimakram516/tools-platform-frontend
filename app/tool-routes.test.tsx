@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import type { PropsWithChildren, ReactNode } from "react";
 import { describe, expect, it, vi } from "vitest";
 import CategoryPage, {
@@ -11,6 +11,7 @@ import ToolPage, {
   generateStaticParams as generateToolParams,
 } from "@/app/tools/[toolSlug]/page";
 import { AppThemeProvider } from "@/components/providers/app-theme-provider";
+import { getToolContent } from "@/lib/tools/tool-content";
 import { RouteError } from "@/components/states/route-error";
 import { ToolPageLoading } from "@/components/states/tool-page-loading";
 import {
@@ -46,7 +47,8 @@ describe("registry-backed routes", () => {
     renderRoute(page);
 
     expect(screen.getByRole("heading", { name: "Developer tools" })).toBeInTheDocument();
-    const toolLinks = screen
+    // Only the page body: the footer also links to popular tools, on purpose.
+    const toolLinks = within(screen.getByRole("main"))
       .getAllByRole("link")
       .filter((link) => link.getAttribute("href")?.startsWith("/tools/"));
 
@@ -135,7 +137,8 @@ describe("registry-backed routes", () => {
     renderRoute(page);
 
     expect(screen.getByRole("heading", { level: 1, name: "Date and time tools" })).toBeInTheDocument();
-    const toolLinks = screen
+    // Only the page body: the footer also links to popular tools, on purpose.
+    const toolLinks = within(screen.getByRole("main"))
       .getAllByRole("link")
       .filter((link) => link.getAttribute("href")?.startsWith("/tools/"));
 
@@ -183,7 +186,7 @@ describe("registry-backed routes", () => {
       generateToolMetadata({
         params: Promise.resolve({ toolSlug: "json-formatter" }),
       }),
-    ).resolves.toMatchObject({ title: "JSON Formatter" });
+    ).resolves.toMatchObject({ title: getToolContent("DEV-01")?.seoTitle });
   });
 
   it("renders reusable loading and recovery states", async () => {

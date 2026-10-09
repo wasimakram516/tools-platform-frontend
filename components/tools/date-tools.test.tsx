@@ -20,6 +20,8 @@ vi.mock("@/components/tools/form-fields", () => {
    */
   const fieldFor =
     (type: string) =>
+    // A stand-in for a picker in a test, so it needs no display name.
+    // eslint-disable-next-line react/display-name
     ({
       id,
       label,

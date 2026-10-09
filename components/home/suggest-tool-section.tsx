@@ -1,5 +1,5 @@
 import MailOutlinedIcon from "@mui/icons-material/MailOutlined";
-import { Box, Button, Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import type { ReactNode } from "react";
 import { HomeSection } from "@/components/home/home-section";
 import { Reveal } from "@/components/ui/reveal";

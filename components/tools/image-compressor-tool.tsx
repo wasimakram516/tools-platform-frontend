@@ -235,7 +235,7 @@ export function ImageCompressorTool({
     }
 
     setSources((current) => current.filter((entry) => entry.id !== id));
-    setOutcomes(({ [id]: _removed, ...rest }) => rest);
+    setOutcomes((current) => Object.fromEntries(Object.entries(current).filter(([key]) => key !== id)));
   }
 
   /**

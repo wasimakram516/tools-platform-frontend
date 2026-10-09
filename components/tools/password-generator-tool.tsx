@@ -130,6 +130,9 @@ export function PasswordGeneratorTool({ source }: PasswordGeneratorToolProps = {
 
   useEffect(() => {
     // Random values are made only in the browser, so the server and the browser cannot disagree.
+    // Setting state here once after mounting is the point: it is how the browser's random source
+    // reaches the page without a mismatch with the server's output.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setResult(generate(INITIAL_SETTINGS, source));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
