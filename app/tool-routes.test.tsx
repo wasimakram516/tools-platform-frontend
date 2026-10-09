@@ -13,7 +13,6 @@ import ToolPage, {
 import { AppThemeProvider } from "@/components/providers/app-theme-provider";
 import { getToolContent } from "@/lib/tools/tool-content";
 import { RouteError } from "@/components/states/route-error";
-import { ToolPageLoading } from "@/components/states/tool-page-loading";
 import {
   getAvailableToolCategories,
   getToolCategories,
@@ -189,18 +188,13 @@ describe("registry-backed routes", () => {
     ).resolves.toMatchObject({ title: getToolContent("DEV-01")?.seoTitle });
   });
 
-  it("renders reusable loading and recovery states", async () => {
+  it("renders a reusable recovery state", async () => {
     const reset = vi.fn();
     const user = (await import("@testing-library/user-event")).default.setup();
 
-    renderRoute(
-      <>
-        <ToolPageLoading />
-        <RouteError reset={reset} />
-      </>,
-    );
+    renderRoute(<RouteError reset={reset} />);
 
-    expect(screen.getAllByRole("main")).toHaveLength(2);
+    expect(screen.getAllByRole("main")).toHaveLength(1);
     await user.click(screen.getByRole("button", { name: "Try again" }));
     expect(reset).toHaveBeenCalledOnce();
   });

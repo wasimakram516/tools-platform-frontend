@@ -6,7 +6,6 @@ import { FAQ_VISIBLE_COUNT } from "@/components/home/faq-section";
 import { FAQ_ITEMS } from "@/lib/home-content";
 import { CONTACT_URL } from "@/lib/site-config";
 import ErrorPage from "./error";
-import Loading from "./loading";
 import NotFound from "./not-found";
 import HomePage from "./page";
 
@@ -97,12 +96,6 @@ describe("application foundation", () => {
     const data = scripts.flatMap((script) => JSON.parse(script.textContent ?? "[]") as { "@type": string }[]);
 
     expect(data.map((entry) => entry["@type"])).toEqual(expect.arrayContaining(["WebSite", "FAQPage"]));
-  });
-
-  it("renders an accessible loading state", () => {
-    renderWithTheme(<Loading />);
-
-    expect(screen.getByRole("status", { name: /loading page/i })).toBeInTheDocument();
   });
 
   it("renders the not-found state", () => {
