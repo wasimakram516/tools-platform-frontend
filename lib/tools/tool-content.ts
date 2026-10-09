@@ -19,6 +19,175 @@ export interface ToolContent {
  * every available tool has an entry, with the right shape and length.
  */
 export const TOOL_CONTENT: Readonly<Record<string, ToolContent>> = {
+  "DAT-01": {
+    faqs: [
+      {
+        answer:
+          "Paste the CSV into the CSV box, or type it, and the JSON appears as you type. With First row is the header on, each row becomes an object keyed by the column names. Turn it off to get a list of lists.",
+        question: "How do I convert a CSV file to JSON?",
+      },
+      {
+        answer:
+          "Yes. It follows the standard CSV rules: a field in double quotes can hold separators and line breaks, and two quotes in a row stand for one quote.",
+        question: "Does it handle commas and line breaks inside quoted fields?",
+      },
+      {
+        answer:
+          "With Convert types on, numbers, true, false, and null become JSON values. Values with leading zeros, such as the ZIP code 02134, and numbers with more than 15 digits stay as text, so nothing is changed by accident.",
+        question: "Why are some numbers kept as text?",
+      },
+      {
+        answer:
+          "Yes. Choose Tab, Semicolon, or Pipe as the separator, or leave it on Detect it and the tool works it out from your data.",
+        question: "Can I convert a TSV, or a file that uses semicolons?",
+      },
+      {
+        answer:
+          "Leave Flatten nested objects on. An object inside an object becomes a column named with dots, such as address.city. Lists are written into the cell as JSON text.",
+        question: "How do I turn nested JSON into CSV?",
+      },
+    ],
+    metaDescription:
+      "Convert CSV or TSV to JSON and JSON to CSV online for free. Detects the separator, handles quoted fields, and flattens nested data. Runs in your browser.",
+    seoTitle: "CSV to JSON and JSON to CSV Converter",
+    steps: [
+      "Choose CSV to JSON or JSON to CSV.",
+      "Paste your data, or load the example.",
+      "Adjust the options, such as the separator, whether the first row is the header, or whether to convert numbers.",
+      "Copy the result, or download it as a file.",
+    ],
+  },
+  "DAT-05": {
+    faqs: [
+      {
+        answer:
+          "Paste the YAML into the YAML box and the JSON appears as you type. Choose the indentation you want, and copy or download the result.",
+        question: "How do I convert YAML to JSON?",
+      },
+      {
+        answer:
+          "The tool says what is wrong and the line and column where it was found. It also rejects a key that appears twice in the same map, instead of quietly keeping one.",
+        question: "What happens if my YAML has a mistake?",
+      },
+      {
+        answer:
+          "It follows YAML 1.2. That means words such as yes, no, on, and off stay text, instead of turning into true and false as they do in older YAML 1.1 readers.",
+        question: "Does it follow YAML 1.2 or 1.1?",
+      },
+      {
+        answer:
+          "A YAML file can hold several documents separated by three dashes. They become a JSON list, with one item for each document.",
+        question: "What about a file with several documents?",
+      },
+    ],
+    metaDescription:
+      "Convert YAML to JSON and JSON to YAML online for free. Follows YAML 1.2, shows where a mistake is, and runs in your browser, so nothing is uploaded.",
+    seoTitle: "YAML to JSON and JSON to YAML Converter",
+    steps: [
+      "Choose YAML to JSON or JSON to YAML.",
+      "Paste your data, or load the example.",
+      "Pick the indentation, and for JSON to YAML choose whether to sort the keys.",
+      "Copy the result, or download it as a file.",
+    ],
+  },
+  "DAT-03": {
+    faqs: [
+      {
+        answer:
+          "Attributes become keys that start with @, for example @id. Text that sits beside attributes or child elements goes under the key #text. Turn off Keep attributes to leave attributes out.",
+        question: "How are XML attributes shown in JSON?",
+      },
+      {
+        answer:
+          "Elements with the same name inside one parent become a JSON list, so three item elements become an item list with three entries.",
+        question: "What happens to repeated elements?",
+      },
+      {
+        answer:
+          "Use keys that start with @ for attributes and #text for an element's own text. If the JSON has a single top-level key, it becomes the root element. Otherwise it is wrapped in the root element name you choose.",
+        question: "How do I turn JSON into XML with attributes?",
+      },
+      {
+        answer:
+          "Comments and processing instructions are not kept, and an empty element becomes null. If the XML is not well formed, the tool says what is wrong.",
+        question: "What does the converter leave out?",
+      },
+    ],
+    metaDescription:
+      "Convert XML to JSON and JSON to XML online for free. Keeps attributes and repeated elements, reports errors, and runs in your browser.",
+    seoTitle: "XML to JSON and JSON to XML Converter",
+    steps: [
+      "Choose XML to JSON or JSON to XML.",
+      "Paste your data, or load the example.",
+      "Choose the indentation, and whether to keep attributes. For JSON to XML, set the root element.",
+      "Copy the result, or download it as a file.",
+    ],
+  },
+  "DAT-08": {
+    faqs: [
+      {
+        answer:
+          "Choose Number bases, set From base to Binary, and type the binary number. The decimal value appears beside binary, octal, and hexadecimal, and you can pick one more base to show.",
+        question: "How do I convert binary to decimal?",
+      },
+      {
+        answer:
+          "Yes. Numbers are worked out exactly, however large, up to 10,000 digits, so there is no rounding as with ordinary calculator numbers.",
+        question: "Can it handle very large numbers?",
+      },
+      {
+        answer:
+          "Text is written as the bytes it is stored as, using UTF-8. A basic letter such as A is one byte, 01000001 in binary or 41 in hex, and a symbol such as the euro sign is three bytes.",
+        question: "How is text turned into binary or hex?",
+      },
+      {
+        answer:
+          "Whole numbers from 1 to 3999 in the standard form. Forms that are not standard, such as IIII, are rejected instead of guessed at.",
+        question: "Which Roman numerals does it support?",
+      },
+    ],
+    metaDescription:
+      "Convert numbers between binary, octal, decimal, hexadecimal and any base to 36, text to binary or hex, and Roman numerals. Free, in your browser.",
+    seoTitle: "Number Base Converter: Binary, Hex, Decimal",
+    steps: [
+      "Choose Number bases, Text and bytes, or Roman numerals.",
+      "For numbers, type the number and choose the base it is written in.",
+      "For text, choose Text to bytes or Bytes to text, and the base to use.",
+      "Copy the result you need.",
+    ],
+  },
+  "DAT-12": {
+    faqs: [
+      {
+        answer:
+          "Pick the category, then choose a metric unit on one side and an imperial unit on the other. The factors are exact: an inch is 25.4 millimetres, and a pound is 0.45359237 kilograms.",
+        question: "How do I convert between metric and imperial units?",
+      },
+      {
+        answer:
+          "MB counts in thousands, so 1 MB is 1,000,000 bytes, as drives are sold. MiB counts in 1,024s, so 1 MiB is 1,048,576 bytes, as operating systems often show. The data category has both.",
+        question: "What is the difference between MB and MiB?",
+      },
+      {
+        answer:
+          "Gallons, quarts, pints, cups, and fluid ounces are US measures, and the imperial gallon is listed separately.",
+        question: "Are the gallons US or imperial?",
+      },
+      {
+        answer:
+          "Yes, down to absolute zero. Anything colder than minus 273.15 degrees Celsius is not possible, so the tool says so.",
+        question: "Can it convert temperatures below zero?",
+      },
+    ],
+    metaDescription:
+      "Free unit converter for length, weight, temperature, area, volume, speed, time and data size. Metric and imperial, with every unit shown at once.",
+    seoTitle: "Unit Converter: Length, Weight, Temperature",
+    steps: [
+      "Choose a category, such as Length or Temperature.",
+      "Type the value, and choose the unit it is in and the unit you want.",
+      "Read the answer, and the value in every other unit in the list below it.",
+    ],
+  },
   "DEV-01": {
     faqs: [
       {

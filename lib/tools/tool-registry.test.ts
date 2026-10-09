@@ -55,6 +55,8 @@ describe("tool registry", () => {
       "DEV-04",
       "DEV-05",
       "DEV-02",
+      "DAT-01",
+      "DAT-05",
     ]);
   });
 

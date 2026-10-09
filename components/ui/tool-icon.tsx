@@ -1,4 +1,9 @@
 import AbcIcon from "@mui/icons-material/Abc";
+import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
+import CodeIcon from "@mui/icons-material/Code";
+import DataArrayIcon from "@mui/icons-material/DataArray";
+import NumbersIcon from "@mui/icons-material/Numbers";
+import StraightenIcon from "@mui/icons-material/Straighten";
 import AccountBalanceOutlinedIcon from "@mui/icons-material/AccountBalanceOutlined";
 import CasinoIcon from "@mui/icons-material/Casino";
 import CakeOutlinedIcon from "@mui/icons-material/CakeOutlined";
@@ -77,6 +82,11 @@ const TOOL_ICONS = {
   interest: SavingsOutlinedIcon,
   bmi: MonitorWeightOutlinedIcon,
   tip: ReceiptLongOutlinedIcon,
+  csvJson: DataArrayIcon,
+  yaml: ArticleOutlinedIcon,
+  xml: CodeIcon,
+  numberBase: NumbersIcon,
+  unitConvert: StraightenIcon,
 } as const satisfies Record<string, ComponentType<SvgIconProps>>;
 
 export type IconKey = keyof typeof TOOL_ICONS;

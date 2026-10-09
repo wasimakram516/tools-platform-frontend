@@ -107,6 +107,13 @@ describe("searchTools on the real tools", () => {
     ["compound interest on my savings", "interest-calculator"],
     ["what is my bmi", "bmi-calculator"],
     ["how much is 20 percent off", "percentage-calculator"],
+    ["csv to json", "csv-json-converter"],
+    ["turn a spreadsheet into json", "csv-json-converter"],
+    ["convert yaml to json", "json-yaml-converter"],
+    ["xml to json", "xml-json-converter"],
+    ["binary to decimal", "number-base-converter"],
+    ["convert miles to km", "unit-converter"],
+    ["celsius to fahrenheit", "unit-converter"],
   ])("finds the right tool for %s", (query, slug) => {
     expect(first(query)).toBe(slug);
   });

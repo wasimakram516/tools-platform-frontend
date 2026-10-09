@@ -1,5 +1,12 @@
 import type { ToolCategory, ToolDefinition } from "@/types/tool";
 
+/**
+ * The categories. When you add a tool, put it in the category its MAIN AUDIENCE would look in,
+ * not the one named after its file format or technique. Tools that mostly developers use (data
+ * format converters such as CSV, JSON, YAML, and XML, timestamps, hashes, and encoders) go in
+ * Developer tools. Tools for everyone (calculators, unit conversion, QR codes, passwords, text and
+ * image tools) go in the general categories. Add a new category only for a distinct audience.
+ */
 const TOOL_CATEGORIES = [
   {
     id: "developer",
@@ -65,15 +72,6 @@ const TOOL_CATEGORIES = [
     icon: "seo",
     status: "planned",
   },
-  {
-    id: "data",
-    slug: "data-converters",
-    name: "Data converters",
-    description: "Move data between CSV, JSON, XML, YAML, and common number formats.",
-    eyebrow: "Formats",
-    icon: "data",
-    status: "planned",
-  },
 ] as const satisfies readonly ToolCategory[];
 
 const TOOL_DEFINITIONS = [
@@ -90,7 +88,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "worker",
     status: "available",
     featured: true,
-    relatedToolIds: ["DEV-04", "DEV-05", "DEV-02"],
+    relatedToolIds: ["DEV-04", "DEV-05", "DEV-02", "DAT-01", "DAT-05"],
     updatedAt: "2026-10-09",
     icon: "json",
   },
@@ -252,6 +250,86 @@ const TOOL_DEFINITIONS = [
     icon: "tip",
   },
   {
+    id: "DAT-01",
+    slug: "csv-json-converter",
+    name: "CSV and JSON Converter",
+    shortDescription: "Convert CSV or TSV to JSON and JSON to CSV, live as you type.",
+    description:
+      "Turn CSV or TSV into JSON and JSON back into CSV in your browser. Pick the separator or let it be detected, convert numbers and booleans, flatten nested objects into columns, and download the result.",
+    categoryId: "developer",
+    keywords: ["csv to json", "json to csv", "csv converter", "tsv to json", "csv to json converter", "convert csv to json online"],
+    searchTerms: ["csv", "tsv", "json", "spreadsheet", "excel", "table", "rows", "columns", "delimiter", "convert", "import", "export", "comma", "semicolon"],
+    processingMode: "browser",
+    status: "available",
+    relatedToolIds: ["DEV-01", "DAT-05", "DAT-03"],
+    updatedAt: "2026-10-09",
+    icon: "csvJson",
+  },
+  {
+    id: "DAT-05",
+    slug: "json-yaml-converter",
+    name: "JSON and YAML Converter",
+    shortDescription: "Convert YAML to JSON and JSON to YAML, live as you type.",
+    description:
+      "Turn YAML into JSON and JSON into YAML in your browser. It follows YAML 1.2, fills in aliases, reads files with several documents, and says where a mistake is.",
+    categoryId: "developer",
+    keywords: ["yaml to json", "json to yaml", "yaml converter", "yml to json", "convert yaml online"],
+    searchTerms: ["yaml", "yml", "json", "config", "kubernetes", "docker", "compose", "convert", "indent", "sort", "keys"],
+    processingMode: "browser",
+    status: "available",
+    relatedToolIds: ["DEV-01", "DAT-01", "DAT-03"],
+    updatedAt: "2026-10-09",
+    icon: "yaml",
+  },
+  {
+    id: "DAT-03",
+    slug: "xml-json-converter",
+    name: "XML and JSON Converter",
+    shortDescription: "Convert XML to JSON and JSON to XML, live as you type.",
+    description:
+      "Turn XML into JSON and JSON into XML in your browser. Attributes, repeated elements, and element text are kept, errors in the XML are reported, and nothing is uploaded.",
+    categoryId: "developer",
+    keywords: ["xml to json", "json to xml", "xml converter", "convert xml to json online"],
+    searchTerms: ["xml", "json", "soap", "rss", "feed", "attributes", "convert", "api", "elements", "tags"],
+    processingMode: "browser",
+    status: "available",
+    relatedToolIds: ["DEV-01", "DAT-05", "DAT-01"],
+    updatedAt: "2026-10-09",
+    icon: "xml",
+  },
+  {
+    id: "DAT-08",
+    slug: "number-base-converter",
+    name: "Number Base Converter",
+    shortDescription: "Convert numbers between bases, text to bytes, and Roman numerals.",
+    description:
+      "Convert whole numbers between binary, octal, decimal, hexadecimal, and any base up to 36, write text as binary or hex bytes and read it back, and convert numbers to and from Roman numerals.",
+    categoryId: "developer",
+    keywords: ["number base converter", "binary to decimal", "decimal to binary", "hex to decimal", "text to binary", "binary to text", "hex to text", "roman numeral converter"],
+    searchTerms: ["binary", "hex", "hexadecimal", "octal", "decimal", "base", "bits", "bytes", "ascii", "utf8", "roman", "numeral", "text", "convert"],
+    processingMode: "browser",
+    status: "available",
+    relatedToolIds: ["DEV-04", "DEV-08", "DAT-01"],
+    updatedAt: "2026-10-09",
+    icon: "numberBase",
+  },
+  {
+    id: "DAT-12",
+    slug: "unit-converter",
+    name: "Unit Converter",
+    shortDescription: "Convert length, weight, temperature, area, volume, speed, time, and data size.",
+    description:
+      "Convert between metric and imperial units of length, weight, temperature, area, volume, speed, and time, and between decimal and binary data sizes, with every other unit shown beside the answer.",
+    categoryId: "calculator",
+    keywords: ["unit converter", "metric to imperial", "cm to inches", "kg to lbs", "celsius to fahrenheit", "mb to gb", "miles to km"],
+    searchTerms: ["unit", "convert", "metric", "imperial", "length", "weight", "mass", "temperature", "celsius", "fahrenheit", "kelvin", "miles", "km", "inches", "feet", "pounds", "kilograms", "litres", "gallons", "speed", "mph", "bytes", "gigabytes"],
+    processingMode: "browser",
+    status: "available",
+    relatedToolIds: ["CAL-01", "DAT-08", "DTM-08"],
+    updatedAt: "2026-10-09",
+    icon: "unitConvert",
+  },
+  {
     id: "DTM-01",
     slug: "age-calculator",
     name: "Age Calculator",
@@ -323,7 +401,7 @@ const TOOL_DEFINITIONS = [
     shortDescription: "Convert Unix timestamps to dates and back.",
     description:
       "Convert seconds or milliseconds since 1970 into a readable date in UTC and your own time zone, or turn a date into a timestamp.",
-    categoryId: "datetime",
+    categoryId: "developer",
     keywords: ["unix timestamp", "epoch converter", "timestamp to date", "epoch time"],
     searchTerms: ["unix", "timestamp", "epoch", "seconds", "milliseconds", "utc", "log", "time", "date"],
     processingMode: "browser",

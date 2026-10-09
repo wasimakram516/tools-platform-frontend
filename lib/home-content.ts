@@ -126,7 +126,7 @@ const MAX_IMAGE_MEGABYTES = MAX_IMAGE_FILE_BYTES / 1024 / 1024;
 export const FAQ_ITEMS: readonly (FaqEntry & { id: string })[] = [
   {
     answer:
-      "QuicklySorted is a growing collection of free online tools for everyday tasks, including developer tools, date and time tools, text tools, image tools, and generators. Each one does a single job and opens in one click.",
+      "QuicklySorted is a growing collection of free online tools for everyday tasks, including developer tools, calculators, date and time tools, text tools, image tools, and generators. Each one does a single job and opens in one click.",
     id: "what",
     question: "What is QuicklySorted?",
   },

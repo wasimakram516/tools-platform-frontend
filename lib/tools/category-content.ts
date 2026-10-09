@@ -15,21 +15,21 @@ export interface CategoryContent {
 export const CATEGORY_CONTENT: Readonly<Record<string, CategoryContent>> = {
   calculator: {
     intro:
-      "Work out percentages, discounts, margin and markup, loan payments, simple and compound interest, BMI, and how to split a bill with a tip. Each calculator shows its answer as you type, with the working.",
+      "Work out percentages, discounts, margin and markup, loan payments, simple and compound interest, BMI, and how to split a bill with a tip, and convert units of length, weight, temperature, and more. Each shows its answer as you type, with the working.",
     metaDescription:
-      "Free online calculators: percentage, discount, margin, loan and mortgage payments, compound interest, BMI, and tip and bill split. Answers as you type.",
+      "Free online calculators and converters: percentage, loan payments, compound interest, BMI, tip split, and a unit converter. Answers as you type.",
   },
   datetime: {
     intro:
-      "Find an exact age, the days between two dates, a date after adding or subtracting time, and the hours worked in a shift. Convert Unix timestamps and Excel date numbers too.",
+      "Find an exact age, the days between two dates, a date after adding or subtracting time, and the hours worked in a shift. Convert Excel date numbers too.",
     metaDescription:
-      "Free date and time tools: age calculator, days between dates, add or subtract days, hours worked, Unix timestamp converter, and Excel date converter.",
+      "Free date and time tools: age calculator, days between dates, add or subtract days, hours worked, and Excel date converter.",
   },
   developer: {
     intro:
-      "Everyday tools for developers: format and validate JSON, encode and decode Base64 and URLs, decode JWTs, generate UUIDs, and create SHA hashes and HMACs. They run in your browser, so what you paste stays on your device.",
+      "Everyday tools for developers: format and validate JSON, convert between JSON, CSV, YAML, and XML, encode and decode Base64 and URLs, decode JWTs, generate UUIDs and SHA hashes, convert Unix timestamps, and work in other number bases. They run in your browser, so what you paste stays on your device.",
     metaDescription:
-      "Free developer tools: JSON formatter, Base64 and URL encoder, JWT decoder, UUID generator, and hash generator. They run in your browser.",
+      "Free developer tools: JSON formatter, CSV, YAML and XML converters, Base64 and URL encoder, JWT decoder, UUID and hash generators. Run in your browser.",
   },
   generator: {
     intro:
