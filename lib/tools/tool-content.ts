@@ -188,6 +188,138 @@ export const TOOL_CONTENT: Readonly<Record<string, ToolContent>> = {
       "Read the answer, and the value in every other unit in the list below it.",
     ],
   },
+  "SEO-01": {
+    faqs: [
+      {
+        answer:
+          "Meta tags are lines in the head of a page that tell search engines and social sites how to show it: the title and description in search results, and the title, text, and picture on a shared link.",
+        question: "What are meta tags?",
+      },
+      {
+        answer:
+          "Search results show about 60 characters of a title and about 160 of a description, cut by width, so the end of a longer one may be cut off. The tool counts for you and warns when one is too long or too short.",
+        question: "How long should a title and description be?",
+      },
+      {
+        answer:
+          "Open Graph tags, which start with og:, control how a link looks when it is shared on Facebook, LinkedIn, WhatsApp, and many chat apps. X also reads them, so the tool adds only the card type and your handle for X.",
+        question: "What are Open Graph tags?",
+      },
+      {
+        answer:
+          "The noindex tag asks search engines to keep a page out of their results. Use it for pages such as thank-you pages or drafts. The tool leaves it off by default.",
+        question: "What does noindex do?",
+      },
+    ],
+    metaDescription:
+      "Free meta tag generator: title, description, canonical, Open Graph and X card tags, with a live search and share preview. Runs in your browser.",
+    seoTitle: "Meta Tag Generator with Social Preview",
+    steps: [
+      "Fill in the page title, the description, and the page address.",
+      "Add a share image and your X handle if you have them.",
+      "Check the previews and the tips, and fix anything marked in red.",
+      "Copy the tags into the head of your page.",
+    ],
+  },
+  "SEO-05": {
+    faqs: [
+      {
+        answer:
+          "At the top of your site, so that it opens at yoursite.com/robots.txt. Crawlers look for it there, and only there.",
+        question: "Where do I put a robots.txt file?",
+      },
+      {
+        answer:
+          "It asks them not to. Well-behaved crawlers such as GPTBot and ClaudeBot follow it, but robots.txt is a request and not a lock, and companies rename their crawlers. The tool can add blocks for the common ones.",
+        question: "Does robots.txt stop AI companies using my pages?",
+      },
+      {
+        answer:
+          "Not always. robots.txt stops a page being crawled, but Google can still list a blocked address it finds elsewhere. To keep a page out of results, use a noindex tag on a page that crawlers are allowed to reach.",
+        question: "Does blocking a page in robots.txt remove it from Google?",
+      },
+      {
+        answer:
+          "Up to 50,000 addresses in one sitemap file. For more, split them into several sitemaps and list those in a sitemap index.",
+        question: "How many addresses can one sitemap hold?",
+      },
+    ],
+    metaDescription:
+      "Free robots.txt generator and XML sitemap maker. Block paths or AI crawlers, list your pages, and download the file. Runs in your browser.",
+    seoTitle: "robots.txt and Sitemap Generator",
+    steps: [
+      "Choose robots.txt or XML sitemap.",
+      "For robots.txt, list the paths to block and allow, and any sitemap addresses.",
+      "For a sitemap, paste your page addresses, one on each line.",
+      "Check the tips, then copy or download the file.",
+    ],
+  },
+  "SEO-07": {
+    faqs: [
+      {
+        answer:
+          "A UTM link is an ordinary link with tags added to the end, such as utm_source and utm_medium. Analytics tools read them to show which campaign, email, or post sent each visit.",
+        question: "What is a UTM link?",
+      },
+      {
+        answer:
+          "Google Analytics expects a source, a medium, and a campaign name. The campaign id, term, and content are optional extras.",
+        question: "Which UTM tags are required?",
+      },
+      {
+        answer:
+          "Analytics treats Email and email as different values, so reports split in two. Writing everything in lower case, with dashes for spaces, keeps them together.",
+        question: "Why should UTM values be in lower case?",
+      },
+      {
+        answer:
+          "No. Tags on links inside your own site can reset where a visit is said to come from. Use them on links that bring people to your site from outside, such as emails, ads, and social posts.",
+        question: "Should I put UTM tags on links inside my own site?",
+      },
+    ],
+    metaDescription:
+      "Free UTM link builder: add source, medium and campaign tags to a link for Google Analytics, with checks for mistakes. Also takes any link apart.",
+    seoTitle: "UTM Link Builder and URL Parser",
+    steps: [
+      "Choose Build a link.",
+      "Enter the page address, then a source, a medium, and a campaign name.",
+      "Check the tips, then copy the finished link.",
+      "To read a link instead, choose Take a link apart and paste it.",
+    ],
+  },
+  "SEO-08": {
+    faqs: [
+      {
+        answer:
+          "Schema markup is data in a standard format, called JSON-LD, that describes a page to search engines, such as the questions on it or the price of a product. It can make a result richer.",
+        question: "What is schema markup?",
+      },
+      {
+        answer:
+          "Paste the whole script tag into the head or the body of the page it describes. Visitors do not see it.",
+        question: "Where do I put the JSON-LD?",
+      },
+      {
+        answer:
+          "For most sites, no. Since 2023 Google shows FAQ results only for well-known government and health websites. The markup is still valid, and the questions must also be on the page.",
+        question: "Will FAQ markup give me rich results?",
+      },
+      {
+        answer:
+          "This tool does not add them, on purpose. Ratings and reviews must come from real customers, and marking up ones that are not real breaks Google's rules.",
+        question: "Can I add ratings and reviews?",
+      },
+    ],
+    metaDescription:
+      "Free schema markup generator: make JSON-LD for FAQ, article, product, local business, organization and breadcrumbs, checked as you type.",
+    seoTitle: "Schema Markup Generator (JSON-LD)",
+    steps: [
+      "Choose the type of markup.",
+      "Fill in the form. The tips tell you what is needed.",
+      "Fix anything shown in red.",
+      "Copy the script tag into the page it describes.",
+    ],
+  },
   "DEV-01": {
     faqs: [
       {

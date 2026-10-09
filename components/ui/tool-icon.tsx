@@ -1,4 +1,8 @@
 import AbcIcon from "@mui/icons-material/Abc";
+import CampaignOutlinedIcon from "@mui/icons-material/CampaignOutlined";
+import LocalOfferOutlinedIcon from "@mui/icons-material/LocalOfferOutlined";
+import SchemaOutlinedIcon from "@mui/icons-material/SchemaOutlined";
+import SmartToyOutlinedIcon from "@mui/icons-material/SmartToyOutlined";
 import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import CodeIcon from "@mui/icons-material/Code";
 import DataArrayIcon from "@mui/icons-material/DataArray";
@@ -87,6 +91,10 @@ const TOOL_ICONS = {
   xml: CodeIcon,
   numberBase: NumbersIcon,
   unitConvert: StraightenIcon,
+  metaTags: LocalOfferOutlinedIcon,
+  robotsSitemap: SmartToyOutlinedIcon,
+  utm: CampaignOutlinedIcon,
+  schemaMarkup: SchemaOutlinedIcon,
 } as const satisfies Record<string, ComponentType<SvgIconProps>>;
 
 export type IconKey = keyof typeof TOOL_ICONS;

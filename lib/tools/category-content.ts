@@ -43,6 +43,12 @@ export const CATEGORY_CONTENT: Readonly<Record<string, CategoryContent>> = {
     metaDescription:
       "Free image tools: compress and convert JPG, PNG, and WebP, resize and crop, and make favicons. Processed in your browser, so nothing is uploaded.",
   },
+  seo: {
+    intro:
+      "Make the tags and files that help search engines and social sites understand your pages: meta tags with live previews, robots.txt and XML sitemaps, campaign links for analytics, and schema markup. They are made in your browser and checked for common mistakes.",
+    metaDescription:
+      "Free SEO tools: meta tag generator with previews, robots.txt and sitemap generator, UTM link builder, and schema markup generator. Run in your browser.",
+  },
   text: {
     intro:
       "Count words and characters, change text case, sort lines, and remove duplicate lines. Handy for writing and editing, for lists, and for checking limits on social posts, page titles, and meta descriptions.",

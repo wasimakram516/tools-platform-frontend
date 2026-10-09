@@ -114,6 +114,11 @@ describe("searchTools on the real tools", () => {
     ["binary to decimal", "number-base-converter"],
     ["convert miles to km", "unit-converter"],
     ["celsius to fahrenheit", "unit-converter"],
+    ["generate a robots.txt file", "robots-txt-sitemap-generator"],
+    ["block gptbot", "robots-txt-sitemap-generator"],
+    ["add utm tags to a link", "utm-link-builder"],
+    ["make open graph tags", "meta-tag-generator"],
+    ["faq schema json-ld", "schema-markup-generator"],
   ])("finds the right tool for %s", (query, slug) => {
     expect(first(query)).toBe(slug);
   });

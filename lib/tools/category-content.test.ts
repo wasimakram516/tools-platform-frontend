@@ -23,7 +23,7 @@ describe("category content", () => {
   it("does not describe tools that do not exist yet", () => {
     const text = JSON.stringify(CATEGORY_CONTENT).toLowerCase();
 
-    for (const promise of ["business day", "time zone difference", "meta tag", "sitemap"]) {
+    for (const promise of ["business day", "time zone difference", "keyword density", "backlink", "rank tracker", "site audit"]) {
       expect(text, promise).not.toContain(promise);
     }
   });
