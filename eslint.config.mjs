@@ -9,6 +9,8 @@ const eslintConfig = defineConfig([
   globalIgnores([
     // Default ignores of eslint-config-next:
     ".next/**",
+    // Extra build folders, such as the one used to build beside the dev server.
+    ".next-*/**",
     "coverage/**",
     "out/**",
     "build/**",
