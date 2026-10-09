@@ -5,7 +5,7 @@ import { NextLink } from "@/components/ui/next-link";
 import { WisemenSoftLogo } from "@/components/ui/wisemen-soft-logo";
 import { LEGAL_DOCUMENTS } from "@/lib/legal/legal-content";
 import { BRAND_TAGLINE, COMPANY_NAME, COMPANY_URL } from "@/lib/site-config";
-import { getAvailableToolCategories } from "@/lib/tools/tool-registry";
+import { getAvailableToolCategories, getFeaturedTools } from "@/lib/tools/tool-registry";
 
 interface FooterLinkGroupProps {
   links: ReadonlyArray<{ href: string; label: string }>;
@@ -36,15 +36,10 @@ function FooterLinkGroup({ links, title }: FooterLinkGroupProps): ReactNode {
   );
 }
 
-interface SiteFooterProps {
-  /** Sit directly against the content above, with no gap, for pages that end in a full-width band. */
-  flush?: boolean;
-}
-
 /**
  * Renders the product footer: brand blurb, browse and legal links, and company attribution.
  */
-export function SiteFooter({ flush = false }: SiteFooterProps = {}): ReactNode {
+export function SiteFooter(): ReactNode {
   const browseLinks = [
     { href: "/categories", label: "All categories" },
     ...getAvailableToolCategories().map((category) => ({
@@ -52,6 +47,7 @@ export function SiteFooter({ flush = false }: SiteFooterProps = {}): ReactNode {
       label: category.name,
     })),
   ];
+  const popularLinks = getFeaturedTools().map((tool) => ({ href: `/tools/${tool.slug}`, label: tool.name }));
   const legalLinks = LEGAL_DOCUMENTS.map((document) => ({
     href: `/${document.slug}`,
     label: document.title,
@@ -60,14 +56,14 @@ export function SiteFooter({ flush = false }: SiteFooterProps = {}): ReactNode {
   return (
     <Box
       component="footer"
-      sx={{ bgcolor: "background.paper", borderTop: "1px solid", borderColor: "divider", mt: flush ? 0 : 8 }}
+      sx={{ bgcolor: "background.paper", borderTop: "1px solid", borderColor: "divider", mt: 0 }}
     >
       <Container maxWidth="xl" sx={{ py: { xs: 5, md: 6 } }}>
         <Box
           sx={{
             display: "grid",
             gap: { xs: 4, md: 6 },
-            gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)", md: "2fr 1fr 1fr" },
+            gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)", md: "2fr 1fr 1fr 1fr" },
           }}
         >
           <Box sx={{ maxWidth: 420 }}>
@@ -77,6 +73,7 @@ export function SiteFooter({ flush = false }: SiteFooterProps = {}): ReactNode {
             </Typography>
           </Box>
           <FooterLinkGroup links={browseLinks} title="Browse" />
+          <FooterLinkGroup links={popularLinks} title="Popular tools" />
           <FooterLinkGroup links={legalLinks} title="Legal" />
         </Box>
 
