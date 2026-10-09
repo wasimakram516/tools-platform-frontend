@@ -7,7 +7,6 @@ export const TEXT_KEY = "#text";
 /** Attributes become keys that start with this mark, so they cannot clash with child elements. */
 export const ATTRIBUTE_PREFIX = "@";
 
-const ELEMENT_NODE = 1;
 const TEXT_NODE = 3;
 const CDATA_SECTION_NODE = 4;
 /** A tag or attribute name: a letter or underscore first, then letters, digits, and . - _ and one colon. */
