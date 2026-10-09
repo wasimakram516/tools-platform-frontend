@@ -171,7 +171,7 @@ export function SearchMenu({ onClose }: SearchMenuProps): ReactNode {
           {isSearching ? `${found.length} ${found.length === 1 ? "tool" : "tools"} found.` : ""}
         </Typography>
 
-        <Box sx={{ minHeight: 0, overflowY: "auto", pb: 2, pt: 1.5, px: 0.5 }}>
+        <Box sx={{ minHeight: 0, overflowX: "hidden", overflowY: "auto", pb: 2, pt: 1.5, px: 0.5 }}>
           {isSearching && found.length === 0 ? (
             <Typography sx={{ color: "#f2f8f5", px: 2, py: 1 }}>
               No tools match this search. Try describing the job in a few words, like &quot;compress an image&quot;.
@@ -183,12 +183,12 @@ export function SearchMenu({ onClose }: SearchMenuProps): ReactNode {
               >
                 {!isSearching ? "Popular tools" : approximate ? "Closest matches" : "Tools"}
               </Typography>
-              <Box component="ul" id={LISTBOX_ID} role="listbox" aria-label="Tools" sx={{ display: "grid", gap: RESULTS_GAP, listStyle: "none", m: 0, p: 0 }}>
+              <Box component="ul" id={LISTBOX_ID} role="listbox" aria-label="Tools" sx={{ display: "grid", gap: RESULTS_GAP, gridTemplateColumns: "minmax(0, 1fr)", listStyle: "none", m: 0, p: 0 }}>
                 {items.map((tool, index) => {
                   const isActive = index === activeIndex;
 
                   return (
-                    <li key={tool.id} role="presentation">
+                    <Box component="li" key={tool.id} role="presentation" sx={{ minWidth: 0 }}>
                       <Box
                         aria-selected={isActive}
                         component={NextLink}
@@ -226,7 +226,7 @@ export function SearchMenu({ onClose }: SearchMenuProps): ReactNode {
                           sx={{ color: isActive ? "primary.main" : "text.secondary", flexShrink: 0 }}
                         />
                       </Box>
-                    </li>
+                    </Box>
                   );
                 })}
               </Box>
