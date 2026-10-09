@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import type { PropsWithChildren } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { ToolBrowser, type BrowsableCategory } from "@/components/home/tool-browser";
@@ -24,13 +24,6 @@ function renderBrowser(): void {
       <ToolBrowser categories={CATEGORIES} featuredTools={FEATURED} />
     </AppThemeProvider>,
   );
-}
-
-/**
- * Types into the search box.
- */
-function search(value: string): void {
-  fireEvent.change(screen.getByLabelText("Search tools"), { target: { value } });
 }
 
 describe("ToolBrowser", () => {
@@ -60,46 +53,10 @@ describe("ToolBrowser", () => {
     expect(within(categories).getByRole("link", { name: /all categories/i })).toHaveAttribute("href", "/categories");
   });
 
-  it("searches every tool, not only the popular ones", () => {
+  it("leaves searching to the header, so the page has no search box of its own", () => {
     renderBrowser();
 
-    const notPopular = CATEGORIES.flatMap((entry) => entry.tools).find(
-      (tool) => !FEATURED.some((featured) => featured.id === tool.id),
-    );
-
-    expect(notPopular).toBeDefined();
-
-    search(notPopular?.name ?? "");
-
-    const results = screen.getByRole("region", { name: "Search results" });
-
-    expect(within(results).getAllByRole("heading", { name: notPopular?.name ?? "" }).length).toBeGreaterThan(0);
-    expect(screen.queryByRole("region", { name: "Popular tools" })).not.toBeInTheDocument();
-    expect(screen.queryByRole("region", { name: "Browse by category" })).not.toBeInTheDocument();
-  });
-
-  it("filters to matching tools as you type, across categories", () => {
-    renderBrowser();
-
-    search("sha256");
-
-    const results = screen.getByRole("region", { name: "Search results" });
-
-    expect(within(results).getAllByRole("article")).toHaveLength(1);
-    expect(within(results).getByRole("heading", { name: "Hash Generator" })).toBeInTheDocument();
-    expect(screen.getByRole("status")).toHaveTextContent("1 tool found.");
-  });
-
-  it("says when nothing matches, and goes back to the browse view", () => {
-    renderBrowser();
-
-    search("zzzz");
-
-    expect(screen.getByText('No tools match this search. Try describing the job, like "compress an image".')).toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole("button", { name: "Show all tools" }));
-
-    expect(screen.getByLabelText("Search tools")).toHaveValue("");
-    expect(screen.getByRole("region", { name: "Popular tools" })).toBeInTheDocument();
+    expect(screen.queryByRole("combobox")).not.toBeInTheDocument();
+    expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
   });
 });

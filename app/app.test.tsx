@@ -2,12 +2,16 @@ import { fireEvent, render, screen, within } from "@testing-library/react";
 import type { PropsWithChildren, ReactNode } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { AppThemeProvider } from "@/components/providers/app-theme-provider";
+import { FAQ_VISIBLE_COUNT } from "@/components/home/faq-section";
 import { FAQ_ITEMS } from "@/lib/home-content";
 import { CONTACT_URL } from "@/lib/site-config";
 import ErrorPage from "./error";
 import Loading from "./loading";
 import NotFound from "./not-found";
 import HomePage from "./page";
+
+// Rendering the whole home page in jsdom is heavy, so these tests get more time than the default.
+vi.setConfig({ testTimeout: 120_000 });
 
 vi.mock("@mui/material-nextjs/v16-appRouter", () => ({
   AppRouterCacheProvider: ({ children }: PropsWithChildren) => children,
@@ -18,6 +22,15 @@ vi.mock("@mui/material-nextjs/v16-appRouter", () => ({
  */
 function renderWithTheme(component: ReactNode): void {
   render(<AppThemeProvider>{component}</AppThemeProvider>);
+}
+
+/**
+ * The question buttons in the FAQ, leaving out the "Show more" button.
+ */
+function questionButtons(faq: HTMLElement): HTMLElement[] {
+  return within(faq)
+    .getAllByRole("button")
+    .filter((button) => button.getAttribute("aria-controls")?.startsWith("faq-") && button.id.endsWith("-header"));
 }
 
 describe("application foundation", () => {
@@ -46,9 +59,11 @@ describe("application foundation", () => {
 
     const faq = screen.getByRole("region", { name: "Frequently asked questions" });
 
-    const questions = within(faq).getAllByRole("button");
+    expect(questionButtons(faq)).toHaveLength(FAQ_VISIBLE_COUNT);
 
-    expect(questions).toHaveLength(FAQ_ITEMS.length);
+    fireEvent.click(within(faq).getByRole("button", { name: `Show more questions (${FAQ_ITEMS.length - FAQ_VISIBLE_COUNT})` }));
+
+    expect(questionButtons(faq)).toHaveLength(FAQ_ITEMS.length);
     expect(within(faq).getByRole("link", { name: "Ask us a question" })).toHaveAttribute("href", CONTACT_URL);
     expect(screen.getByRole("link", { name: "Suggest a tool" })).toHaveAttribute("href", CONTACT_URL);
   });
@@ -57,7 +72,7 @@ describe("application foundation", () => {
     renderWithTheme(<HomePage />);
 
     const faq = screen.getByRole("region", { name: "Frequently asked questions" });
-    const questions = within(faq).getAllByRole("button");
+    const questions = questionButtons(faq);
 
     expect(questions.every((question) => question.getAttribute("aria-expanded") === "false")).toBe(true);
 

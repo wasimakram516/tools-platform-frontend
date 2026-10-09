@@ -170,7 +170,7 @@ export function AboutSection(): ReactNode {
                         transition: "background-color 150ms ease, color 150ms ease",
                       },
                       "& a:hover": { bgcolor: "action.hover", color: "primary.main" },
-                      "& a:hover .about-arrow": { opacity: 1, transform: "translateX(0)" },
+                      "& a:hover .about-arrow": { color: "primary.main", transform: "translateX(3px)" },
                     }}
                   >
                     <NextLink href={`/tools/${link.slug}`}>
@@ -180,7 +180,7 @@ export function AboutSection(): ReactNode {
                         aria-hidden="true"
                         className="about-arrow"
                         fontSize="small"
-                        sx={{ opacity: 0, transform: "translateX(-4px)", transition: "all 150ms ease" }}
+                        sx={{ color: "text.secondary", transition: "color 150ms ease, transform 150ms ease" }}
                       />
                     </NextLink>
                   </Box>

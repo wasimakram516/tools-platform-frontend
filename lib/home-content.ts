@@ -131,6 +131,12 @@ export const FAQ_ITEMS: readonly (FaqEntry & { id: string })[] = [
     question: "What is QuicklySorted?",
   },
   {
+    answer:
+      "Use the search icon at the top of any page, or press the / key. Type a tool's name, or just describe the job, such as \"shrink an image\" or \"how old am I\", and matching tools appear as you type. You can also browse by category.",
+    id: "find",
+    question: "How do I find the right tool?",
+  },
+  {
     answer: "Yes. Every tool is free to use, and there is no account or signup to create.",
     id: "free",
     question: "Is it really free, and do I need an account?",
@@ -157,6 +163,59 @@ export const FAQ_ITEMS: readonly (FaqEntry & { id: string })[] = [
     answer: `A few, to keep your browser responsive. The text tools handle up to ${MAX_TEXT_TOOL_CHARACTERS.toLocaleString("en-US")} characters, and the image tools accept files up to ${MAX_IMAGE_MEGABYTES} MB, with up to ${MAX_BATCH_FILES} images at a time in the compressor. A tool shows a clear message if you go over.`,
     id: "limits",
     question: "Are there any limits?",
+  },
+  {
+    answer:
+      "Excel stores a date as a serial number, counting days from 1 January 1900 in its standard date system. A cell shows a number when it is not formatted as a date. The Excel date converter turns serial numbers into dates, and dates into serial numbers.",
+    id: "excel",
+    question: "Why does Excel show a number instead of my date?",
+  },
+  {
+    answer:
+      "Markup is profit as a share of the cost. Margin is profit as a share of the selling price. Something that costs 60 and sells for 100 has a markup of 66.67% but a margin of 40%. The percentage calculator works out both.",
+    id: "margin",
+    question: "What is the difference between margin and markup?",
+  },
+  {
+    answer:
+      "The password generator runs in your browser and uses the browser's built-in secure random number generator, so passwords are not made on a server or sent anywhere. Even so, keep your passwords in a password manager rather than a note or a message.",
+    id: "password",
+    question: "Is the password generator safe to use?",
+  },
+  {
+    answer:
+      "No. BMI is a rough screening number for adults. It does not account for muscle, bone, age, or where weight is carried. For advice about your health, speak to a doctor or dietitian.",
+    id: "bmi",
+    question: "Is the BMI result a medical diagnosis?",
+  },
+  {
+    answer:
+      "Yes. The calculators work with plain numbers and show no currency symbol, so you can use any currency. Just enter every amount in the same currency.",
+    id: "currency",
+    question: "Do the calculators work with my currency?",
+  },
+  {
+    answer:
+      "No. They give estimates from the numbers you enter, using standard formulas. Real loans and savings accounts can differ because of fees, rounding rules, and when payments fall, so check the figures with your lender or bank before you decide anything.",
+    id: "financial",
+    question: "Are the loan and interest calculators financial advice?",
+  },
+  {
+    answer:
+      "Yes, where it makes sense. The loan and interest calculators export their tables as CSV files, and the image tools let you download one image, or several together as a zip.",
+    id: "downloads",
+    question: "Can I download my results?",
+  },
+  {
+    answer: "Yes. Use the moon or sun button in the header to switch between the light and dark themes.",
+    id: "dark",
+    question: "Is there a dark mode?",
+  },
+  {
+    answer:
+      "Yes. QuicklySorted is growing, and what people ask for decides what comes next. If a tool would save you time, tell us using the link at the bottom of the page.",
+    id: "more",
+    question: "Will more tools be added?",
   },
   {
     answer: `QuicklySorted is made by ${COMPANY_NAME}, a software company based in Pakistan that builds business systems and web products.`,

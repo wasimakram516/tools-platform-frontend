@@ -10,6 +10,10 @@
   --band-deep-muted: #c9ddd3;
   --band-deep-accent: #6fd6a5;
   --hero-glow: rgba(31, 122, 90, 0.12);
+  /* Scrollbars: a thin green thumb on a pale track. */
+  --scrollbar-track: #e9f1ed;
+  --scrollbar-thumb: rgba(31, 122, 90, 0.5);
+  --scrollbar-thumb-hover: #1f7a5a;
 }
 
 [data-dark] {
@@ -21,6 +25,9 @@
   --band-deep-muted: #a9c4b7;
   --band-deep-accent: #4fc08d;
   --hero-glow: rgba(79, 192, 141, 0.12);
+  --scrollbar-track: #0e1914;
+  --scrollbar-thumb: rgba(79, 192, 141, 0.45);
+  --scrollbar-thumb-hover: #4fc08d;
 }
 
 html {
@@ -81,4 +88,44 @@ body {
 .rise-in {
   animation: rise-in 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
   animation-delay: var(--rise-delay, 0ms);
+}
+
+/*
+ * Scrollbars: thin, rounded, and in the theme colours, on the page and on every inner scroll area.
+ * Chromium and Safari use the pseudo-elements; Firefox uses the standard properties.
+ */
+* {
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  scrollbar-width: thin;
+}
+
+@supports selector(::-webkit-scrollbar) {
+  * {
+    scrollbar-color: auto;
+    scrollbar-width: auto;
+  }
+
+  ::-webkit-scrollbar {
+    height: 10px;
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-clip: content-box;
+    background-color: var(--scrollbar-thumb);
+    border: 2px solid transparent;
+    border-radius: 999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--scrollbar-thumb-hover);
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: var(--scrollbar-track);
+  }
 }

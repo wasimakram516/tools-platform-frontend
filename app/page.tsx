@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import type { CSSProperties, ReactNode } from "react";
 import { AboutSection } from "@/components/home/about-section";
 import { FaqSection } from "@/components/home/faq-section";
-import { SuggestToolSection } from "@/components/home/suggest-tool-section";
 import { ToolBrowser, type BrowsableCategory } from "@/components/home/tool-browser";
 import { WhySection } from "@/components/home/why-section";
 import { PageFrame } from "@/components/layout/page-frame";
@@ -15,7 +14,7 @@ import { BRAND_DESCRIPTOR, BRAND_TAGLINE_BEATS } from "@/lib/site-config";
 import { getAvailableToolCategories, getFeaturedTools, getToolsByCategory } from "@/lib/tools/tool-registry";
 
 /**
- * Lists the categories and tools a visitor can use today, ready for the search box to filter.
+ * Lists the categories and tools a visitor can use today, for the popular row and category tiles.
  */
 function browsableCategories(): BrowsableCategory[] {
   return getAvailableToolCategories()
@@ -41,15 +40,16 @@ export function generateMetadata(): Metadata {
 }
 
 /**
- * Renders the home page: what the site is, a search box, popular tools, one tile per category,
- * who it is for, why to use it, the frequently asked questions, and a way to suggest a tool.
+ * Renders the home page: what the site is, popular tools, one tile per category,
+ * who it is for, why to use it, and the frequently asked questions. The page frame adds the
+ * closing "suggest a tool" band.
  */
 export default function HomePage(): ReactNode {
   const [firstBeat, secondBeat] = BRAND_TAGLINE_BEATS;
   const categories = browsableCategories();
 
   return (
-    <PageFrame flushFooter>
+    <PageFrame>
       <JsonLd data={[websiteJsonLd(), faqJsonLd(FAQ_ITEMS)]} />
       <Box
         sx={{ backgroundImage: "radial-gradient(60% 90% at 50% 0%, var(--hero-glow), transparent 75%)" }}
@@ -91,7 +91,6 @@ export default function HomePage(): ReactNode {
       <AboutSection />
       <WhySection />
       <FaqSection />
-      <SuggestToolSection />
     </PageFrame>
   );
 }

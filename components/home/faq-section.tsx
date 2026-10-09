@@ -1,27 +1,22 @@
 "use client";
 
-import AddIcon from "@mui/icons-material/Add";
 import MailOutlinedIcon from "@mui/icons-material/MailOutlined";
-import RemoveIcon from "@mui/icons-material/Remove";
-import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import type { ReactNode } from "react";
-import { useState } from "react";
 import { HomeSection } from "@/components/home/home-section";
+import { FaqAccordion } from "@/components/ui/faq-accordion";
 import { FAQ_HEADING, FAQ_INTRO, FAQ_ITEMS } from "@/lib/home-content";
-import { Reveal } from "@/components/ui/reveal";
-import { revealDelay } from "@/lib/reveal-delay";
 import { CONTACT_URL } from "@/lib/site-config";
-import { SURFACE_RADIUS, SURFACE_SHADOW } from "@/theme/surface";
+
+/** How many questions show before "Show more". The rest stay in the page, folded away. */
+export const FAQ_VISIBLE_COUNT = 6;
 
 /**
- * The frequently asked questions: the heading and a way to ask on the left, and an accordion on
- * the right that opens one answer at a time and highlights the open one. The same text is sent
- * to search engines as structured data, so the answers a visitor reads are exactly the ones a
- * search result can show.
+ * The frequently asked questions: the heading and a way to ask on the left, and the shared FAQ
+ * accordion on the right. The same text is sent as structured data, so what a visitor reads is
+ * what a search engine reads.
  */
 export function FaqSection(): ReactNode {
-  const [openId, setOpenId] = useState<string | false>(false);
-
   return (
     <HomeSection headingId="home-faq-heading">
       <Box
@@ -51,85 +46,7 @@ export function FaqSection(): ReactNode {
           </Button>
         </Box>
 
-        <Box sx={{ display: "grid", gap: 1.5 }}>
-          {FAQ_ITEMS.map((item, index) => {
-            const isOpen = openId === item.id;
-
-            return (
-              <Reveal delay={revealDelay(index)} key={item.id}>
-              <Accordion
-                disableGutters
-                elevation={0}
-                expanded={isOpen}
-                onChange={(_event, expanded) => setOpenId(expanded ? item.id : false)}
-                slotProps={{ transition: { timeout: 220 } }}
-                sx={{
-                  "&::before": { display: "none" },
-                  bgcolor: "background.paper",
-                  border: "1px solid",
-                  borderColor: isOpen ? "primary.main" : "divider",
-                  borderRadius: `${SURFACE_RADIUS} !important`,
-                  boxShadow: isOpen ? SURFACE_SHADOW : "none",
-                  overflow: "hidden",
-                  transition: "border-color 200ms ease, box-shadow 200ms ease",
-                  "&:hover": { borderColor: "primary.main" },
-                }}
-              >
-                <AccordionSummary
-                  aria-controls={`faq-${item.id}-content`}
-                  expandIcon={null}
-                  id={`faq-${item.id}-header`}
-                  sx={{
-                    alignItems: "center",
-                    gap: 2,
-                    px: 2.5,
-                    py: 1,
-                    "& .MuiAccordionSummary-content": { alignItems: "center", gap: 2, m: 0 },
-                  }}
-                >
-                  <Typography
-                    aria-hidden="true"
-                    sx={{
-                      color: isOpen ? "primary.main" : "text.disabled",
-                      fontFamily: "var(--font-mono), monospace",
-                      fontSize: "0.85rem",
-                      fontWeight: 700,
-                      minWidth: 24,
-                    }}
-                  >
-                    {String(index + 1).padStart(2, "0")}
-                  </Typography>
-                  <Typography component="h3" sx={{ flexGrow: 1, fontSize: "1.05rem", fontWeight: 650 }}>
-                    {item.question}
-                  </Typography>
-                  <Box
-                    aria-hidden="true"
-                    sx={{
-                      alignItems: "center",
-                      bgcolor: isOpen ? "primary.main" : "action.hover",
-                      borderRadius: "50%",
-                      color: isOpen ? "primary.contrastText" : "primary.main",
-                      display: "inline-flex",
-                      flexShrink: 0,
-                      height: 32,
-                      justifyContent: "center",
-                      transition: "background-color 200ms ease, color 200ms ease",
-                      width: 32,
-                    }}
-                  >
-                    {isOpen ? <RemoveIcon fontSize="small" /> : <AddIcon fontSize="small" />}
-                  </Box>
-                </AccordionSummary>
-                <AccordionDetails id={`faq-${item.id}-content`} sx={{ pb: 2.75, pl: { xs: 2.5, sm: 8.5 }, pr: 2.5, pt: 0 }}>
-                  <Typography color="text.secondary" sx={{ lineHeight: 1.75 }}>
-                    {item.answer}
-                  </Typography>
-                </AccordionDetails>
-              </Accordion>
-              </Reveal>
-            );
-          })}
-        </Box>
+        <FaqAccordion items={FAQ_ITEMS} visibleCount={FAQ_VISIBLE_COUNT} />
       </Box>
     </HomeSection>
   );

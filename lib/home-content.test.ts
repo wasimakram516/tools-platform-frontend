@@ -2,6 +2,7 @@
 import { describe, expect, it } from "vitest";
 import { ABOUT_PARAGRAPHS, FAQ_ITEMS, REASONS, USE_CASES } from "@/lib/home-content";
 import { getToolBySlug } from "@/lib/tools/tool-registry";
+import { marginFromCostAndPrice } from "@/lib/tools/calculators/percentage";
 import { faqJsonLd } from "@/lib/seo";
 import { MAX_BATCH_FILES, MAX_IMAGE_FILE_BYTES } from "@/lib/tools/image/format";
 import { MAX_TEXT_TOOL_CHARACTERS } from "@/lib/tools/text/text-stats";
@@ -63,6 +64,22 @@ describe("home page content", () => {
       for (const link of group.links) {
         expect(getToolBySlug(link.slug)?.status, `${link.label} -> ${link.slug}`).toBe("available");
       }
+    }
+  });
+
+  it("gives the margin and markup example that the calculator actually produces", () => {
+    const answer = FAQ_ITEMS.find((item) => item.id === "margin")?.answer ?? "";
+    const result = marginFromCostAndPrice(60, 100);
+
+    expect(result.ok && result.markupPercent.toFixed(2)).toBe("66.67");
+    expect(result.ok && result.marginPercent.toFixed(0)).toBe("40");
+    expect(answer).toContain("66.67%");
+    expect(answer).toContain("40%");
+  });
+
+  it("keeps every answer short enough to read at a glance", () => {
+    for (const item of FAQ_ITEMS) {
+      expect(item.answer.length, item.id).toBeLessThanOrEqual(420);
     }
   });
 });
