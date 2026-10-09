@@ -9,6 +9,8 @@ import type { ToolCategory, ToolDefinition } from "@/types/tool";
 
 interface ToolPageShellProps extends PropsWithChildren {
   category: ToolCategory;
+  /** How-to steps and questions, shown below the tool. */
+  guide?: ReactNode;
   tool: ToolDefinition;
   relatedTools: readonly ToolDefinition[];
 }
@@ -18,6 +20,7 @@ interface ToolPageShellProps extends PropsWithChildren {
  */
 export function ToolPageShell({
   category,
+  guide,
   tool,
   relatedTools,
   children,
@@ -45,6 +48,7 @@ export function ToolPageShell({
             {children}
             <ProcessingBadge mode={tool.processingMode} />
           </Stack>
+          {guide}
           <RelatedToolLinks tools={relatedTools} />
         </Stack>
       </Container>

@@ -1,64 +1,42 @@
+import dynamic from "next/dynamic";
 import type { ComponentType } from "react";
-import { AgeCalculatorTool } from "@/components/tools/age-calculator-tool";
-import { Base64EncoderDecoderTool } from "@/components/tools/base64-encoder-decoder-tool";
-import { BmiCalculatorTool } from "@/components/tools/bmi-calculator-tool";
-import { CaseConverterTool } from "@/components/tools/case-converter-tool";
-import { CharacterCounterTool } from "@/components/tools/character-counter-tool";
-import { DateDifferenceTool } from "@/components/tools/date-difference-tool";
-import { DateMathTool } from "@/components/tools/date-math-tool";
-import { ExcelDateTool } from "@/components/tools/excel-date-tool";
-import { FaviconGeneratorTool } from "@/components/tools/favicon-generator-tool";
-import { HashGeneratorTool } from "@/components/tools/hash-generator-tool";
-import { HoursWorkedTool } from "@/components/tools/hours-worked-tool";
-import { ImageCompressorTool } from "@/components/tools/image-compressor-tool";
-import { ImageResizerTool } from "@/components/tools/image-resizer-tool";
-import { InterestCalculatorTool } from "@/components/tools/interest-calculator-tool";
-import { JsonFormatterTool } from "@/components/tools/json-formatter-tool";
-import { JwtDecoderTool } from "@/components/tools/jwt-decoder-tool";
-import { LoanCalculatorTool } from "@/components/tools/loan-calculator-tool";
-import { PercentageCalculatorTool } from "@/components/tools/percentage-calculator-tool";
-import { RemoveDuplicateLinesTool } from "@/components/tools/remove-duplicate-lines-tool";
-import { SortLinesTool } from "@/components/tools/sort-lines-tool";
-import { PasswordGeneratorTool } from "@/components/tools/password-generator-tool";
-import { QrCodeTool } from "@/components/tools/qr-code-tool";
-import { RandomGeneratorTool } from "@/components/tools/random-generator-tool";
-import { TipSplitTool } from "@/components/tools/tip-split-tool";
-import { UnixTimestampTool } from "@/components/tools/unix-timestamp-tool";
-import { UrlEncoderDecoderTool } from "@/components/tools/url-encoder-decoder-tool";
-import { UuidGeneratorTool } from "@/components/tools/uuid-generator-tool";
-import { WordCounterTool } from "@/components/tools/word-counter-tool";
 
 /**
  * Maps a registry tool id to the component that renders its workspace.
+ *
+ * Each component loads on its own, so a tool page downloads the code for that one tool, not for
+ * all of them. That keeps pages light, which helps both visitors and search rankings. The page is
+ * still rendered on the server, so the tool's words are in the HTML.
+ *
  * Every tool with status "available" in the registry must have an entry here; a test enforces it.
  */
 export const TOOL_COMPONENTS: Readonly<Record<string, ComponentType>> = {
-  "DEV-01": JsonFormatterTool,
-  "DEV-04": Base64EncoderDecoderTool,
-  "DEV-05": UrlEncoderDecoderTool,
-  "DEV-03": UuidGeneratorTool,
-  "DEV-02": JwtDecoderTool,
-  "DEV-08": HashGeneratorTool,
-  "CAL-01": PercentageCalculatorTool,
-  "CAL-05": LoanCalculatorTool,
-  "CAL-07": InterestCalculatorTool,
-  "CAL-04": BmiCalculatorTool,
-  "CAL-10": TipSplitTool,
-  "DTM-01": AgeCalculatorTool,
-  "DTM-02": DateDifferenceTool,
-  "DTM-04": DateMathTool,
-  "DTM-06": HoursWorkedTool,
-  "DTM-08": UnixTimestampTool,
-  "DTM-11": ExcelDateTool,
-  "IMG-01": ImageCompressorTool,
-  "IMG-02": ImageResizerTool,
-  "IMG-12": FaviconGeneratorTool,
-  "GEN-01": PasswordGeneratorTool,
-  "GEN-02": QrCodeTool,
-  "GEN-03": RandomGeneratorTool,
-  "TXT-01": WordCounterTool,
-  "TXT-02": CharacterCounterTool,
-  "TXT-03": CaseConverterTool,
-  "TXT-07": SortLinesTool,
-  "TXT-08": RemoveDuplicateLinesTool,
+  "DEV-01": dynamic(() => import("@/components/tools/json-formatter-tool").then((module) => module.JsonFormatterTool)),
+  "DEV-04": dynamic(() => import("@/components/tools/base64-encoder-decoder-tool").then((module) => module.Base64EncoderDecoderTool)),
+  "DEV-05": dynamic(() => import("@/components/tools/url-encoder-decoder-tool").then((module) => module.UrlEncoderDecoderTool)),
+  "DEV-03": dynamic(() => import("@/components/tools/uuid-generator-tool").then((module) => module.UuidGeneratorTool)),
+  "DEV-02": dynamic(() => import("@/components/tools/jwt-decoder-tool").then((module) => module.JwtDecoderTool)),
+  "DEV-08": dynamic(() => import("@/components/tools/hash-generator-tool").then((module) => module.HashGeneratorTool)),
+  "CAL-01": dynamic(() => import("@/components/tools/percentage-calculator-tool").then((module) => module.PercentageCalculatorTool)),
+  "CAL-05": dynamic(() => import("@/components/tools/loan-calculator-tool").then((module) => module.LoanCalculatorTool)),
+  "CAL-07": dynamic(() => import("@/components/tools/interest-calculator-tool").then((module) => module.InterestCalculatorTool)),
+  "CAL-04": dynamic(() => import("@/components/tools/bmi-calculator-tool").then((module) => module.BmiCalculatorTool)),
+  "CAL-10": dynamic(() => import("@/components/tools/tip-split-tool").then((module) => module.TipSplitTool)),
+  "DTM-01": dynamic(() => import("@/components/tools/age-calculator-tool").then((module) => module.AgeCalculatorTool)),
+  "DTM-02": dynamic(() => import("@/components/tools/date-difference-tool").then((module) => module.DateDifferenceTool)),
+  "DTM-04": dynamic(() => import("@/components/tools/date-math-tool").then((module) => module.DateMathTool)),
+  "DTM-06": dynamic(() => import("@/components/tools/hours-worked-tool").then((module) => module.HoursWorkedTool)),
+  "DTM-08": dynamic(() => import("@/components/tools/unix-timestamp-tool").then((module) => module.UnixTimestampTool)),
+  "DTM-11": dynamic(() => import("@/components/tools/excel-date-tool").then((module) => module.ExcelDateTool)),
+  "IMG-01": dynamic(() => import("@/components/tools/image-compressor-tool").then((module) => module.ImageCompressorTool)),
+  "IMG-02": dynamic(() => import("@/components/tools/image-resizer-tool").then((module) => module.ImageResizerTool)),
+  "IMG-12": dynamic(() => import("@/components/tools/favicon-generator-tool").then((module) => module.FaviconGeneratorTool)),
+  "GEN-01": dynamic(() => import("@/components/tools/password-generator-tool").then((module) => module.PasswordGeneratorTool)),
+  "GEN-02": dynamic(() => import("@/components/tools/qr-code-tool").then((module) => module.QrCodeTool)),
+  "GEN-03": dynamic(() => import("@/components/tools/random-generator-tool").then((module) => module.RandomGeneratorTool)),
+  "TXT-01": dynamic(() => import("@/components/tools/word-counter-tool").then((module) => module.WordCounterTool)),
+  "TXT-02": dynamic(() => import("@/components/tools/character-counter-tool").then((module) => module.CharacterCounterTool)),
+  "TXT-03": dynamic(() => import("@/components/tools/case-converter-tool").then((module) => module.CaseConverterTool)),
+  "TXT-07": dynamic(() => import("@/components/tools/sort-lines-tool").then((module) => module.SortLinesTool)),
+  "TXT-08": dynamic(() => import("@/components/tools/remove-duplicate-lines-tool").then((module) => module.RemoveDuplicateLinesTool)),
 };

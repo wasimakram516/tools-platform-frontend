@@ -31,5 +31,7 @@ export interface ToolDefinition {
   processingMode: ProcessingMode;
   status: ToolStatus;
   relatedToolIds: readonly string[];
+  /** The date this tool, or its page, last meaningfully changed (YYYY-MM-DD). Used for the sitemap. */
+  updatedAt: string;
   icon: IconKey;
 }

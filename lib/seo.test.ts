@@ -1,13 +1,16 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import robots from "@/app/robots";
 import sitemap from "@/app/sitemap";
 import {
   absoluteUrl,
   breadcrumbJsonLd,
   buildPageMetadata,
+  organizationJsonLd,
   toolJsonLd,
   toolListJsonLd,
+  websiteJsonLd,
 } from "@/lib/seo";
+import { LEGAL_LAST_UPDATED, LEGAL_LAST_UPDATED_ISO } from "@/lib/legal/legal-content";
 import {
   getToolBySlug,
   getToolCategoryBySlug,
@@ -28,7 +31,7 @@ describe("page metadata", () => {
     expect(metadata.title).toBe("JSON Formatter");
     expect(metadata.alternates?.canonical).toBe("/tools/json-formatter");
     expect(metadata.openGraph).toMatchObject({ title: "JSON Formatter", type: "website" });
-    expect(metadata.twitter).toMatchObject({ card: "summary", title: "JSON Formatter" });
+    expect(metadata.twitter).toMatchObject({ card: "summary_large_image", title: "JSON Formatter" });
     expect(metadata.keywords).toEqual(["json"]);
   });
 
@@ -76,6 +79,35 @@ describe("structured data", () => {
     });
   });
 
+  it("describes the organization with an absolute logo address and its parent company", () => {
+    expect(organizationJsonLd()).toMatchObject({
+      "@id": "http://localhost:3000/#organization",
+      "@type": "Organization",
+      logo: "http://localhost:3000/apple-icon.png",
+      name: "QuicklySorted",
+      parentOrganization: { "@type": "Organization", name: "Wisemen Soft (SMC-Private) Limited" },
+      url: "http://localhost:3000/",
+    });
+  });
+
+  it("links the website to its organization instead of describing it twice", () => {
+    expect(websiteJsonLd()).toMatchObject({
+      "@type": "WebSite",
+      inLanguage: "en",
+      publisher: { "@id": organizationJsonLd()["@id"] },
+    });
+  });
+
+  it("gives a tool the date it last changed, and links it to the organization", () => {
+    const tool = getToolBySlug("loan-calculator");
+
+    expect(toolJsonLd(tool!)).toMatchObject({
+      dateModified: tool!.updatedAt,
+      inLanguage: "en",
+      publisher: { "@id": organizationJsonLd()["@id"] },
+    });
+  });
+
   it("lists every tool in a category", () => {
     const category = getToolCategoryBySlug("developer-tools");
     const tools = getToolsByCategory("developer");
@@ -104,10 +136,66 @@ describe("crawler files", () => {
     expect(new Set(urls).size).toBe(urls.length);
   });
 
+  it("gives every page a real date it last changed, never the time of the build", () => {
+    const entries = sitemap();
+    const byUrl = new Map(entries.map((entry) => [entry.url, entry.lastModified]));
+
+    for (const entry of entries) {
+      expect(String(entry.lastModified), entry.url).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    }
+
+    for (const tool of getTools().filter((entry) => entry.status === "available")) {
+      expect(byUrl.get(`http://localhost:3000/tools/${tool.slug}`), tool.slug).toBe(tool.updatedAt);
+    }
+
+    expect(byUrl.get("http://localhost:3000/privacy")).toBe(LEGAL_LAST_UPDATED_ISO);
+  });
+
+  it("writes the legal page date in the sitemap the same way as on the page", () => {
+    const shown = new Date(`${LEGAL_LAST_UPDATED} UTC`);
+
+    expect(shown.toISOString().slice(0, 10)).toBe(LEGAL_LAST_UPDATED_ISO);
+  });
+
   it("allows crawling and links the sitemap", () => {
     expect(robots()).toEqual({
       rules: { allow: "/", userAgent: "*" },
       sitemap: "http://localhost:3000/sitemap.xml",
     });
+  });
+
+  it("blocks every crawler on a preview deployment, so previews never reach search results", async () => {
+    vi.stubEnv("VERCEL_ENV", "preview");
+    vi.resetModules();
+
+    const { default: previewRobots } = await import("@/app/robots");
+
+    expect(previewRobots()).toEqual({ rules: { disallow: "/", userAgent: "*" } });
+  });
+
+  it("allows crawling on the production deployment", async () => {
+    vi.stubEnv("VERCEL_ENV", "production");
+    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://www.quicklysorted.com");
+    vi.resetModules();
+
+    const { default: productionRobots } = await import("@/app/robots");
+
+    expect(productionRobots()).toEqual({
+      rules: { allow: "/", userAgent: "*" },
+      sitemap: "https://www.quicklysorted.com/sitemap.xml",
+    });
+  });
+
+  it("refuses to start in production with a local site address", async () => {
+    vi.stubEnv("VERCEL_ENV", "production");
+    vi.stubEnv("NEXT_PUBLIC_SITE_URL", "http://localhost:3000");
+    vi.resetModules();
+
+    await expect(import("@/lib/env")).rejects.toThrow(/local address/);
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    vi.resetModules();
   });
 });

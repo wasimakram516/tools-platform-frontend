@@ -90,7 +90,7 @@ describe("registry-backed routes", () => {
     renderRoute(page);
 
     expect(screen.getByRole("heading", { name: "JSON Formatter" })).toBeInTheDocument();
-    expect(screen.getByLabelText("JSON formatter workspace")).toBeInTheDocument();
+    expect(await screen.findByLabelText("JSON formatter workspace", {}, { timeout: 15_000 })).toBeInTheDocument();
     expect(screen.getByText("On this device · background worker")).toBeInTheDocument();
   });
 
@@ -102,7 +102,7 @@ describe("registry-backed routes", () => {
     renderRoute(page);
 
     expect(screen.getByRole("heading", { name: "Base64 Encoder / Decoder" })).toBeInTheDocument();
-    expect(screen.getByLabelText("Base64 encoder and decoder workspace")).toBeInTheDocument();
+    expect(await screen.findByLabelText("Base64 encoder and decoder workspace", {}, { timeout: 15_000 })).toBeInTheDocument();
   });
 
   it("renders the URL tool inside the reusable tool shell", async () => {
@@ -113,7 +113,7 @@ describe("registry-backed routes", () => {
     renderRoute(page);
 
     expect(screen.getByRole("heading", { name: "URL Encoder / Decoder" })).toBeInTheDocument();
-    expect(screen.getByLabelText("URL encoder and decoder workspace")).toBeInTheDocument();
+    expect(await screen.findByLabelText("URL encoder and decoder workspace", {}, { timeout: 15_000 })).toBeInTheDocument();
   });
 
   it("renders the UUID tool inside the reusable tool shell", async () => {
@@ -124,7 +124,7 @@ describe("registry-backed routes", () => {
     renderRoute(page);
 
     expect(screen.getByRole("heading", { name: "UUID Generator" })).toBeInTheDocument();
-    expect(screen.getByLabelText("UUID generator workspace")).toBeInTheDocument();
+    expect(await screen.findByLabelText("UUID generator workspace", {}, { timeout: 15_000 })).toBeInTheDocument();
   });
 
   it("renders the date and time category with every one of its tools", async () => {
@@ -151,7 +151,7 @@ describe("registry-backed routes", () => {
     renderRoute(page);
 
     expect(screen.getByRole("heading", { level: 1, name: "Age Calculator" })).toBeInTheDocument();
-    expect(screen.getByLabelText("Age calculator workspace")).toBeInTheDocument();
+    expect(await screen.findByLabelText("Age calculator workspace", {}, { timeout: 15_000 })).toBeInTheDocument();
   });
 
   it("renders the JWT tool inside the reusable tool shell", async () => {
@@ -162,7 +162,7 @@ describe("registry-backed routes", () => {
     renderRoute(page);
 
     expect(screen.getByRole("heading", { name: "JWT Decoder" })).toBeInTheDocument();
-    expect(screen.getByLabelText("JWT decoder workspace")).toBeInTheDocument();
+    expect(await screen.findByLabelText("JWT decoder workspace", {}, { timeout: 15_000 })).toBeInTheDocument();
   });
 
   it("generates route params and metadata from the registry", async () => {

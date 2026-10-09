@@ -3,8 +3,10 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/seo/json-ld";
 import { TOOL_COMPONENTS } from "@/components/tools/tool-components";
+import { ToolGuide } from "@/components/tools/tool-guide";
 import { ToolPageShell } from "@/components/tools/tool-page-shell";
-import { breadcrumbJsonLd, buildPageMetadata, toolJsonLd } from "@/lib/seo";
+import { breadcrumbJsonLd, buildPageMetadata, faqJsonLd, toolJsonLd } from "@/lib/seo";
+import { getToolContent } from "@/lib/tools/tool-content";
 import {
   getRelatedTools,
   getToolBySlug,
@@ -33,12 +35,14 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
   const { toolSlug } = await params;
   const tool = getToolBySlug(toolSlug);
 
+  const content = tool ? getToolContent(tool.id) : undefined;
+
   return tool
     ? buildPageMetadata({
-        description: tool.description,
+        description: content?.metaDescription ?? tool.description,
         keywords: tool.keywords,
         path: `/tools/${tool.slug}`,
-        title: tool.name,
+        title: content?.seoTitle ?? tool.name,
       })
     : {};
 }
@@ -56,6 +60,7 @@ export default async function ToolPage({ params }: ToolPageProps): Promise<React
 
   const category = getToolCategoryById(tool.categoryId);
   const ToolComponent = TOOL_COMPONENTS[tool.id];
+  const content = getToolContent(tool.id);
 
   if (!category || !ToolComponent) {
     notFound();
@@ -72,9 +77,15 @@ export default async function ToolPage({ params }: ToolPageProps): Promise<React
             { name: category.name, path: `/categories/${category.slug}` },
             { name: tool.name, path: `/tools/${tool.slug}` },
           ]),
+          ...(content ? [faqJsonLd(content.faqs)] : []),
         ]}
       />
-      <ToolPageShell category={category} tool={tool} relatedTools={getRelatedTools(tool)}>
+      <ToolPageShell
+        category={category}
+        guide={content ? <ToolGuide content={content} idPrefix={tool.slug} toolName={tool.name} /> : undefined}
+        relatedTools={getRelatedTools(tool)}
+        tool={tool}
+      >
         <ToolComponent />
       </ToolPageShell>
     </>

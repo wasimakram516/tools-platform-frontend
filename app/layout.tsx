@@ -1,11 +1,12 @@
 import InitColorSchemeScript from "@mui/material/InitColorSchemeScript";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Comfortaa, Figtree, JetBrains_Mono } from "next/font/google";
 import type { PropsWithChildren, ReactNode } from "react";
 import { AppThemeProvider } from "@/components/providers/app-theme-provider";
-import { env } from "@/lib/env";
+import { deploymentContext, env } from "@/lib/env";
 import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/seo";
-import { BRAND_DESCRIPTOR } from "@/lib/site-config";
+import { isIndexableDeployment } from "@/lib/site-url";
+import { BRAND_DESCRIPTOR, THEME_COLOR } from "@/lib/site-config";
 import "./globals.css";
 
 const headingFont = Comfortaa({
@@ -34,8 +35,20 @@ export const metadata: Metadata = {
   },
   description: SITE_DESCRIPTION,
   applicationName: SITE_NAME,
-  robots: { follow: true, index: true },
-  openGraph: { siteName: SITE_NAME, type: "website" },
+  // Preview deployments must not be indexed. The real site is.
+  robots: isIndexableDeployment(deploymentContext)
+    ? { follow: true, index: true, googleBot: { "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 } }
+    : { follow: false, index: false },
+  category: "technology",
+  openGraph: { locale: "en_US", siteName: SITE_NAME, type: "website" },
+  twitter: { card: "summary_large_image" },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { color: THEME_COLOR, media: "(prefers-color-scheme: light)" },
+    { color: "#0B2B20", media: "(prefers-color-scheme: dark)" },
+  ],
 };
 
 /**

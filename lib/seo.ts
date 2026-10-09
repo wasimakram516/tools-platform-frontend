@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { env } from "@/lib/env";
-import { BRAND_NAME } from "@/lib/site-config";
+import { BRAND_NAME, COMPANY_NAME, COMPANY_URL } from "@/lib/site-config";
 import type { ToolCategory, ToolDefinition } from "@/types/tool";
 
 export const SITE_NAME = BRAND_NAME;
@@ -53,22 +53,47 @@ export function buildPageMetadata({
       description,
       siteName: SITE_NAME,
       title: socialTitle,
+      locale: "en_US",
       type: "website",
       url: path,
     },
-    twitter: { card: "summary", description, title: socialTitle },
+    twitter: { card: "summary_large_image", description, title: socialTitle },
+  };
+}
+
+/** The identifier other entries use to point at the organization, so it is described once. */
+function organizationId(): string {
+  return `${absoluteUrl("/")}#organization`;
+}
+
+/**
+ * Describes who is behind the site: QuicklySorted, a product of Wisemen Soft. The logo is a
+ * square image large enough for search engines to show.
+ */
+export function organizationJsonLd(): JsonLdObject {
+  return {
+    "@context": "https://schema.org",
+    "@id": organizationId(),
+    "@type": "Organization",
+    description: SITE_DESCRIPTION,
+    logo: absoluteUrl("/apple-icon.png"),
+    name: SITE_NAME,
+    parentOrganization: { "@type": "Organization", name: COMPANY_NAME, url: COMPANY_URL },
+    url: absoluteUrl("/"),
   };
 }
 
 /**
- * Describes the site itself for search engines.
+ * Describes the site itself for search engines, and links it to its organization.
  */
 export function websiteJsonLd(): JsonLdObject {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
     description: SITE_DESCRIPTION,
+    inLanguage: "en",
     name: SITE_NAME,
+    publisher: { "@id": organizationId() },
     url: absoluteUrl("/"),
   };
 }
@@ -140,11 +165,14 @@ export function toolJsonLd(tool: ToolDefinition): JsonLdObject {
     applicationCategory:
       SCHEMA_CATEGORY_BY_CATEGORY_ID[tool.categoryId] ?? DEFAULT_SCHEMA_CATEGORY,
     browserRequirements: "Requires a modern web browser with JavaScript enabled",
+    dateModified: tool.updatedAt,
     description: tool.description,
+    inLanguage: "en",
     isAccessibleForFree: true,
     name: tool.name,
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
     operatingSystem: "Any",
+    publisher: { "@id": organizationId() },
     url: absoluteUrl(`/tools/${tool.slug}`),
   };
 }

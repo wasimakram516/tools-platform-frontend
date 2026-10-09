@@ -16,6 +16,7 @@ function tool(overrides: Partial<ToolDefinition> & Pick<ToolDefinition, "id" | "
     shortDescription: "",
     slug: overrides.id.toLowerCase(),
     status: "available",
+    updatedAt: "2026-10-09",
     ...overrides,
   };
 }

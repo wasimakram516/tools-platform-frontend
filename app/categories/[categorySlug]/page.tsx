@@ -10,6 +10,7 @@ import { categoriesCrumb, homeCrumb, PageTitle } from "@/components/ui/page-titl
 import { ToolCard } from "@/components/ui/tool-card";
 import { ToolIcon } from "@/components/ui/tool-icon";
 import { breadcrumbJsonLd, buildPageMetadata, toolListJsonLd } from "@/lib/seo";
+import { getCategoryContent } from "@/lib/tools/category-content";
 import {
   getAvailableToolCategories,
   getToolCategoryBySlug,
@@ -36,7 +37,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
 
   return category
     ? buildPageMetadata({
-        description: category.description,
+        description: getCategoryContent(category.id)?.metaDescription ?? category.description,
         path: `/categories/${category.slug}`,
         title: category.name,
       })
@@ -55,6 +56,7 @@ export default async function CategoryPage({ params }: CategoryPageProps): Promi
   }
 
   const tools = getToolsByCategory(category.id);
+  const content = getCategoryContent(category.id);
 
   return (
     <PageFrame>
@@ -76,7 +78,7 @@ export default async function CategoryPage({ params }: CategoryPageProps): Promi
               { ...categoriesCrumb, href: "/categories" },
               { icon: <ToolIcon name={category.icon} sx={{ fontSize: 18 }} />, label: category.name },
             ]}
-            description={category.description}
+            description={content?.intro ?? category.description}
             icon={category.icon}
             title={category.name}
           />

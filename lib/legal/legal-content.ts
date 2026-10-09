@@ -1,6 +1,8 @@
 import { BRAND_NAME, COMPANY_NAME, COMPANY_URL } from "@/lib/site-config";
 
 export const LEGAL_LAST_UPDATED = "3 October 2026";
+/** The same date in the form the sitemap uses. A test checks that the two agree. */
+export const LEGAL_LAST_UPDATED_ISO = "2026-10-03";
 
 export interface LegalSection {
   bullets?: readonly string[];

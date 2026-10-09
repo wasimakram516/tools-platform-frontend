@@ -33,7 +33,7 @@ const TOOL_CATEGORIES = [
     id: "calculator",
     slug: "calculators",
     name: "Calculators",
-    description: "Percentages, loans, interest, and everyday maths with clear workings.",
+    description: "Percentages, loans, interest, BMI, and splitting a bill, with clear workings.",
     eyebrow: "Numbers",
     icon: "calculator",
     status: "available",
@@ -42,7 +42,7 @@ const TOOL_CATEGORIES = [
     id: "datetime",
     slug: "date-and-time-tools",
     name: "Date and time tools",
-    description: "Work out ages, durations, business days, and time zone differences.",
+    description: "Work out ages, the days between dates, hours worked, and convert timestamps and Excel dates.",
     eyebrow: "Calendars and clocks",
     icon: "datetime",
     status: "available",
@@ -91,6 +91,7 @@ const TOOL_DEFINITIONS = [
     status: "available",
     featured: true,
     relatedToolIds: ["DEV-04", "DEV-05", "DEV-02"],
+    updatedAt: "2026-10-09",
     icon: "json",
   },
   {
@@ -105,6 +106,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "worker",
     status: "available",
     relatedToolIds: ["DEV-05", "DEV-01"],
+    updatedAt: "2026-10-09",
     icon: "base64",
   },
   {
@@ -119,6 +121,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "worker",
     status: "available",
     relatedToolIds: ["DEV-04", "DEV-01"],
+    updatedAt: "2026-10-09",
     icon: "url",
   },
   {
@@ -133,6 +136,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["DEV-02", "DEV-01"],
+    updatedAt: "2026-10-09",
     icon: "uuid",
   },
   {
@@ -148,6 +152,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["DEV-01", "DEV-04", "DTM-08"],
+    updatedAt: "2026-10-09",
     icon: "jwt",
   },
   {
@@ -163,6 +168,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["DEV-04", "DEV-03", "DEV-02"],
+    updatedAt: "2026-10-09",
     icon: "hash",
   },
   {
@@ -178,6 +184,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["CAL-10", "CAL-05", "CAL-07"],
+    updatedAt: "2026-10-09",
     icon: "percentage",
   },
   {
@@ -193,6 +200,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["CAL-07", "CAL-01", "CAL-10"],
+    updatedAt: "2026-10-09",
     icon: "loan",
   },
   {
@@ -208,6 +216,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["CAL-05", "CAL-01", "CAL-10"],
+    updatedAt: "2026-10-09",
     icon: "interest",
   },
   {
@@ -223,6 +232,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["CAL-01", "DTM-01"],
+    updatedAt: "2026-10-09",
     icon: "bmi",
   },
   {
@@ -238,6 +248,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["CAL-01", "CAL-05"],
+    updatedAt: "2026-10-09",
     icon: "tip",
   },
   {
@@ -254,6 +265,7 @@ const TOOL_DEFINITIONS = [
     status: "available",
     featured: true,
     relatedToolIds: ["DTM-02", "DTM-04", "DTM-06"],
+    updatedAt: "2026-10-09",
     icon: "age",
   },
   {
@@ -269,6 +281,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["DTM-04", "DTM-01", "DTM-08"],
+    updatedAt: "2026-10-09",
     icon: "dateDifference",
   },
   {
@@ -284,6 +297,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["DTM-02", "DTM-01", "DTM-08"],
+    updatedAt: "2026-10-09",
     icon: "dateMath",
   },
   {
@@ -299,6 +313,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["DTM-02", "DTM-04", "DTM-01"],
+    updatedAt: "2026-10-09",
     icon: "hoursWorked",
   },
   {
@@ -314,6 +329,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["DEV-02", "DTM-02", "DTM-04"],
+    updatedAt: "2026-10-09",
     icon: "timestamp",
   },
   {
@@ -329,6 +345,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["DTM-08", "DTM-02", "DTM-04"],
+    updatedAt: "2026-10-09",
     icon: "spreadsheet",
   },
   {
@@ -345,6 +362,7 @@ const TOOL_DEFINITIONS = [
     status: "available",
     featured: true,
     relatedToolIds: ["TXT-02", "TXT-03", "TXT-08"],
+    updatedAt: "2026-10-09",
     icon: "wordCount",
   },
   {
@@ -360,6 +378,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["TXT-01", "TXT-03", "TXT-07"],
+    updatedAt: "2026-10-09",
     icon: "characterCount",
   },
   {
@@ -375,6 +394,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["TXT-01", "TXT-02", "TXT-07"],
+    updatedAt: "2026-10-09",
     icon: "caseConverter",
   },
   {
@@ -390,6 +410,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["TXT-08", "TXT-03", "TXT-01"],
+    updatedAt: "2026-10-09",
     icon: "sortLines",
   },
   {
@@ -405,6 +426,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["TXT-07", "TXT-01", "TXT-03"],
+    updatedAt: "2026-10-09",
     icon: "duplicateLines",
   },
   {
@@ -421,6 +443,7 @@ const TOOL_DEFINITIONS = [
     status: "available",
     featured: true,
     relatedToolIds: ["IMG-02", "IMG-12", "DEV-04"],
+    updatedAt: "2026-10-09",
     icon: "imageCompress",
   },
   {
@@ -436,6 +459,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["IMG-01", "IMG-12", "TXT-02"],
+    updatedAt: "2026-10-09",
     icon: "imageResize",
   },
   {
@@ -451,6 +475,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["IMG-01", "IMG-02", "DEV-04"],
+    updatedAt: "2026-10-09",
     icon: "favicon",
   },
   {
@@ -467,6 +492,7 @@ const TOOL_DEFINITIONS = [
     status: "available",
     featured: true,
     relatedToolIds: ["DEV-03", "DEV-08", "GEN-03"],
+    updatedAt: "2026-10-09",
     icon: "password",
   },
   {
@@ -483,6 +509,7 @@ const TOOL_DEFINITIONS = [
     status: "available",
     featured: true,
     relatedToolIds: ["IMG-12", "DEV-05", "GEN-01"],
+    updatedAt: "2026-10-09",
     icon: "qrCode",
   },
   {
@@ -498,6 +525,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["GEN-01", "TXT-07", "TXT-08"],
+    updatedAt: "2026-10-09",
     icon: "random",
   },
 ] as const satisfies readonly ToolDefinition[];

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { assertPublicSiteUrl, type DeploymentContext } from "@/lib/site-url";
 
 const publicEnvironmentSchema = z.object({
   // Optional until a backend exists; nothing reads it today.
@@ -16,3 +17,11 @@ if (!parsedEnvironment.success) {
 }
 
 export const env = parsedEnvironment.data;
+
+/**
+ * Which kind of deployment this is, as reported by Vercel. It is unset on other hosting and on
+ * a developer's computer.
+ */
+export const deploymentContext: DeploymentContext = { deployment: process.env.VERCEL_ENV };
+
+assertPublicSiteUrl(env.NEXT_PUBLIC_SITE_URL, deploymentContext);
