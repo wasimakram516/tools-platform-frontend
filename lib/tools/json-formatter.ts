@@ -1,3 +1,5 @@
+import { findJsonErrorPosition } from "@/lib/tools/json-error-location";
+
 export type JsonIndentation = 2 | 4;
 export type JsonTransformMode = "format" | "minify";
 
@@ -21,6 +23,14 @@ export const MAX_JSON_INPUT_CHARACTERS = 5_000_000;
 const JSON_POSITION_PATTERN = /position\s+(\d+)/i;
 
 /**
+ * Browsers name the position in their own way, such as "at position 15 (line 1 column 16)" or
+ * "at line 1 column 16 of the JSON data". The tool states the location itself, so these are
+ * removed to avoid saying it twice.
+ */
+const LOCATION_IN_MESSAGE =
+  /\s+at position\s+\d+(\s*\(line\s+\d+\s+column\s+\d+\))?|\s+at line\s+\d+\s+column\s+\d+(\s+of the JSON data)?/gi;
+
+/**
  * Converts a zero-based string position into a one-based line and column.
  */
 function getLineAndColumn(input: string, position: number): Pick<JsonTransformFailure, "line" | "column"> {
@@ -39,11 +49,18 @@ function getLineAndColumn(input: string, position: number): Pick<JsonTransformFa
 function createJsonFailure(input: string, error: unknown): JsonTransformFailure {
   const nativeMessage = error instanceof Error ? error.message : "The JSON could not be parsed.";
   const positionMatch = JSON_POSITION_PATTERN.exec(nativeMessage);
-  const position = positionMatch?.[1] ? Number.parseInt(positionMatch[1], 10) : undefined;
+  // The location comes from reading the text itself, so it is the same in every browser. The
+  // browser's own position is only a fallback if the two ever disagree about what is valid.
+  const position =
+    findJsonErrorPosition(input) ?? (positionMatch?.[1] ? Number.parseInt(positionMatch[1], 10) : undefined);
+  const message = nativeMessage
+    .replace(/^JSON\.parse:\s*/i, "")
+    .replace(LOCATION_IN_MESSAGE, "")
+    .trim();
 
   return {
     ok: false,
-    message: nativeMessage.replace(/^JSON\.parse:\s*/i, ""),
+    message: message === "" ? "The JSON could not be parsed." : message,
     ...(position === undefined ? {} : getLineAndColumn(input, position)),
   };
 }
