@@ -1,6 +1,20 @@
 import { describe, expect, it } from "vitest";
 import { MAX_JSON_INPUT_CHARACTERS, transformJson } from "./json-formatter";
 
+describe("transformJson with very large numbers", () => {
+  it("keeps whole numbers up to 9,007,199,254,740,991 exactly", () => {
+    const result = transformJson('{"id":9007199254740991}', "minify");
+
+    expect(result).toMatchObject({ ok: true, output: '{"id":9007199254740991}' });
+  });
+
+  it("loses digits beyond that, as the tool page warns", () => {
+    const result = transformJson('{"id":9007199254740993}', "minify");
+
+    expect(result).toMatchObject({ ok: true, output: '{"id":9007199254740992}' });
+  });
+});
+
 describe("transformJson", () => {
   it("formats valid JSON with the selected indentation", () => {
     const result = transformJson('{"name":"Wisemen","active":true}', "format", 4);

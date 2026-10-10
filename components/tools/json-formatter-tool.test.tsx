@@ -28,13 +28,32 @@ async function testTransform(
 function renderJsonFormatter(
   transform: JsonTransformRunner = testTransform,
   maxCharacters?: number,
+  download?: (blob: Blob, fileName: string) => void,
 ): void {
   render(
     <AppThemeProvider>
-      <JsonFormatterTool transform={transform} maxCharacters={maxCharacters} />
+      <JsonFormatterTool download={download} transform={transform} maxCharacters={maxCharacters} />
     </AppThemeProvider>,
   );
 }
+
+describe("JsonFormatterTool download", () => {
+  it("saves the result as formatted.json, and only once there is a result", async () => {
+    const download = vi.fn();
+    const user = userEvent.setup();
+
+    renderJsonFormatter(testTransform, undefined, download);
+    expect(screen.getByRole("button", { name: "Download .json" })).toBeDisabled();
+
+    fireEvent.change(screen.getByLabelText("Input"), { target: { value: '{"ready":true}' } });
+    await user.click(screen.getByRole("button", { name: "Format JSON" }));
+    await waitFor(() => expect(screen.getByRole("button", { name: "Download .json" })).toBeEnabled());
+    await user.click(screen.getByRole("button", { name: "Download .json" }));
+
+    expect(download).toHaveBeenCalledWith(expect.any(Blob), "formatted.json");
+    expect(screen.getByText("JSON downloaded.")).toBeInTheDocument();
+  });
+});
 
 describe("JsonFormatterTool", () => {
   it("shows live character counts for the input and output", async () => {

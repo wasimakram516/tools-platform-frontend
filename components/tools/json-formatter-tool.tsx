@@ -2,6 +2,7 @@
 
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import DownloadIcon from "@mui/icons-material/Download";
 import FormatAlignLeftIcon from "@mui/icons-material/FormatAlignLeft";
 import LightbulbOutlinedIcon from "@mui/icons-material/LightbulbOutlined";
 import UnfoldLessIcon from "@mui/icons-material/UnfoldLess";
@@ -14,6 +15,7 @@ import {
   LinearProgress,
   MenuItem,
   Select,
+  Stack,
 } from "@mui/material";
 import type { ChangeEvent, ReactNode } from "react";
 import { useState } from "react";
@@ -29,11 +31,14 @@ import {
   type JsonTransformRunner,
 } from "@/lib/tools/json-formatter-worker";
 import { copyBlockedMessage, copyToClipboard } from "@/lib/tools/clipboard";
+import { downloadBlob } from "@/lib/tools/download";
 import { formatCharacterCount } from "@/lib/tools/text-metrics";
 
 const EXAMPLE_JSON = '{"project":"QuicklySorted","private":true,"categories":["developer","image"]}';
 
 interface JsonFormatterToolProps {
+  /** Saves a file; replaced in tests so nothing is downloaded. */
+  download?: (blob: Blob, fileName: string) => void;
   maxCharacters?: number;
   transform?: JsonTransformRunner;
 }
@@ -42,6 +47,7 @@ interface JsonFormatterToolProps {
  * Provides the interactive JSON format, minify, validate, copy, example, and clear workflow.
  */
 export function JsonFormatterTool({
+  download = downloadBlob,
   maxCharacters = MAX_JSON_INPUT_CHARACTERS,
   transform = transformJsonInWorker,
 }: JsonFormatterToolProps = {}): ReactNode {
@@ -156,6 +162,19 @@ export function JsonFormatterTool({
     }
   }
 
+  /**
+   * Saves the current result as a .json file.
+   */
+  function handleDownload(): void {
+    if (!output) {
+      return;
+    }
+
+    download(new Blob([output], { type: "application/json" }), "formatted.json");
+    setStatusMessage("JSON downloaded.");
+    setErrorMessage(null);
+  }
+
   return (
     <ToolWorkspace
       actions={
@@ -250,14 +269,24 @@ export function JsonFormatterTool({
       <ToolFooter
         message={statusMessage || "Paste JSON above, then format or minify it locally in your browser."}
       >
-        <Button
-          disabled={!output}
-          onClick={handleCopy}
-          startIcon={<ContentCopyIcon />}
-          variant="outlined"
-        >
-          Copy result
-        </Button>
+        <Stack direction="row" sx={{ flexWrap: "wrap", gap: 1 }}>
+          <Button
+            disabled={!output}
+            onClick={handleCopy}
+            startIcon={<ContentCopyIcon />}
+            variant="outlined"
+          >
+            Copy result
+          </Button>
+          <Button
+            disabled={!output}
+            onClick={handleDownload}
+            startIcon={<DownloadIcon />}
+            variant="outlined"
+          >
+            Download .json
+          </Button>
+        </Stack>
       </ToolFooter>
     </ToolWorkspace>
   );
