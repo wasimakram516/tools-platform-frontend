@@ -52,12 +52,32 @@ describe("tool registry", () => {
     expect(getToolBySlug("uuid-generator")?.status).toBe("available");
     expect(getToolBySlug("jwt-decoder")?.status).toBe("available");
     expect(tool ? getRelatedTools(tool).map((relatedTool) => relatedTool.id) : []).toEqual([
-      "DEV-04",
-      "DEV-05",
-      "DEV-02",
-      "DAT-01",
       "DAT-05",
+      "DAT-01",
+      "DAT-03",
+      "DEV-02",
+      "DEV-04",
     ]);
+  });
+
+  it("links each tool to a few real, different tools, and leaves none without a link in", () => {
+    const available = getTools().filter((tool) => tool.status === "available");
+    const linkedTo = new Set<string>();
+
+    for (const tool of available) {
+      const related = getRelatedTools(tool);
+
+      expect(related.length, tool.id).toBeGreaterThanOrEqual(2);
+      expect(related.length, tool.id).toBeLessThanOrEqual(5);
+      expect(new Set(tool.relatedToolIds).size, `${tool.id} repeats a tool`).toBe(tool.relatedToolIds.length);
+      expect(tool.relatedToolIds, `${tool.id} links to itself`).not.toContain(tool.id);
+      expect(related.length, `${tool.id} links to a tool that does not exist`).toBe(tool.relatedToolIds.length);
+      related.forEach((relatedTool) => linkedTo.add(relatedTool.id));
+    }
+
+    for (const tool of available) {
+      expect(linkedTo.has(tool.id), `${tool.id} is not linked from any other tool`).toBe(true);
+    }
   });
 
   it("returns undefined for unknown public slugs", () => {
