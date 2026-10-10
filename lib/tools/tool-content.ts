@@ -334,7 +334,7 @@ export const TOOL_CONTENT: Readonly<Record<string, ToolContent>> = {
       },
       {
         answer:
-          "Yes. Formatting runs in your browser, in a background worker, so your JSON is not uploaded. You can also load an example to see how it works.",
+          "No. Formatting runs in your browser, in a background worker, so your JSON is not uploaded. You can also load an example to see how it works.",
         question: "Is my JSON sent to a server?",
       },
     ],
@@ -849,7 +849,7 @@ export const TOOL_CONTENT: Readonly<Record<string, ToolContent>> = {
         question: "Does it make camelCase and snake_case?",
       },
       {
-        answer: "Yes. Everything runs in your browser, so your text is not uploaded.",
+        answer: "No. Everything runs in your browser, so your text is not uploaded.",
         question: "Is my text sent anywhere?",
       },
     ],

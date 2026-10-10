@@ -48,6 +48,16 @@ describe("tool content", () => {
     }
   });
 
+  it("never answers a question about data being sent or uploaded with a Yes that then says it is not", () => {
+    for (const [id, content] of Object.entries(TOOL_CONTENT)) {
+      for (const faq of content.faqs) {
+        if (/(sent|uploaded|upload)/i.test(faq.question)) {
+          expect(faq.answer.startsWith("Yes"), `${id}: ${faq.question}`).toBe(false);
+        }
+      }
+    }
+  });
+
   it("makes no promise that the site never uses a server, which is not true of every future tool", () => {
     const text = JSON.stringify(TOOL_CONTENT);
 
