@@ -5,6 +5,7 @@ import {
   absoluteUrl,
   breadcrumbJsonLd,
   buildPageMetadata,
+  categoriesJsonLd,
   organizationJsonLd,
   toolJsonLd,
   toolListJsonLd,
@@ -106,6 +107,16 @@ describe("structured data", () => {
       inLanguage: "en",
       publisher: { "@id": organizationJsonLd()["@id"] },
     });
+  });
+
+  it("describes the categories hub as a collection of its categories", () => {
+    const categories = getToolCategories().filter((category) => category.status === "available");
+    const data = categoriesJsonLd(categories, "Every category.");
+
+    expect(data["@type"]).toBe("CollectionPage");
+    expect(data.mainEntity).toMatchObject({ "@type": "ItemList" });
+    expect((data.mainEntity as { itemListElement: unknown[] }).itemListElement).toHaveLength(categories.length);
+    expect(data.url).toBe(absoluteUrl("/categories"));
   });
 
   it("lists every tool in a category", () => {

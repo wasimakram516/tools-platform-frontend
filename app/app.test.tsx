@@ -7,7 +7,7 @@ import { FAQ_ITEMS } from "@/lib/home-content";
 import { CONTACT_URL } from "@/lib/site-config";
 import ErrorPage from "./error";
 import NotFound from "./not-found";
-import HomePage from "./page";
+import HomePage, { generateMetadata as generateHomeMetadata } from "./page";
 
 // Rendering the whole home page in jsdom is heavy, so these tests get more time than the default.
 vi.setConfig({ testTimeout: 120_000 });
@@ -112,6 +112,15 @@ describe("application foundation", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /try again/i }));
     expect(reset).toHaveBeenCalledOnce();
+  });
+});
+
+describe("home page description", () => {
+  it("fits in a search result without being cut off", () => {
+    const description = String(generateHomeMetadata().description);
+
+    expect(description.length).toBeGreaterThanOrEqual(80);
+    expect(description.length).toBeLessThanOrEqual(165);
   });
 });
 

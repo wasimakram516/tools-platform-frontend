@@ -26,16 +26,21 @@ function browsableCategories(): BrowsableCategory[] {
     .filter((entry) => entry.tools.length > 0);
 }
 
+/** How many category names the home page description lists before "and more". */
+const HOME_DESCRIPTION_CATEGORIES = 3;
+
 /**
  * Builds the page description from the registry, so it names the tools that exist today.
  */
 export function generateMetadata(): Metadata {
-  const categories = browsableCategories();
-  const categoryNames = categories.map((entry) => entry.category.name.toLowerCase()).join(", ");
-  const toolNames = getFeaturedTools().map((tool) => tool.name);
+  const categoryNames = browsableCategories()
+    .slice(0, HOME_DESCRIPTION_CATEGORIES)
+    .map((entry) => entry.category.name.toLowerCase())
+    .join(", ");
 
   return buildPageMetadata({
-    description: `${SITE_DESCRIPTION} Includes ${categoryNames}, such as the ${toolNames.join(", ")}.`,
+    // Search results show about 160 characters, so only the first few categories are named.
+    description: `${SITE_DESCRIPTION} Includes ${categoryNames}, and more.`,
     path: "/",
   });
 }

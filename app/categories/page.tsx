@@ -2,15 +2,25 @@ import { Container, Stack } from "@mui/material";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { PageFrame } from "@/components/layout/page-frame";
+import { JsonLd } from "@/components/seo/json-ld";
 import { CardGrid } from "@/components/ui/card-grid";
 import { CategoryCard } from "@/components/ui/category-card";
 import { HiddenHeading } from "@/components/ui/hidden-heading";
 import { categoriesCrumb, homeCrumb, PageTitle } from "@/components/ui/page-title";
-import { buildPageMetadata } from "@/lib/seo";
-import { getToolCategories, getToolsByCategory } from "@/lib/tools/tool-registry";
+import { breadcrumbJsonLd, buildPageMetadata, categoriesJsonLd } from "@/lib/seo";
+import { getAvailableToolCategories, getToolCategories, getToolsByCategory } from "@/lib/tools/tool-registry";
+
+/**
+ * Names the categories that exist, so the description stays true as categories are added.
+ */
+function categoriesDescription(): string {
+  const names = getAvailableToolCategories().map((category) => category.name.toLowerCase());
+
+  return `Free browser tools by category: ${names.join(", ")}.`;
+}
 
 export const metadata: Metadata = buildPageMetadata({
-  description: "Browse every tool category, from developer utilities to calculators and converters.",
+  description: categoriesDescription(),
   path: "/categories",
   title: "All categories",
 });
@@ -25,6 +35,15 @@ export default function CategoriesPage(): ReactNode {
 
   return (
     <PageFrame>
+      <JsonLd
+        data={[
+          categoriesJsonLd(getAvailableToolCategories(), categoriesDescription()),
+          breadcrumbJsonLd([
+            { name: "Home", path: "/" },
+            { name: "All categories", path: "/categories" },
+          ]),
+        ]}
+      />
       <Container maxWidth="xl" sx={{ py: { xs: 5, md: 7 } }}>
         <Stack sx={{ gap: { xs: 4, md: 5 } }}>
           <PageTitle

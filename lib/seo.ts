@@ -156,6 +156,31 @@ export function toolListJsonLd(
 }
 
 /**
+ * Describes the categories hub as a collection page that lists every category.
+ */
+export function categoriesJsonLd(
+  categories: readonly ToolCategory[],
+  description: string,
+): JsonLdObject {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    description,
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: categories.map((category, index) => ({
+        "@type": "ListItem",
+        name: category.name,
+        position: index + 1,
+        url: absoluteUrl(`/categories/${category.slug}`),
+      })),
+    },
+    name: "All categories",
+    url: absoluteUrl("/categories"),
+  };
+}
+
+/**
  * Describes a tool as a free web application.
  */
 export function toolJsonLd(tool: ToolDefinition): JsonLdObject {
