@@ -6,6 +6,10 @@ const TERM_SCORE = 6;
 const KEYWORD_SCORE = 5;
 const DESCRIPTION_SCORE = 2;
 const CATEGORY_SCORE = 1;
+/** Added when the typed word is the first word of the name, so "json" finds "JSON Formatter". */
+const NAME_START_SCORE = 2;
+/** Shared out between the typed words, by how much of a short name they cover. */
+const NAME_COVERAGE_SCORE = 8;
 
 /** The most tools shown as "closest matches" when nothing matches every word. */
 const APPROXIMATE_LIMIT = 6;
@@ -79,6 +83,15 @@ function normalize(text: string): string {
 }
 
 /**
+ * The words of a tool's name that carry meaning, so "CSV and JSON Converter" is three words.
+ */
+function nameWords(name: string): string[] {
+  const words = normalize(name).split(" ").filter((word) => word !== "" && !STOP_WORDS.has(word));
+
+  return words.length > 0 ? words : [normalize(name)];
+}
+
+/**
  * Trims a simple plural, so "images" and "image" find the same tools.
  */
 function singular(word: string): string {
@@ -129,6 +142,14 @@ function scoreWord(word: string, tool: ToolDefinition, categoryName: string): nu
 
   if (appearsIn(tool.name, word)) {
     score += NAME_SCORE;
+
+    // A word that opens a short name is a closer match than one buried in a long name, so the
+    // tool that is simply called "JSON Formatter" ranks above "CSV and JSON Converter".
+    if (normalize(tool.name).startsWith(word)) {
+      score += NAME_START_SCORE;
+    }
+
+    score += NAME_COVERAGE_SCORE / nameWords(tool.name).length;
   }
 
   if (tool.searchTerms.some((term) => appearsIn(term, word))) {

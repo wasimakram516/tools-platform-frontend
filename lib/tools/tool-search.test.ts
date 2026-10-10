@@ -123,6 +123,16 @@ describe("searchTools on the real tools", () => {
     expect(first(query)).toBe(slug);
   });
 
+  it.each([
+    ["json", "json-formatter"],
+    ["yaml", "json-yaml-converter"],
+    ["image", "image-compressor-converter"],
+    ["password", "password-generator"],
+    ["qr", "qr-code-generator"],
+  ])("puts the tool named for a single word first when searching %s", (query, slug) => {
+    expect(first(query)).toBe(slug);
+  });
+
   it("lists several single search words for every available tool", () => {
     for (const entry of available) {
       expect(entry.searchTerms.length, entry.slug).toBeGreaterThanOrEqual(6);
