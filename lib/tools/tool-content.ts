@@ -927,6 +927,11 @@ export const TOOL_CONTENT: Readonly<Record<string, ToolContent>> = {
       },
       {
         answer:
+          "Switch Make files smaller by to Target size, enter the size in KB, and choose WebP or JPEG. Each image is saved at the highest quality that stays under that size, and the card says which quality was used.",
+        question: "How do I compress an image to a specific file size, like 200 KB?",
+      },
+      {
+        answer:
           "Yes. Pick PNG, JPEG, or WebP as the Output format and the images are converted. For transparent areas going to JPEG, you choose the colour to fill them with.",
         question: "Can I convert PNG to JPG, or to WebP?",
       },
@@ -937,11 +942,12 @@ export const TOOL_CONTENT: Readonly<Record<string, ToolContent>> = {
       },
     ],
     metaDescription:
-      "Compress images and convert between JPG, PNG, and WebP online for free. Process several at once with a quality slider. Nothing is uploaded.",
+      "Compress images and convert between JPG, PNG, and WebP online for free. Set a quality or fit a target size in KB. Nothing is uploaded.",
     seoTitle: "Image Compressor: JPG, PNG, WebP Converter",
     steps: [
       "Choose images, or drop them anywhere on the page.",
-      "Pick the Output format and set the quality.",
+      "Pick the Output format, WebP or JPEG for the smallest files.",
+      "Set the quality, or switch to Target size and enter the size you need in KB.",
       "Optionally set a Maximum width.",
       "Check the sizes, then download one image or all as a zip.",
     ],

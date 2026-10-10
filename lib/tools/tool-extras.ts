@@ -387,15 +387,17 @@ export const TOOL_EXTRAS: Readonly<Record<string, ToolExtras>> = {
   },
   "IMG-01": {
     about:
-      "Each image is decoded by your browser, drawn onto a canvas, and saved again in the format and quality you chose. Because it is your own browser doing it, the pictures are never uploaded.",
+      "Each image is decoded by your browser, drawn onto a canvas, and saved again in the format and quality you chose. In target size mode it saves the image several times at different qualities and keeps the highest one that is under your size. Because it is your own browser doing it, the pictures are never uploaded.",
     example: {
-      input: "A 4000 by 3000 pixel PNG photo, converted to WebP.",
-      output: "A WebP file that is smaller than the PNG. The tool shows the size before and after for each image.",
-      title: "A large photo to WebP",
+      input: "A 4 MB JPG photo, WebP, Target size 200 KB.",
+      output:
+        "A WebP file under 200 KB, saved at the highest quality that fits. The card says which quality was used, for example: Saved at quality 70% to fit under 200 KB.",
+      title: "Fitting a photo under 200 KB",
     },
     limits: [
       "Up to 50 images at once, each up to 50 MB and 100 million pixels.",
       "JPG, PNG, WebP, GIF, BMP, AVIF, and SVG can be read. JPG, PNG, and WebP can be written.",
+      "Target size works with JPG and WebP. PNG is lossless, so it cannot be fitted to a size by quality, and a size that is too small is reported with the smallest result.",
       "Compressing JPG or WebP at lower quality loses detail for good, so keep your original.",
     ],
   },
