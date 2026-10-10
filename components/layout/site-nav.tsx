@@ -24,6 +24,7 @@ import {
 } from "@mui/material";
 import type { MouseEvent, ReactNode } from "react";
 import { lazy, Suspense, useEffect, useState } from "react";
+import { HOME_SEARCH_INPUT_ID } from "@/components/home/home-search";
 import { ColorModeToggle } from "@/components/ui/color-mode-toggle";
 import { NextLink } from "@/components/ui/next-link";
 import { ToolIcon } from "@/components/ui/tool-icon";
@@ -108,7 +109,16 @@ export function SiteNav({ data }: SiteNavProps): ReactNode {
 
       if (isShortcut) {
         event.preventDefault();
-        setSearchOpen(true);
+
+        // On the home page the search box is already in view, so the shortcut goes there.
+        const homeBox = document.getElementById(HOME_SEARCH_INPUT_ID);
+
+        if (homeBox) {
+          homeBox.scrollIntoView({ behavior: "smooth", block: "center" });
+          homeBox.focus({ preventScroll: true });
+        } else {
+          setSearchOpen(true);
+        }
       }
     }
 

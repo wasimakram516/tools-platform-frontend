@@ -16,6 +16,8 @@ vi.mock("@mui/material-nextjs/v16-appRouter", () => ({
   AppRouterCacheProvider: ({ children }: PropsWithChildren) => children,
 }));
 
+vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn() }) }));
+
 /**
  * Renders a component with the application theme used in production.
  */
@@ -112,3 +114,22 @@ describe("application foundation", () => {
     expect(reset).toHaveBeenCalledOnce();
   });
 });
+
+describe("home page search", () => {
+  it("has a search box under the headline that finds tools as you type", () => {
+    renderWithTheme(<HomePage />);
+
+    const box = screen.getByRole("combobox", { name: "Search all tools" });
+
+    expect(box).toBeInTheDocument();
+    expect(screen.queryAllByRole("option")).toHaveLength(0);
+
+    fireEvent.focus(box);
+    expect(screen.getByText("Popular tools")).toBeInTheDocument();
+
+    fireEvent.change(box, { target: { value: "make my photo smaller" } });
+
+    expect(screen.getAllByRole("option")[0]).toHaveAttribute("href", "/tools/image-compressor-converter");
+  });
+});
+

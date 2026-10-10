@@ -120,6 +120,22 @@ describe("SiteNav", () => {
     expect(await screen.findByRole("combobox", { name: "Search tools" }, { timeout: 15_000 })).toBeInTheDocument();
   });
 
+  it("sends the / key to the search box on the home page instead of opening the floating search", () => {
+    renderNav();
+
+    const homeBox = document.createElement("input");
+
+    homeBox.id = "home-search-input";
+    homeBox.scrollIntoView = vi.fn();
+    document.body.append(homeBox);
+
+    fireEvent.keyDown(document.body, { key: "/" });
+
+    expect(homeBox).toHaveFocus();
+    expect(screen.queryByRole("combobox", { name: "Search tools" })).not.toBeInTheDocument();
+    homeBox.remove();
+  });
+
   it("opens the search menu with Ctrl+K", async () => {
     renderNav();
 

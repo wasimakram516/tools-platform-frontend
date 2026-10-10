@@ -2,6 +2,7 @@ import { Box, Container, Typography } from "@mui/material";
 import type { Metadata } from "next";
 import type { CSSProperties, ReactNode } from "react";
 import { AboutSection } from "@/components/home/about-section";
+import { HomeSearch } from "@/components/home/home-search";
 import { FaqSection } from "@/components/home/faq-section";
 import { ToolBrowser, type BrowsableCategory } from "@/components/home/tool-browser";
 import { WhySection } from "@/components/home/why-section";
@@ -52,7 +53,8 @@ export default function HomePage(): ReactNode {
     <PageFrame>
       <JsonLd data={[websiteJsonLd(), faqJsonLd(FAQ_ITEMS)]} />
       <Box
-        sx={{ backgroundImage: "radial-gradient(60% 90% at 50% 0%, var(--hero-glow), transparent 75%)" }}
+        // Raised so the search dropdown, which hangs below the hero, covers the sections after it.
+        sx={{ backgroundImage: "radial-gradient(60% 90% at 50% 0%, var(--hero-glow), transparent 75%)", position: "relative", zIndex: 5 }}
       >
       <Container maxWidth="lg" sx={{ pb: { xs: 4, md: 5 }, pt: { xs: 7, md: 11 }, textAlign: "center" }}>
         <Typography className="rise-in" component="h1" variant="h1" sx={{ mx: "auto", maxWidth: 1100, whiteSpace: { md: "nowrap" } }}>
@@ -75,6 +77,7 @@ export default function HomePage(): ReactNode {
         >
           {BRAND_DESCRIPTOR} Free to use, no signup, and every tool shows how it handles your data.
         </Typography>
+        <HomeSearch />
       </Container>
       </Box>
 
