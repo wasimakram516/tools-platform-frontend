@@ -717,14 +717,20 @@ export const TOOL_CONTENT: Readonly<Record<string, ToolContent>> = {
         answer: "It shows decimal hours, such as 7.5, which many payroll systems ask for.",
         question: "Can I get the hours as a decimal?",
       },
+      {
+        answer:
+          "Yes. Work out each shift, press Add shift to week, and the tool keeps a running total. You can copy the list as text or download it as a CSV for a spreadsheet or timesheet.",
+        question: "Can I add up a week of shifts?",
+      },
     ],
     metaDescription:
-      "Free hours worked calculator: enter start time, end time, and break to get hours and minutes, plus decimal hours. Handles overnight shifts.",
+      "Free hours worked calculator: get hours and minutes plus decimal hours for a shift, handle overnight shifts, and total a week. Copy or download a CSV.",
     seoTitle: "Hours Worked Calculator",
     steps: [
       "Enter the Start time and End time.",
       "Enter the Break in minutes.",
       "Read the time worked, and the decimal hours.",
+      "To total a week, press Add shift to week for each shift, then copy or download the list.",
     ],
   },
   "DTM-08": {

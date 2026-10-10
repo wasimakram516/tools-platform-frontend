@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import type { PropsWithChildren, ReactElement } from "react";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AppThemeProvider } from "@/components/providers/app-theme-provider";
 import { AgeCalculatorTool } from "@/components/tools/age-calculator-tool";
 import { DateDifferenceTool } from "@/components/tools/date-difference-tool";
@@ -192,7 +192,40 @@ describe("DateMathTool", () => {
   });
 });
 
+describe("HoursWorkedTool week memory", () => {
+  beforeEach(() => {
+    window.localStorage.clear();
+  });
+
+  it("remembers the week in this browser, and clearing the week forgets it", async () => {
+    const first = render(
+      <AppThemeProvider>
+        <HoursWorkedTool />
+      </AppThemeProvider>,
+    );
+
+    fill("Start time", "09:00");
+    fill("End time", "17:30");
+    fireEvent.click(screen.getByRole("button", { name: "Add shift to week" }));
+    expect(screen.getByRole("heading", { name: "Week total: 8h 30m" })).toBeInTheDocument();
+
+    first.unmount();
+    renderTool(<HoursWorkedTool />);
+
+    expect(await screen.findByRole("heading", { name: "Week total: 8h 30m" })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Clear week" }));
+    expect(screen.queryByRole("heading", { name: /Week total/ })).not.toBeInTheDocument();
+    expect(window.localStorage.length).toBe(0);
+  });
+});
+
 describe("HoursWorkedTool", () => {
+  beforeEach(() => {
+    // The week is remembered in storage, so each test starts from a clean browser.
+    window.localStorage.clear();
+  });
+
   it("subtracts the break and shows decimal hours", () => {
     renderTool(<HoursWorkedTool />);
 
@@ -214,6 +247,40 @@ describe("HoursWorkedTool", () => {
     // The net time and the shift before the break are both 8h 00m with no break taken.
     expect(screen.getAllByText("8h 00m")).toHaveLength(2);
     expect(screen.getByText("The next day")).toBeInTheDocument();
+  });
+
+  it("totals shifts for a week and lets each be removed", () => {
+    renderTool(<HoursWorkedTool />);
+
+    fill("Start time", "09:00");
+    fill("End time", "17:30");
+    fill("Break (minutes)", "30");
+    fireEvent.click(screen.getByRole("button", { name: "Add shift to week" }));
+
+    fill("Start time", "22:00");
+    fill("End time", "06:00");
+    fireEvent.click(screen.getByRole("button", { name: "Add shift to week" }));
+
+    expect(screen.getByRole("heading", { name: "Week total: 15h 30m" })).toBeInTheDocument();
+    expect(screen.getByText(/15\.50 decimal hours across 2 shifts/)).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "Remove shift 1" }));
+
+    expect(screen.getByRole("heading", { name: "Week total: 7h 30m" })).toBeInTheDocument();
+  });
+
+  it("downloads the week as a CSV, and only offers to add a valid shift", () => {
+    const download = vi.fn();
+
+    renderTool(<HoursWorkedTool download={download} />);
+    expect(screen.getByRole("button", { name: "Add shift to week" })).toBeDisabled();
+
+    fill("Start time", "09:00");
+    fill("End time", "17:30");
+    fireEvent.click(screen.getByRole("button", { name: "Add shift to week" }));
+    fireEvent.click(screen.getByRole("button", { name: "Download CSV" }));
+
+    expect(download).toHaveBeenCalledWith(expect.any(Blob), "hours-worked.csv");
   });
 
   it("explains equal times", () => {

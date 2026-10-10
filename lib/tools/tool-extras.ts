@@ -303,14 +303,14 @@ export const TOOL_EXTRAS: Readonly<Record<string, ToolExtras>> = {
   },
   "DTM-06": {
     about:
-      "The start time is subtracted from the end time, then the break is taken off. If the end time is earlier than the start, the shift is treated as running past midnight.",
+      "The start time is subtracted from the end time, then the break is taken off. If the end time is earlier than the start, the shift is treated as running past midnight. Each shift can be added to a list, which keeps a running total for the week.",
     example: {
-      input: "09:00 to 17:30, with a 30 minute break.",
-      output: "8h 00m, which is 8 hours as a decimal.",
-      title: "A day shift",
+      input: "22:00 to 06:00, with a 30 minute break.",
+      output: "7h 30m, which is 7.5 hours as a decimal. The shift ends the next day.",
+      title: "A night shift past midnight",
     },
     limits: [
-      "It works out one shift at a time. Add several results yourself for a week.",
+      "Add each shift to the week to total them, up to 31 shifts, then copy the list or download it as a CSV.",
       "A shift is under 24 hours, so the start and end times cannot be the same, and a break can be at most 1,440 minutes.",
       "Overtime rules and pay are not calculated.",
     ],
