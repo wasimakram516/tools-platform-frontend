@@ -1,6 +1,12 @@
 // @vitest-environment node
-import { describe, expect, it } from "vitest";
-import { resizeForMaxWidth, resolveFormat, shouldKeepOriginal } from "@/lib/tools/image/compress-plan";
+import { describe, expect, it, vi } from "vitest";
+import {
+  findQualityForTarget,
+  MIN_TARGET_QUALITY,
+  resizeForMaxWidth,
+  resolveFormat,
+  shouldKeepOriginal,
+} from "@/lib/tools/image/compress-plan";
 
 describe("resolveFormat", () => {
   it("keeps the file's own format when it can be written", () => {
@@ -52,5 +58,34 @@ describe("shouldKeepOriginal", () => {
   it("never overrides a chosen format change or a turned-off option", () => {
     expect(shouldKeepOriginal({ ...base, newBytes: 1200, sameFormat: false })).toBe(false);
     expect(shouldKeepOriginal({ ...base, keepSmaller: false, newBytes: 1200 })).toBe(false);
+  });
+});
+
+describe("findQualityForTarget", () => {
+  const sizeAt = (quality: number) => Promise.resolve({ bytes: Math.round(1_000_000 * quality), result: quality });
+
+  it("uses full quality when the file already fits", async () => {
+    const measure = vi.fn(sizeAt);
+    const found = await findQualityForTarget(measure, 2_000_000);
+
+    expect(found).toMatchObject({ quality: 1, reached: true });
+    expect(measure).toHaveBeenCalledTimes(1);
+  });
+
+  it("finds the highest quality that still fits, close to the target", async () => {
+    const found = await findQualityForTarget(sizeAt, 500_000);
+
+    expect(found.reached).toBe(true);
+    expect(found.bytes).toBeLessThanOrEqual(500_000);
+    expect(found.bytes).toBeGreaterThan(470_000);
+    expect(found.result).toBe(found.quality);
+  });
+
+  it("returns the smallest result and says so when the target cannot be reached", async () => {
+    const found = await findQualityForTarget(sizeAt, 10_000);
+
+    expect(found.reached).toBe(false);
+    expect(found.quality).toBe(MIN_TARGET_QUALITY);
+    expect(found.bytes).toBe(50_000);
   });
 });

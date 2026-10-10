@@ -395,6 +395,61 @@ describe("ImageCompressorTool", () => {
     expect(screen.queryByText("photo.webp")).not.toBeInTheDocument();
   });
 
+  describe("target size", () => {
+    /**
+     * A processor whose files get smaller as quality falls: 100,000 bytes at full quality.
+     */
+    function sizedProcessor(): ImageProcessor {
+      const processor = fakeProcessor();
+
+      processor.render = vi.fn(async (_source, options: RenderOptions) => ({
+        image: {
+          blob: new Blob([new Uint8Array(Math.round(100_000 * options.quality))], { type: `image/${options.format}` }),
+          fellBack: false,
+          format: options.format,
+          height: options.plan.output.height,
+          width: options.plan.output.width,
+        },
+        ok: true as const,
+      }));
+
+      return processor;
+    }
+
+    /**
+     * Opens the tool with one large photo and switches to the target size mode.
+     */
+    async function openTargetMode(processor: ImageProcessor): Promise<void> {
+      renderTool(<ImageCompressorTool download={vi.fn()} processor={processor} />);
+      choose("Choose images", imageFile("photo.jpg", 400_000, "image/jpeg"));
+      await screen.findByText("photo.webp");
+      fireEvent.click(screen.getByRole("button", { name: "Target size" }));
+    }
+
+    it("saves each image at the highest quality that fits under the size", async () => {
+      await openTargetMode(sizedProcessor());
+      fireEvent.change(screen.getByLabelText("Target size (KB)"), { target: { value: "50" } });
+
+      expect(await screen.findByText(/Saved at quality \d+% to fit under 50 KB/)).toBeInTheDocument();
+      expect(screen.queryByRole("slider", { name: /Quality/ })).not.toBeInTheDocument();
+    });
+
+    it("says so when the size cannot be reached", async () => {
+      await openTargetMode(sizedProcessor());
+      fireEvent.change(screen.getByLabelText("Target size (KB)"), { target: { value: "1" } });
+
+      expect(await screen.findByText(/Could not get under 1 KB/)).toBeInTheDocument();
+    });
+
+    it("explains that PNG cannot be fitted to a size", async () => {
+      await openTargetMode(sizedProcessor());
+      fireEvent.click(screen.getByRole("button", { name: "PNG" }));
+      fireEvent.change(screen.getByLabelText("Target size (KB)"), { target: { value: "50" } });
+
+      expect(await screen.findByText(/a target size cannot be met by quality/)).toBeInTheDocument();
+    });
+  });
+
   it("explains that PNG quality does not apply", async () => {
     renderTool(<ImageCompressorTool download={vi.fn()} processor={fakeProcessor()} />);
 

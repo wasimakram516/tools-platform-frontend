@@ -15,6 +15,7 @@ import { ToolFooter, ToolWorkspace } from "@/components/tools/tool-workspace";
 import { FieldHint } from "@/components/ui/field-hint";
 import { downloadBlob } from "@/lib/tools/download";
 import {
+  findQualityForTarget,
   resizeForMaxWidth,
   resolveFormat,
   shouldKeepOriginal,
@@ -31,11 +32,22 @@ import {
   type ImageFormatId,
   uniqueFileNames,
 } from "@/lib/tools/image/format";
-import { browserImageProcessor, type ImageProcessor, type LoadedImage } from "@/lib/tools/image/image-processing";
+import {
+  browserImageProcessor,
+  type ImageProcessor,
+  type LoadedImage,
+  type RenderResult,
+} from "@/lib/tools/image/image-processing";
 import { createZip } from "@/lib/tools/image/zip";
 
 const DEBOUNCE_MS = 250;
 const DEFAULT_QUALITY = 80;
+const BYTES_PER_KB = 1024;
+const MAX_TARGET_KB = 51_200;
+const SIZE_MODE_OPTIONS = [
+  { label: "Set quality", tooltip: "Choose how much detail to keep", value: "quality" },
+  { label: "Target size", tooltip: "Fit each image under a file size", value: "target" },
+] as const;
 const FORMAT_OPTIONS = [
   { label: "Keep format", tooltip: "Save each image in its own format", value: "keep" },
   { label: "JPEG", tooltip: "Small photos, no transparency", value: "jpeg" },
@@ -84,13 +96,16 @@ export function ImageCompressorTool({
   const [rejected, setRejected] = useState<string[]>([]);
   const [format, setFormat] = useState<FormatSetting>("webp");
   const [quality, setQuality] = useState(DEFAULT_QUALITY);
+  const [sizeMode, setSizeMode] = useState<"quality" | "target">("quality");
+  const [targetKb, setTargetKb] = useState("");
   const [maxWidth, setMaxWidth] = useState("");
   const [keepSmaller, setKeepSmaller] = useState(true);
   const [background, setBackground] = useState("#ffffff");
   const [statusMessage, setStatusMessage] = useState("");
   const urls = useRef(new Set<string>());
   const widthLimit = maxWidth === "" ? null : Number(maxWidth);
-  const settingsKey = JSON.stringify([format, quality, widthLimit, keepSmaller, background]);
+  const targetBytes = sizeMode === "target" && targetKb !== "" && Number(targetKb) > 0 ? Math.round(Number(targetKb) * BYTES_PER_KB) : null;
+  const settingsKey = JSON.stringify([format, quality, widthLimit, keepSmaller, background, targetBytes]);
 
   useEffect(() => {
     const created = urls.current;
@@ -122,20 +137,52 @@ export function ImageCompressorTool({
           continue;
         }
 
-        const result = await processor.render(source.loaded, {
-          background: resolved.format === "jpeg" ? background : null,
-          format: resolved.format,
-          orientation: NO_ROTATION,
-          plan,
-          quality: quality / 100,
-        });
+        const renderAt = (atQuality: number): ReturnType<ImageProcessor["render"]> =>
+          processor.render(source.loaded, {
+            background: resolved.format === "jpeg" ? background : null,
+            format: resolved.format,
+            orientation: NO_ROTATION,
+            plan,
+            quality: atQuality,
+          });
+        const fitsTarget = targetBytes !== null && resolved.format !== "png";
+        let targetNote = "";
+        let result = fitsTarget ? null : await renderAt(quality / 100);
+
+        if (fitsTarget && targetBytes !== null) {
+          // A render that fails stops the search from trusting its sizes, and is reported as is.
+          const failure: { attempt: RenderResult | null } = { attempt: null };
+          const found = await findQualityForTarget<RenderResult>(async (atQuality) => {
+            const attempt = await renderAt(atQuality);
+
+            if (!attempt.ok) {
+              failure.attempt ??= attempt;
+
+              return { bytes: Number.POSITIVE_INFINITY, result: attempt };
+            }
+
+            return { bytes: attempt.image.blob.size, result: attempt };
+          }, targetBytes);
+
+          result = failure.attempt ?? found.result;
+          targetNote = failure.attempt
+            ? ""
+            : found.reached
+              ? `Saved at quality ${Math.round(found.quality * 100)}% to fit under ${formatBytes(targetBytes)}.`
+              : `Could not get under ${formatBytes(targetBytes)}. This is the smallest at the lowest quality. Try a smaller maximum width.`;
+        } else if (targetBytes !== null) {
+          targetNote = "PNG is lossless, so a target size cannot be met by quality. Choose WebP or JPEG, or set a maximum width.";
+        }
 
         if (cancelled) {
           return;
         }
 
-        if (!result.ok) {
-          setOutcomes((current) => ({ ...current, [source.id]: { key: settingsKey, problem: result.message } }));
+        if (!result || !result.ok) {
+          setOutcomes((current) => ({
+            ...current,
+            [source.id]: { key: settingsKey, problem: result?.ok === false ? result.message : "The image could not be processed." },
+          }));
           continue;
         }
 
@@ -153,6 +200,7 @@ export function ImageCompressorTool({
         const sameExtension = file.name.toLowerCase().endsWith(`.${extension}`);
         const url = URL.createObjectURL(finalBlob);
         const notes = [
+          keepOriginal ? "" : targetNote,
           keepOriginal ? "Kept the original because re-saving did not make it smaller." : "",
           resolved.usedFallback ? "This type cannot be saved as itself, so it was saved as PNG." : "",
           rendered.fellBack && !resolved.usedFallback
@@ -193,7 +241,7 @@ export function ImageCompressorTool({
       cancelled = true;
       window.clearTimeout(timer);
     };
-  }, [sources, format, quality, widthLimit, keepSmaller, background, processor, settingsKey]);
+  }, [sources, format, quality, widthLimit, keepSmaller, background, processor, settingsKey, targetBytes]);
 
   /**
    * Reads the chosen files, keeps the ones that load, and lists the ones that do not.
@@ -250,6 +298,8 @@ export function ImageCompressorTool({
     setRejected([]);
     setFormat("webp");
     setQuality(DEFAULT_QUALITY);
+    setSizeMode("quality");
+    setTargetKb("");
     setMaxWidth("");
     setKeepSmaller(true);
     setBackground("#ffffff");
@@ -304,6 +354,23 @@ export function ImageCompressorTool({
                 value={format}
               />
             </Stack>
+            <Stack sx={{ gap: 1 }}>
+              <Typography component="h2" sx={{ fontSize: "0.92rem", fontWeight: 700 }}>
+                Make files smaller by
+              </Typography>
+              <ModeToggle fullWidth label="How to shrink" onChange={setSizeMode} options={SIZE_MODE_OPTIONS} value={sizeMode} />
+            </Stack>
+            {sizeMode === "target" ? (
+              <NumberField
+                helperText="Each image is saved at the highest quality that stays under this size. Works with JPEG and WebP."
+                id="image-target-kb"
+                label="Target size (KB)"
+                max={MAX_TARGET_KB}
+                min={1}
+                onChange={setTargetKb}
+                value={targetKb}
+              />
+            ) : (
             <Stack sx={{ gap: 0.5 }}>
               <Typography id="quality-label" sx={{ fontSize: "0.92rem", fontWeight: 700 }}>
                 Quality: {quality}%
@@ -325,6 +392,7 @@ export function ImageCompressorTool({
                 </FieldHint>
               </Typography>
             </Stack>
+            )}
             <NumberField
               helperText="Optional. Wider images are scaled down. Narrower ones are left alone."
               id="image-max-width"

@@ -50,3 +50,60 @@ interface KeepOriginalInput {
 export function shouldKeepOriginal({ keepSmaller, newBytes, originalBytes, sameFormat }: KeepOriginalInput): boolean {
   return keepSmaller && sameFormat && newBytes >= originalBytes;
 }
+
+/** The lowest quality tried when fitting a file under a size. Below this, images look broken. */
+export const MIN_TARGET_QUALITY = 0.05;
+/** How many halving steps to take between the lowest and highest quality. */
+const TARGET_SEARCH_STEPS = 6;
+
+export interface TargetSample<T> {
+  bytes: number;
+  /** Whatever was made at this quality, handed back for the one that is chosen. */
+  result: T;
+}
+
+export interface TargetSearchResult<T> extends TargetSample<T> {
+  /** The quality used, from 0 to 1. */
+  quality: number;
+  /** False when even the lowest quality is still over the target. */
+  reached: boolean;
+}
+
+/**
+ * Finds the highest quality whose file still fits under a target size. It tries full quality
+ * first, then the lowest, then halves the gap between them. File size falls as quality falls, so
+ * this finds the best fit in about eight tries. When the lowest quality is still too big, that
+ * smallest result is returned with reached set to false.
+ */
+export async function findQualityForTarget<T>(
+  measure: (quality: number) => Promise<TargetSample<T>>,
+  targetBytes: number,
+): Promise<TargetSearchResult<T>> {
+  const full = await measure(1);
+
+  if (full.bytes <= targetBytes) {
+    return { ...full, quality: 1, reached: true };
+  }
+
+  const lowest = await measure(MIN_TARGET_QUALITY);
+
+  if (lowest.bytes > targetBytes) {
+    return { ...lowest, quality: MIN_TARGET_QUALITY, reached: false };
+  }
+
+  let fits = { ...lowest, quality: MIN_TARGET_QUALITY };
+  let tooBig = 1;
+
+  for (let step = 0; step < TARGET_SEARCH_STEPS; step += 1) {
+    const quality = (fits.quality + tooBig) / 2;
+    const sample = await measure(quality);
+
+    if (sample.bytes <= targetBytes) {
+      fits = { ...sample, quality };
+    } else {
+      tooBig = quality;
+    }
+  }
+
+  return { ...fits, reached: true };
+}
