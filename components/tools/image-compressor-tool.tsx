@@ -44,6 +44,7 @@ const DEBOUNCE_MS = 250;
 const DEFAULT_QUALITY = 80;
 const BYTES_PER_KB = 1024;
 const MAX_TARGET_KB = 51_200;
+const TARGET_PRESETS_KB = [100, 200, 500] as const;
 const SIZE_MODE_OPTIONS = [
   { label: "Set quality", tooltip: "Choose how much detail to keep", value: "quality" },
   { label: "Target size", tooltip: "Fit each image under a file size", value: "target" },
@@ -361,15 +362,36 @@ export function ImageCompressorTool({
               <ModeToggle fullWidth label="How to shrink" onChange={setSizeMode} options={SIZE_MODE_OPTIONS} value={sizeMode} />
             </Stack>
             {sizeMode === "target" ? (
-              <NumberField
-                helperText="Each image is saved at the highest quality that stays under this size. Works with JPEG and WebP."
-                id="image-target-kb"
-                label="Target size (KB)"
-                max={MAX_TARGET_KB}
-                min={1}
-                onChange={setTargetKb}
-                value={targetKb}
-              />
+              <Stack sx={{ gap: 1 }}>
+                <NumberField
+                  helperText="Each image is saved at the highest quality that stays under this size. Works with JPEG and WebP."
+                  id="image-target-kb"
+                  label="Target size (KB)"
+                  max={MAX_TARGET_KB}
+                  min={1}
+                  onChange={setTargetKb}
+                  value={targetKb}
+                />
+                <Stack direction="row" sx={{ flexWrap: "wrap", gap: 1 }}>
+                  {TARGET_PRESETS_KB.map((preset) => (
+                    <Button
+                      aria-pressed={Number(targetKb) === preset}
+                      key={preset}
+                      onClick={() => setTargetKb(String(preset))}
+                      size="small"
+                      variant={Number(targetKb) === preset ? "contained" : "outlined"}
+                    >
+                      {preset} KB
+                    </Button>
+                  ))}
+                </Stack>
+                <Typography color="text.secondary" component="div" sx={{ fontSize: "0.8rem" }}>
+                  <FieldHint>
+                    Very small targets need fewer pixels as well as lower quality. If a size cannot be reached, set a
+                    Maximum width below and try again.
+                  </FieldHint>
+                </Typography>
+              </Stack>
             ) : (
             <Stack sx={{ gap: 0.5 }}>
               <Typography id="quality-label" sx={{ fontSize: "0.92rem", fontWeight: 700 }}>

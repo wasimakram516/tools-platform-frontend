@@ -434,6 +434,17 @@ describe("ImageCompressorTool", () => {
       expect(screen.queryByRole("slider", { name: /Quality/ })).not.toBeInTheDocument();
     });
 
+    it("fills in the size from the 100, 200, and 500 KB presets", async () => {
+      await openTargetMode(sizedProcessor());
+
+      fireEvent.click(screen.getByRole("button", { name: "200 KB" }));
+
+      expect(screen.getByLabelText("Target size (KB)")).toHaveValue(200);
+      expect(screen.getByRole("button", { name: "200 KB" })).toHaveAttribute("aria-pressed", "true");
+      expect(screen.getByRole("button", { name: "100 KB" })).toHaveAttribute("aria-pressed", "false");
+      expect(screen.getByText(/Maximum width below/)).toBeInTheDocument();
+    });
+
     it("says so when the size cannot be reached", async () => {
       await openTargetMode(sizedProcessor());
       fireEvent.change(screen.getByLabelText("Target size (KB)"), { target: { value: "1" } });
