@@ -18,7 +18,7 @@ interface FooterLinkGroupProps {
 function FooterLinkGroup({ links, title }: FooterLinkGroupProps): ReactNode {
   return (
     <Stack aria-label={title} component="nav" sx={{ gap: 1.25 }}>
-      <Typography color="text.secondary" component="h2" sx={{ fontSize: "0.8rem", fontWeight: 700 }}>
+      <Typography color="text.secondary" component="p" sx={{ fontSize: "0.8rem", fontWeight: 700 }}>
         {title}
       </Typography>
       {links.map((link) => (

@@ -1,10 +1,11 @@
-import { Container, Stack } from "@mui/material";
+import { Container, Stack, Typography } from "@mui/material";
 import type { PropsWithChildren, ReactNode } from "react";
 import { PageFrame } from "@/components/layout/page-frame";
 import { categoriesCrumb, homeCrumb, PageTitle } from "@/components/ui/page-title";
 import { ProcessingBadge } from "@/components/ui/processing-badge";
 import { RelatedToolLinks } from "@/components/ui/related-tool-links";
 import { ToolIcon } from "@/components/ui/tool-icon";
+import { formatIsoDate } from "@/lib/format-iso-date";
 import type { ToolCategory, ToolDefinition } from "@/types/tool";
 
 interface ToolPageShellProps extends PropsWithChildren {
@@ -49,6 +50,9 @@ export function ToolPageShell({
             <ProcessingBadge mode={tool.processingMode} />
           </Stack>
           {guide}
+          <Typography color="text.secondary" sx={{ fontSize: "0.85rem" }}>
+            Last updated <time dateTime={tool.updatedAt}>{formatIsoDate(tool.updatedAt)}</time>
+          </Typography>
           <RelatedToolLinks tools={relatedTools} />
         </Stack>
       </Container>

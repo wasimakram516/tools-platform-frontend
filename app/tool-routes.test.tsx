@@ -5,7 +5,7 @@ import CategoryPage, {
   generateMetadata as generateCategoryMetadata,
   generateStaticParams as generateCategoryParams,
 } from "@/app/categories/[categorySlug]/page";
-import CategoriesPage from "@/app/categories/page";
+import CategoriesPage, { metadata as categoriesMetadata } from "@/app/categories/page";
 import ToolPage, {
   generateMetadata as generateToolMetadata,
   generateStaticParams as generateToolParams,
@@ -93,6 +93,38 @@ describe("registry-backed routes", () => {
     expect(screen.getByRole("heading", { name: "JSON Formatter" })).toBeInTheDocument();
     expect(await screen.findByLabelText("JSON formatter workspace", {}, { timeout: 15_000 })).toBeInTheDocument();
     expect(screen.getByText("On this device · background worker")).toBeInTheDocument();
+  });
+
+  it("shows when a tool page was last updated, as a machine readable date", async () => {
+    const page = await ToolPage({
+      params: Promise.resolve({ toolSlug: "json-formatter" }),
+    });
+
+    renderRoute(page);
+
+    const updated = screen.getByText(/^Last updated/);
+    const time = within(updated).getByText(/\d{4}$/);
+
+    expect(time.tagName).toBe("TIME");
+    expect(time).toHaveAttribute("datetime", expect.stringMatching(/^\d{4}-\d{2}-\d{2}$/));
+  });
+
+  it("gives the categories hub a description that fits in search results, and structured data", () => {
+    const { container } = render(
+      <AppThemeProvider>
+        <CategoriesPage />
+      </AppThemeProvider>,
+    );
+    const description = String(categoriesMetadata.description);
+    const types = Array.from(container.querySelectorAll('script[type="application/ld+json"]')).flatMap((script) => {
+      const data = JSON.parse(script.textContent ?? "[]") as { "@type": string } | { "@type": string }[];
+
+      return (Array.isArray(data) ? data : [data]).map((entry) => entry["@type"]);
+    });
+
+    expect(description.length).toBeGreaterThanOrEqual(80);
+    expect(description.length).toBeLessThanOrEqual(165);
+    expect(types).toEqual(expect.arrayContaining(["CollectionPage", "BreadcrumbList"]));
   });
 
   it("renders the Base64 tool inside the reusable tool shell", async () => {
