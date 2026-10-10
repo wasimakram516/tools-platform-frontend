@@ -7,6 +7,7 @@ import { ToolGuide } from "@/components/tools/tool-guide";
 import { ToolPageShell } from "@/components/tools/tool-page-shell";
 import { breadcrumbJsonLd, buildPageMetadata, faqJsonLd, toolJsonLd } from "@/lib/seo";
 import { getToolContent } from "@/lib/tools/tool-content";
+import { getToolExtras } from "@/lib/tools/tool-extras";
 import {
   getRelatedTools,
   getToolBySlug,
@@ -82,7 +83,7 @@ export default async function ToolPage({ params }: ToolPageProps): Promise<React
       />
       <ToolPageShell
         category={category}
-        guide={content ? <ToolGuide content={content} idPrefix={tool.slug} toolName={tool.name} /> : undefined}
+        guide={content ? <ToolGuide content={content} extras={getToolExtras(tool.id)} idPrefix={tool.slug} toolName={tool.name} /> : undefined}
         relatedTools={getRelatedTools(tool)}
         tool={tool}
       >
