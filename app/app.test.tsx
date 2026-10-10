@@ -125,7 +125,7 @@ describe("home page search", () => {
     expect(screen.queryAllByRole("option")).toHaveLength(0);
 
     fireEvent.focus(box);
-    expect(screen.getByText("Popular tools")).toBeInTheDocument();
+    expect(screen.getAllByRole("option").length).toBeGreaterThan(0);
 
     fireEvent.change(box, { target: { value: "make my photo smaller" } });
 

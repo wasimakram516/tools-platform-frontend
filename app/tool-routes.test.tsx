@@ -64,7 +64,7 @@ describe("registry-backed routes", () => {
         .getAllByRole("link")
         .some((link) => link.getAttribute("href") === "/categories/developer-tools"),
     ).toBe(true);
-    expect(screen.getAllByText("Coming soon")).toHaveLength(
+    expect(screen.queryAllByText("Coming soon")).toHaveLength(
       getToolCategories().filter((category) => category.status === "planned").length,
     );
     expect(screen.getAllByText(/^\d+ tools$/)).toHaveLength(getAvailableToolCategories().length);
