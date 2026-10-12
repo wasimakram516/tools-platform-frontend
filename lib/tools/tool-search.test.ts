@@ -119,6 +119,9 @@ describe("searchTools on the real tools", () => {
     ["add utm tags to a link", "utm-link-builder"],
     ["make open graph tags", "meta-tag-generator"],
     ["faq schema json-ld", "schema-markup-generator"],
+    ["count symbols online", "character-counter"],
+    ["count number of chars", "character-counter"],
+    ["character checker", "character-counter"],
   ])("finds the right tool for %s", (query, slug) => {
     expect(first(query)).toBe(slug);
   });

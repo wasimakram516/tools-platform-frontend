@@ -515,8 +515,8 @@ const TOOL_DEFINITIONS = [
     description:
       "Count characters with and without spaces, break them down by letters, digits, spaces, and symbols, see the size in bytes, and check your text against a limit such as an X post, SMS, page title, or meta description.",
     categoryId: "text",
-    keywords: ["character counter", "character count", "count characters", "characters with spaces", "length checker", "twitter character limit"],
-    searchTerms: ["character", "characters", "letters", "count", "limit", "tweet", "bio", "caption", "sms", "length", "spaces"],
+    keywords: ["character counter", "character count", "character checker", "count characters", "count symbols", "count number of characters", "characters with spaces", "length checker", "twitter character limit"],
+    searchTerms: ["character", "characters", "chars", "symbols", "letters", "count", "checker", "limit", "tweet", "bio", "caption", "sms", "length", "spaces"],
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["TXT-01", "TXT-03", "TXT-07"],

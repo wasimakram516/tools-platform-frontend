@@ -824,6 +824,11 @@ export const TOOL_CONTENT: Readonly<Record<string, ToolContent>> = {
       },
       {
         answer:
+          "Paste or type your text and read the Characters figure. It counts every character you enter, including letters, digits, spaces, and punctuation, so it works as a character checker for any text. A breakdown shows how many are letters, digits, spaces, and symbols.",
+        question: "How do I count symbols or the number of characters in my text?",
+      },
+      {
+        answer:
           "Choose a Character limit, such as X post, SMS, Instagram caption, LinkedIn post, YouTube title, page title, or meta description. A bar shows how much of the limit you have used.",
         question: "Can I check a platform's character limit?",
       },
