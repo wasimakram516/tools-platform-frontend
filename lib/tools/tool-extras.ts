@@ -10,6 +10,8 @@ export interface ToolExtras {
   example: ToolExample;
   /** What the tool does not do, and the sizes it accepts. Each is one sentence. */
   limits: readonly string[];
+  /** A page on this site that goes further than the tool page can, linked under the limits. */
+  seeAlso?: { href: string; label: string };
 }
 
 export interface ToolExample {
@@ -514,6 +516,10 @@ export const TOOL_EXTRAS: Readonly<Record<string, ToolExtras>> = {
       "Up to 1 million characters are accepted.",
       "Counting uses the way your browser groups characters, and an older browser may count some emoji as more than one.",
     ],
+    seeAlso: {
+      href: "/character-limits",
+      label: "Character limits for X, Instagram, LinkedIn, YouTube, SMS, and search results",
+    },
   },
   "TXT-03": {
     about:

@@ -1,6 +1,7 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Link, Typography } from "@mui/material";
 import type { ReactNode } from "react";
 import { FaqAccordion } from "@/components/ui/faq-accordion";
+import { NextLink } from "@/components/ui/next-link";
 import type { ToolContent } from "@/lib/tools/tool-content";
 import type { ToolExtras } from "@/lib/tools/tool-extras";
 import { FONT_HEADING } from "@/theme/typography";
@@ -105,6 +106,14 @@ export function ToolGuide({ content, extras, idPrefix, toolName }: ToolGuideProp
                 </Typography>
               ))}
             </Box>
+            {extras.seeAlso ? (
+              <Typography sx={{ lineHeight: 1.65, mt: 2 }}>
+                See also:{" "}
+                <Link component={NextLink} href={extras.seeAlso.href}>
+                  {extras.seeAlso.label}
+                </Link>
+              </Typography>
+            ) : null}
           </Box>
         </>
       ) : null}

@@ -70,6 +70,19 @@ describe("ToolGuide", () => {
     expect(within(limits).getAllByRole("listitem")).toHaveLength(TOOL_EXTRAS["DEV-01"]!.limits.length);
   });
 
+  it("links to a reference page under the limits when the tool has one", () => {
+    render(
+      <AppThemeProvider>
+        <ToolGuide content={CONTENT} extras={TOOL_EXTRAS["TXT-02"]} idPrefix="character-counter" toolName="Character Counter" />
+      </AppThemeProvider>,
+    );
+
+    expect(screen.getByRole("link", { name: /Character limits for X, Instagram/ })).toHaveAttribute(
+      "href",
+      "/character-limits",
+    );
+  });
+
   it("has no Show more button when there are only a few questions", () => {
     renderGuide();
 
