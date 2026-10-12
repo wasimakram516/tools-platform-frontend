@@ -89,7 +89,7 @@ const TOOL_DEFINITIONS = [
     status: "available",
     featured: true,
     relatedToolIds: ["DAT-05", "DAT-01", "DAT-03", "DEV-02", "DEV-04"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-10",
     icon: "json",
   },
   {
@@ -104,7 +104,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "worker",
     status: "available",
     relatedToolIds: ["DEV-05", "DEV-02", "DEV-08", "DEV-01"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-10",
     icon: "base64",
   },
   {
@@ -119,7 +119,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "worker",
     status: "available",
     relatedToolIds: ["DEV-04", "SEO-07", "DEV-01"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-10",
     icon: "url",
   },
   {
@@ -134,7 +134,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["DEV-08", "GEN-01", "DEV-04"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-10",
     icon: "uuid",
   },
   {
@@ -150,7 +150,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["DEV-01", "DEV-04", "DTM-08"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-10",
     icon: "jwt",
   },
   {
@@ -166,7 +166,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["DEV-04", "DEV-03", "GEN-01"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-10",
     icon: "hash",
   },
   {
@@ -182,7 +182,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["CAL-10", "CAL-05", "CAL-07"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-10",
     icon: "percentage",
   },
   {
@@ -198,7 +198,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["CAL-07", "CAL-01", "CAL-10"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-10",
     icon: "loan",
   },
   {
@@ -214,7 +214,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["CAL-05", "CAL-01", "CAL-10"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-10",
     icon: "interest",
   },
   {
@@ -230,7 +230,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["DTM-01", "DAT-12", "CAL-01"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-10",
     icon: "bmi",
   },
   {
@@ -246,7 +246,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["CAL-01", "CAL-05"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-10",
     icon: "tip",
   },
   {
@@ -262,7 +262,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["DEV-01", "DAT-05", "DAT-03"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-10",
     icon: "csvJson",
   },
   {
@@ -278,7 +278,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["DEV-01", "DAT-01", "DAT-03"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-10",
     icon: "yaml",
   },
   {
@@ -294,7 +294,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["DEV-01", "DAT-05", "DAT-01"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-10",
     icon: "xml",
   },
   {
@@ -310,7 +310,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["DEV-04", "DEV-08", "DAT-12"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-10",
     icon: "numberBase",
   },
   {
@@ -326,7 +326,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["DAT-08", "CAL-01", "CAL-04"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-10",
     icon: "unitConvert",
   },
   {
@@ -342,7 +342,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["SEO-05", "SEO-08", "SEO-07"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-10",
     icon: "metaTags",
   },
   {
@@ -358,7 +358,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["SEO-01", "SEO-07", "SEO-08"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-10",
     icon: "robotsSitemap",
   },
   {
@@ -374,7 +374,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["SEO-01", "SEO-05", "GEN-02", "DEV-05"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-10",
     icon: "utm",
   },
   {
@@ -390,7 +390,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["SEO-01", "DEV-01", "SEO-05"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-10",
     icon: "schemaMarkup",
   },
   {
@@ -407,7 +407,7 @@ const TOOL_DEFINITIONS = [
     status: "available",
     featured: true,
     relatedToolIds: ["DTM-02", "DTM-04", "DTM-06"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-10",
     icon: "age",
   },
   {
@@ -423,7 +423,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["DTM-04", "DTM-01", "DTM-08"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-10",
     icon: "dateDifference",
   },
   {
@@ -439,7 +439,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["DTM-02", "DTM-01", "DTM-08"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-10",
     icon: "dateMath",
   },
   {
@@ -455,7 +455,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["DTM-02", "DTM-04", "DTM-11"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-10",
     icon: "hoursWorked",
   },
   {
@@ -471,7 +471,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["DEV-02", "DTM-11", "DTM-02"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-10",
     icon: "timestamp",
   },
   {
@@ -487,7 +487,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["DTM-08", "DTM-02", "DTM-04"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-10",
     icon: "spreadsheet",
   },
   {
@@ -504,7 +504,7 @@ const TOOL_DEFINITIONS = [
     status: "available",
     featured: true,
     relatedToolIds: ["TXT-02", "TXT-03", "TXT-08"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-10",
     icon: "wordCount",
   },
   {
@@ -520,7 +520,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["TXT-01", "TXT-03", "TXT-07"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-12",
     icon: "characterCount",
   },
   {
@@ -536,7 +536,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["TXT-01", "TXT-02", "TXT-07"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-10",
     icon: "caseConverter",
   },
   {
@@ -552,7 +552,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["TXT-08", "TXT-03", "TXT-01"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-10",
     icon: "sortLines",
   },
   {
@@ -568,7 +568,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["TXT-07", "TXT-01", "TXT-03"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-10",
     icon: "duplicateLines",
   },
   {
@@ -585,7 +585,7 @@ const TOOL_DEFINITIONS = [
     status: "available",
     featured: true,
     relatedToolIds: ["IMG-02", "IMG-12"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-10",
     icon: "imageCompress",
   },
   {
@@ -601,7 +601,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["IMG-01", "IMG-12"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-10",
     icon: "imageResize",
   },
   {
@@ -617,7 +617,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["IMG-01", "IMG-02", "SEO-01"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-10",
     icon: "favicon",
   },
   {
@@ -634,7 +634,7 @@ const TOOL_DEFINITIONS = [
     status: "available",
     featured: true,
     relatedToolIds: ["DEV-03", "DEV-08", "GEN-03"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-10",
     icon: "password",
   },
   {
@@ -651,7 +651,7 @@ const TOOL_DEFINITIONS = [
     status: "available",
     featured: true,
     relatedToolIds: ["SEO-07", "DEV-05"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-10",
     icon: "qrCode",
   },
   {
@@ -667,7 +667,7 @@ const TOOL_DEFINITIONS = [
     processingMode: "browser",
     status: "available",
     relatedToolIds: ["GEN-01", "TXT-07", "DEV-03"],
-    updatedAt: "2026-10-09",
+    updatedAt: "2026-10-10",
     icon: "random",
   },
 ] as const satisfies readonly ToolDefinition[];
