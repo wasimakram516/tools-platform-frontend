@@ -1,7 +1,12 @@
 import { TextField } from "@mui/material";
-import { DatePicker, DateTimePicker, TimePicker } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import dayjs, { type Dayjs } from "dayjs";
-import type { ReactNode } from "react";
+import "dayjs/locale/en-gb";
+import type { PropsWithChildren, ReactNode } from "react";
 import { hintFor } from "@/components/ui/field-hint";
 
 interface FieldProps {
@@ -50,17 +55,31 @@ function pickerSlotProps({ helperText, id }: Pick<FieldProps, "helperText" | "id
 }
 
 /**
+ * Gives a picker the date localization it needs: day first, with weeks starting on Monday.
+ * Each field adds it for itself, so only pages with a date field load the date picker code.
+ */
+function Localized({ children }: PropsWithChildren): ReactNode {
+  return (
+    <LocalizationProvider adapterLocale="en-gb" dateAdapter={AdapterDayjs}>
+      {children}
+    </LocalizationProvider>
+  );
+}
+
+/**
  * A calendar date picker. The value is YYYY-MM-DD, or an empty string.
  */
 export function DateField(props: FieldProps): ReactNode {
   return (
-    <DatePicker
-      format={DATE_DISPLAY_FORMAT}
-      label={props.label}
-      onChange={(next) => props.onChange(toToolValue(next, DATE_VALUE_FORMAT))}
-      slotProps={pickerSlotProps(props)}
-      value={toPickerValue(props.value, (value) => dayjs(value))}
-    />
+    <Localized>
+      <DatePicker
+        format={DATE_DISPLAY_FORMAT}
+        label={props.label}
+        onChange={(next) => props.onChange(toToolValue(next, DATE_VALUE_FORMAT))}
+        slotProps={pickerSlotProps(props)}
+        value={toPickerValue(props.value, (value) => dayjs(value))}
+      />
+    </Localized>
   );
 }
 
@@ -69,14 +88,16 @@ export function DateField(props: FieldProps): ReactNode {
  */
 export function TimeField(props: FieldProps): ReactNode {
   return (
-    <TimePicker
-      ampm
-      format={TIME_DISPLAY_FORMAT}
-      label={props.label}
-      onChange={(next) => props.onChange(toToolValue(next, TIME_VALUE_FORMAT))}
-      slotProps={pickerSlotProps(props)}
-      value={toPickerValue(props.value, (value) => dayjs(`1970-01-01T${value}`))}
-    />
+    <Localized>
+      <TimePicker
+        ampm
+        format={TIME_DISPLAY_FORMAT}
+        label={props.label}
+        onChange={(next) => props.onChange(toToolValue(next, TIME_VALUE_FORMAT))}
+        slotProps={pickerSlotProps(props)}
+        value={toPickerValue(props.value, (value) => dayjs(`1970-01-01T${value}`))}
+      />
+    </Localized>
   );
 }
 
@@ -85,14 +106,16 @@ export function TimeField(props: FieldProps): ReactNode {
  */
 export function DateTimeField(props: FieldProps): ReactNode {
   return (
-    <DateTimePicker
-      ampm
-      format={DATE_TIME_DISPLAY_FORMAT}
-      label={props.label}
-      onChange={(next) => props.onChange(toToolValue(next, DATE_TIME_VALUE_FORMAT))}
-      slotProps={pickerSlotProps(props)}
-      value={toPickerValue(props.value, (value) => dayjs(value))}
-    />
+    <Localized>
+      <DateTimePicker
+        ampm
+        format={DATE_TIME_DISPLAY_FORMAT}
+        label={props.label}
+        onChange={(next) => props.onChange(toToolValue(next, DATE_TIME_VALUE_FORMAT))}
+        slotProps={pickerSlotProps(props)}
+        value={toPickerValue(props.value, (value) => dayjs(value))}
+      />
+    </Localized>
   );
 }
 
