@@ -156,6 +156,32 @@ export function toolListJsonLd(
 }
 
 /**
+ * Describes an ordinary content page, with the date its content was last checked.
+ */
+export function webPageJsonLd({
+  dateModified,
+  description,
+  name,
+  path,
+}: {
+  dateModified: string;
+  description: string;
+  name: string;
+  path: string;
+}): JsonLdObject {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    dateModified,
+    description,
+    inLanguage: "en",
+    name,
+    publisher: { "@id": organizationId() },
+    url: absoluteUrl(path),
+  };
+}
+
+/**
  * Describes the categories hub as a collection page that lists every category.
  */
 export function categoriesJsonLd(

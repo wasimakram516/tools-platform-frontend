@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { LEGAL_DOCUMENTS, LEGAL_LAST_UPDATED_ISO } from "@/lib/legal/legal-content";
 import { absoluteUrl } from "@/lib/seo";
+import { CHARACTER_LIMITS_CHECKED_ON } from "@/lib/tools/text/character-limits";
 import { getAvailableToolCategories, getToolsByCategory, getTools } from "@/lib/tools/tool-registry";
 
 /**
@@ -34,6 +35,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { lastModified: catalogUpdated, priority: 0.8, url: absoluteUrl("/categories") },
     ...categoryEntries,
     ...toolEntries,
+    { lastModified: CHARACTER_LIMITS_CHECKED_ON, priority: 0.7, url: absoluteUrl("/character-limits") },
     ...LEGAL_DOCUMENTS.map((document) => ({
       lastModified: LEGAL_LAST_UPDATED_ISO,
       priority: 0.3,

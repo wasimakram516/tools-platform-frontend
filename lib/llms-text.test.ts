@@ -18,6 +18,10 @@ describe("buildLlmsText", () => {
     }
   });
 
+  it("points to the character limits page", () => {
+    expect(buildLlmsText()).toContain("[Character limits](http://localhost:3000/character-limits)");
+  });
+
   it("groups the tools under their category names", () => {
     expect(text).toContain("## Calculators");
     expect(text).toContain("## Developer tools");

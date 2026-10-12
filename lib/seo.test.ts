@@ -141,6 +141,7 @@ describe("crawler files", () => {
     for (const category of getToolCategories().filter((entry) => entry.status === "planned")) {
       expect(urls).not.toContain(`http://localhost:3000/categories/${category.slug}`);
     }
+    expect(urls).toContain("http://localhost:3000/character-limits");
     expect(urls).toContain("http://localhost:3000/privacy");
     expect(urls).toContain("http://localhost:3000/terms");
     expect(urls.filter((url) => url.includes("/tools/"))).toHaveLength(availableTools.length);

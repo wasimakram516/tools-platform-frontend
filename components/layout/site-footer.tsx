@@ -42,6 +42,7 @@ function FooterLinkGroup({ links, title }: FooterLinkGroupProps): ReactNode {
 export function SiteFooter(): ReactNode {
   const browseLinks = [
     { href: "/categories", label: "All categories" },
+    { href: "/character-limits", label: "Character limits" },
     ...getAvailableToolCategories().map((category) => ({
       href: `/categories/${category.slug}`,
       label: category.name,
