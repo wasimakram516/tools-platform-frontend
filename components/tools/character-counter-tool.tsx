@@ -7,21 +7,14 @@ import { NumberField } from "@/components/tools/form-fields";
 import { StatGrid } from "@/components/tools/stat-grid";
 import { TextAnalysisTool } from "@/components/tools/text-analysis-tool";
 import { formatCharacterCount } from "@/lib/tools/text-metrics";
+import { counterPresets } from "@/lib/tools/text/character-limits";
 import { checkLimit, type TextStats } from "@/lib/tools/text/text-stats";
 import { countCharacterTypes } from "@/lib/tools/text/word-insights";
 
 const MAX_LIMIT = 10_000_000;
 
-/** Common places a length limit applies. The numbers are widely used guides, not hard rules. */
-const LIMIT_PRESETS = [
-  { label: "X post", limit: 280 },
-  { label: "SMS", limit: 160 },
-  { label: "Page title", limit: 60 },
-  { label: "Meta description", limit: 160 },
-  { label: "YouTube title", limit: 100 },
-  { label: "Instagram caption", limit: 2200 },
-  { label: "LinkedIn post", limit: 3000 },
-] as const;
+/** Common places a length limit applies, from the same list as the character limits page. */
+const LIMIT_PRESETS = counterPresets();
 
 /**
  * Describes how the text stands against the limit, for example "30 characters left".
