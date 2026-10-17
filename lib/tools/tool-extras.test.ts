@@ -12,6 +12,7 @@ import { dateToExcelSerial } from "@/lib/tools/dates/excel-date";
 import { calculateHoursWorked } from "@/lib/tools/dates/hours-worked";
 import { hashText } from "@/lib/tools/hash-generator";
 import { transformJson } from "@/lib/tools/json-formatter";
+import { runRegex } from "@/lib/tools/regex-tester";
 import { buildUtmUrl } from "@/lib/tools/seo/utm";
 import { TOOL_EXTRAS } from "@/lib/tools/tool-extras";
 import { getTools } from "@/lib/tools/tool-registry";
@@ -70,6 +71,24 @@ describe("worked examples match what the tools really produce", () => {
 
     expect(result.ok && result.hashes["SHA-256"]).toBe("2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824");
     expect(TOOL_EXTRAS["DEV-08"]?.example.output).toContain("2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824");
+  });
+
+  it("finds email addresses with a regular expression", () => {
+    const result = runRegex({
+      flags: "g",
+      pattern: "(?<user>[\\w.]+)@(?<domain>[\\w-]+\\.[a-z]{2,})",
+      replacement: "$<user> at $<domain>",
+      text: "Write to ada@example.com or grace.hopper@navy.mil",
+    });
+    const output = TOOL_EXTRAS["DEV-07"]?.example.output ?? "";
+
+    expect(result.ok && result.matches.map((match) => `${match.value} at position ${match.index}`)).toEqual([
+      "ada@example.com at position 9",
+      "grace.hopper@navy.mil at position 28",
+    ]);
+    expect(output).toContain("ada@example.com at position 9");
+    expect(output).toContain("grace.hopper@navy.mil at position 28");
+    expect(output).toContain(result.ok ? (result.replaced ?? "") : "missing");
   });
 
   it("converts CSV to JSON with numbers typed", () => {

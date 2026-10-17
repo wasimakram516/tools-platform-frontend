@@ -485,6 +485,39 @@ export const TOOL_CONTENT: Readonly<Record<string, ToolContent>> = {
       "To check a checksum, paste it into Hash to check.",
     ],
   },
+  "DEV-07": {
+    faqs: [
+      {
+        answer:
+          "It uses the JavaScript regular expression engine built into your browser, so patterns behave the way they do in JavaScript, Node.js, and TypeScript. Some features differ in other languages such as Python, PHP, or Java.",
+        question: "Which regex flavour does it use?",
+      },
+      {
+        answer:
+          "Switch on Global to find every match, and leave it off to find only the first. The other flags make the pattern ignore case, match at the start and end of every line, let a dot match line breaks, and treat text as Unicode.",
+        question: "What do the flags do?",
+      },
+      {
+        answer:
+          "Some patterns with nested repeats can take an enormous time to fail on certain text. The tool runs each test in a separate worker and stops it after two seconds, then tells you, so the page never freezes.",
+        question: "Why did my pattern stop with a message about taking too long?",
+      },
+      {
+        answer:
+          "Type the new text in Replace with. Use $1 for the first group, $<name> for a named group, and $& for the whole match. The result is shown below the matches and can be copied.",
+        question: "How do I preview a replacement?",
+      },
+    ],
+    metaDescription:
+      "Test regular expressions online for free. See every match highlighted with its position and groups, and preview a replacement. It runs in your browser.",
+    seoTitle: "Regex Tester Online: Test and Debug Regular Expressions",
+    steps: [
+      "Type your pattern into Pattern, without the slashes.",
+      "Switch the flags you need on or off in the bar above.",
+      "Paste the text you want to search into Text to test, and read the highlighted matches and the match list.",
+      "Optionally type a replacement to preview the changed text, then copy the matches or the result.",
+    ],
+  },
   "CAL-01": {
     faqs: [
       {

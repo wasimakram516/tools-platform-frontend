@@ -261,6 +261,21 @@ export const TOOL_EXTRAS: Readonly<Record<string, ToolExtras>> = {
       "A hash alone is not a safe way to store passwords. Use a slow password hashing method for that.",
     ],
   },
+  "DEV-07": {
+    about:
+      "Your pattern is compiled with your browser's own JavaScript regular expression engine and run over the text in a background worker. Every match is listed with its position and groups, and the worker is stopped if a pattern runs longer than two seconds.",
+    example: {
+      input: "Pattern: (?<user>[\\w.]+)@(?<domain>[\\w-]+\\.[a-z]{2,}) with the g flag, on: Write to ada@example.com or grace.hopper@navy.mil",
+      output: "2 matches: ada@example.com at position 9, and grace.hopper@navy.mil at position 28. Replacing with $<user> at $<domain> gives: Write to ada at example.com or grace.hopper at navy.mil",
+      title: "Finding email addresses",
+    },
+    limits: [
+      "Patterns up to 2,000 characters and text up to 200,000 characters are accepted.",
+      "Only the first 1,000 matches are listed.",
+      "It uses JavaScript regex rules. Other languages may treat some patterns differently.",
+      "A pattern that takes more than 2 seconds is stopped.",
+    ],
+  },
   "DTM-01": {
     about:
       "The age is the number of whole years, months, and days between the date of birth and the date you pick, counted on the calendar. The next birthday and the totals in months, weeks, and days are worked out from the same dates.",

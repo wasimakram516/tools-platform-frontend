@@ -18,6 +18,7 @@ import CalculateIcon from "@mui/icons-material/Calculate";
 import CompressIcon from "@mui/icons-material/Compress";
 import DataObjectIcon from "@mui/icons-material/DataObject";
 import EventIcon from "@mui/icons-material/Event";
+import FindInPageOutlinedIcon from "@mui/icons-material/FindInPageOutlined";
 import FingerprintIcon from "@mui/icons-material/Fingerprint";
 import FormatSizeIcon from "@mui/icons-material/FormatSize";
 import ImageIcon from "@mui/icons-material/Image";
@@ -64,6 +65,7 @@ const TOOL_ICONS = {
   uuid: TagIcon,
   jwt: KeyIcon,
   hash: FingerprintIcon,
+  regex: FindInPageOutlinedIcon,
   age: CakeOutlinedIcon,
   dateDifference: DateRangeIcon,
   dateMath: EventRepeatIcon,

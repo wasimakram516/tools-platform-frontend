@@ -118,8 +118,8 @@ const TOOL_DEFINITIONS = [
     searchTerms: ["url", "link", "percent", "query", "string", "encode", "decode", "escape", "slug", "uri", "address"],
     processingMode: "worker",
     status: "available",
-    relatedToolIds: ["DEV-04", "SEO-07", "DEV-01"],
-    updatedAt: "2026-10-10",
+    relatedToolIds: ["DEV-04", "SEO-07", "DEV-01", "DEV-07"],
+    updatedAt: "2026-10-17",
     icon: "url",
   },
   {
@@ -168,6 +168,22 @@ const TOOL_DEFINITIONS = [
     relatedToolIds: ["DEV-04", "DEV-03", "GEN-01"],
     updatedAt: "2026-10-10",
     icon: "hash",
+  },
+  {
+    id: "DEV-07",
+    slug: "regex-tester",
+    name: "Regex Tester",
+    shortDescription: "Test regular expressions and see every match.",
+    description:
+      "Test a JavaScript regular expression against your text as you type, see every match highlighted with its position and groups, and preview a replacement. It runs on your device and stops patterns that run too long.",
+    categoryId: "developer",
+    keywords: ["regex tester", "regular expression tester", "regex online", "test regex", "regex match", "javascript regex", "regex replace"],
+    searchTerms: ["regex", "regexp", "regular", "expression", "pattern", "match", "capture", "group", "replace", "find", "test", "validate", "extract", "lookahead"],
+    processingMode: "worker",
+    status: "available",
+    relatedToolIds: ["DEV-01", "DEV-05", "TXT-08", "TXT-03"],
+    updatedAt: "2026-10-17",
+    icon: "regex",
   },
   {
     id: "CAL-01",

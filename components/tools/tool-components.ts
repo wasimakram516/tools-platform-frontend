@@ -17,6 +17,7 @@ export const TOOL_COMPONENTS: Readonly<Record<string, ComponentType>> = {
   "DEV-03": dynamic(() => import("@/components/tools/uuid-generator-tool").then((module) => module.UuidGeneratorTool)),
   "DEV-02": dynamic(() => import("@/components/tools/jwt-decoder-tool").then((module) => module.JwtDecoderTool)),
   "DEV-08": dynamic(() => import("@/components/tools/hash-generator-tool").then((module) => module.HashGeneratorTool)),
+  "DEV-07": dynamic(() => import("@/components/tools/regex-tester-tool").then((module) => module.RegexTesterTool)),
   "CAL-01": dynamic(() => import("@/components/tools/percentage-calculator-tool").then((module) => module.PercentageCalculatorTool)),
   "CAL-05": dynamic(() => import("@/components/tools/loan-calculator-tool").then((module) => module.LoanCalculatorTool)),
   "CAL-07": dynamic(() => import("@/components/tools/interest-calculator-tool").then((module) => module.InterestCalculatorTool)),
