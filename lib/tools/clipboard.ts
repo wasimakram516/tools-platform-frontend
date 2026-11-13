@@ -1,3 +1,5 @@
+import { trackToolAction } from "@/lib/analytics";
+
 /**
  * Copies text to the clipboard and reports whether the browser allowed it.
  * Browsers can refuse (permissions, insecure context), so callers must handle `false`.
@@ -5,6 +7,7 @@
 export async function copyToClipboard(text: string): Promise<boolean> {
   try {
     await navigator.clipboard.writeText(text);
+    trackToolAction("copy");
     return true;
   } catch {
     return false;

@@ -1,3 +1,5 @@
+import { trackToolAction } from "@/lib/analytics";
+
 /** How long the temporary address stays valid, so slow browsers can finish starting the download. */
 const REVOKE_DELAY_MS = 10_000;
 
@@ -16,6 +18,7 @@ export function downloadBlob(blob: Blob, fileName: string): void {
   link.remove();
 
   window.setTimeout(() => URL.revokeObjectURL(url), REVOKE_DELAY_MS);
+  trackToolAction("download");
 }
 
 /**

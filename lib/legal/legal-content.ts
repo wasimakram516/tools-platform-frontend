@@ -1,8 +1,8 @@
 import { BRAND_NAME, COMPANY_NAME, COMPANY_URL } from "@/lib/site-config";
 
-export const LEGAL_LAST_UPDATED = "3 October 2026";
+export const LEGAL_LAST_UPDATED = "13 November 2026";
 /** The same date in the form the sitemap uses. A test checks that the two agree. */
-export const LEGAL_LAST_UPDATED_ISO = "2026-10-03";
+export const LEGAL_LAST_UPDATED_ISO = "2026-11-13";
 
 export interface LegalSection {
   bullets?: readonly string[];
@@ -46,14 +46,16 @@ export const PRIVACY_POLICY: LegalDocumentContent = {
     {
       heading: "Information stored on your device",
       paragraphs: [
-        "We store your light or dark theme choice in your browser's local storage so the site remembers it on your next visit. This stays on your device and is not sent to us. You can clear it at any time through your browser settings.",
+        "We store your light or dark theme choice in your browser's local storage so the site remembers it on your next visit. The Hours Worked Calculator can also remember the week you entered in the same way. This stays on your device and is not sent to us. You can clear it at any time through your browser settings.",
       ],
     },
     {
       heading: "Information collected automatically",
       paragraphs: [
         "Like most websites, our hosting infrastructure records standard technical logs when you request a page, such as your IP address, browser type, the page requested, and the time. We use these logs to keep the service secure and reliable.",
-        "We do not currently run advertising or behavioural analytics. If we add analytics later, we will update this policy first and will never include the content of your tool input.",
+        "We use Vercel Web Analytics and Vercel Speed Insights, provided by our hosting provider, to count page visits and measure how fast pages load. They use no cookies and do not identify you: a visitor is recognised only within a single day, through a short-lived value derived from the request, which is then discarded. They record the page address, referrer, country, browser, operating system, device type, and page speed measurements.",
+        "They may also record that a tool's copy or download button was used, together with the tool's page address. They never record the text, files, images, or values you enter into a tool.",
+        "We do not run advertising, and we do not sell or share data with advertisers.",
       ],
     },
     {

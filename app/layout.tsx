@@ -1,4 +1,6 @@
 import InitColorSchemeScript from "@mui/material/InitColorSchemeScript";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata, Viewport } from "next";
 import { Comfortaa, Figtree, JetBrains_Mono } from "next/font/google";
 import type { PropsWithChildren, ReactNode } from "react";
@@ -60,6 +62,9 @@ export default function RootLayout({ children }: PropsWithChildren): ReactNode {
       <body>
         <InitColorSchemeScript attribute="data" defaultMode="light" />
         <AppThemeProvider>{children}</AppThemeProvider>
+        {/* Cookieless page counts and speed measurements, served from this site's own address. */}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
