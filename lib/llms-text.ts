@@ -31,6 +31,7 @@ export function buildLlmsText(): string {
     "",
     `- [Home](${absoluteUrl("/")}): all tools and answers to common questions`,
     `- [Character limits](${absoluteUrl("/character-limits")}): the length limits of X, Instagram, LinkedIn, YouTube, SMS, page titles, and meta descriptions, and where each figure comes from`,
+    `- [About](${absoluteUrl("/about")}): who makes the site and how tools keep your input on your device`,
     `- [Sitemap](${absoluteUrl("/sitemap.xml")}): every page`,
     "",
   );

@@ -49,10 +49,13 @@ export function SiteFooter(): ReactNode {
     })),
   ];
   const popularLinks = getFeaturedTools().map((tool) => ({ href: `/tools/${tool.slug}`, label: tool.name }));
-  const legalLinks = LEGAL_DOCUMENTS.map((document) => ({
-    href: `/${document.slug}`,
-    label: document.title,
-  }));
+  const legalLinks = [
+    { href: "/about", label: "About" },
+    ...LEGAL_DOCUMENTS.map((document) => ({
+      href: `/${document.slug}`,
+      label: document.title,
+    })),
+  ];
 
   return (
     <Box
@@ -75,7 +78,7 @@ export function SiteFooter(): ReactNode {
           </Box>
           <FooterLinkGroup links={browseLinks} title="Browse" />
           <FooterLinkGroup links={popularLinks} title="Popular tools" />
-          <FooterLinkGroup links={legalLinks} title="Legal" />
+          <FooterLinkGroup links={legalLinks} title="Company" />
         </Box>
 
         <Stack

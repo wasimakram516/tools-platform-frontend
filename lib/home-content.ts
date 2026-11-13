@@ -36,6 +36,7 @@ export const ABOUT_HEADING = "What is QuicklySorted?";
 
 export const ABOUT_PARAGRAPHS: readonly string[] = [
   "Free tools for the small jobs that come up every day. Each one does a single job well, opens in one click, and needs no account.",
+  "Every tool runs in your browser, so what you paste or drop in stays on your device. [Read who makes the site and how that promise is kept](/about).",
 ];
 
 export const USE_CASES_HEADING = "What people use it for";

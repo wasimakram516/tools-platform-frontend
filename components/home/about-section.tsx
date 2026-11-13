@@ -6,6 +6,7 @@ import LanguageOutlinedIcon from "@mui/icons-material/LanguageOutlined";
 import { Box, Stack, Typography } from "@mui/material";
 import type { ReactNode } from "react";
 import { HomeSection } from "@/components/home/home-section";
+import { InlineLinks } from "@/components/legal/inline-links";
 import { ToolSnapshots } from "@/components/home/tool-snapshots";
 import { NextLink } from "@/components/ui/next-link";
 import { Reveal } from "@/components/ui/reveal";
@@ -58,7 +59,7 @@ export function AboutSection(): ReactNode {
           <Stack sx={{ gap: 1.75, mt: 2.5 }}>
             {ABOUT_PARAGRAPHS.map((paragraph) => (
               <Typography color="text.secondary" key={paragraph} sx={{ fontSize: "1.05rem", lineHeight: 1.7 }}>
-                {paragraph}
+                <InlineLinks text={paragraph} />
               </Typography>
             ))}
           </Stack>
