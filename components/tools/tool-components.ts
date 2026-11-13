@@ -8,6 +8,9 @@ import type { ComponentType } from "react";
  * all of them. That keeps pages light, which helps both visitors and search rankings. The page is
  * still rendered on the server, so the tool's words are in the HTML.
  *
+ * Import this map only from ToolRenderer, which is a client component. A server component that
+ * imports it puts every tool's code on every tool page.
+ *
  * Every tool with status "available" in the registry must have an entry here; a test enforces it.
  */
 export const TOOL_COMPONENTS: Readonly<Record<string, ComponentType>> = {

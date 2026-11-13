@@ -2,9 +2,9 @@ import type { ReactNode } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/seo/json-ld";
-import { TOOL_COMPONENTS } from "@/components/tools/tool-components";
 import { ToolGuide } from "@/components/tools/tool-guide";
 import { ToolPageShell } from "@/components/tools/tool-page-shell";
+import { ToolRenderer } from "@/components/tools/tool-renderer";
 import { breadcrumbJsonLd, buildPageMetadata, faqJsonLd, toolJsonLd } from "@/lib/seo";
 import { getToolContent } from "@/lib/tools/tool-content";
 import { getToolExtras } from "@/lib/tools/tool-extras";
@@ -60,10 +60,10 @@ export default async function ToolPage({ params }: ToolPageProps): Promise<React
   }
 
   const category = getToolCategoryById(tool.categoryId);
-  const ToolComponent = TOOL_COMPONENTS[tool.id];
   const content = getToolContent(tool.id);
 
-  if (!category || !ToolComponent) {
+  // Every available tool has a component; a test of the component map guarantees it.
+  if (!category) {
     notFound();
   }
 
@@ -87,7 +87,7 @@ export default async function ToolPage({ params }: ToolPageProps): Promise<React
         relatedTools={getRelatedTools(tool)}
         tool={tool}
       >
-        <ToolComponent />
+        <ToolRenderer toolId={tool.id} />
       </ToolPageShell>
     </>
   );
