@@ -6,7 +6,7 @@ import { getTools } from "@/lib/tools/tool-registry";
 /** Search results show about this many characters of a title and a description. */
 const MAX_TITLE_WITH_BRAND = 62;
 const BRAND_SUFFIX_LENGTH = " | QuicklySorted".length;
-const MAX_DESCRIPTION = 165;
+const MAX_DESCRIPTION = 155;
 const MAX_ANSWER = 420;
 
 const available = getTools().filter((tool) => tool.status === "available");

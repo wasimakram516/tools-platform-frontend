@@ -339,7 +339,7 @@ export const TOOL_CONTENT: Readonly<Record<string, ToolContent>> = {
       },
     ],
     metaDescription:
-      "Format, minify, and validate JSON online for free. Paste your JSON, pick an indent, and copy a clean result. It runs in your browser, so nothing is uploaded.",
+      "Format, minify, and validate JSON online for free. Paste your JSON, pick an indent, and copy a clean result. Runs in your browser, so nothing is uploaded.",
     seoTitle: "JSON Formatter and Validator Online",
     steps: [
       "Paste your JSON into the Input box, or load the example.",
@@ -510,7 +510,7 @@ export const TOOL_CONTENT: Readonly<Record<string, ToolContent>> = {
     ],
     metaDescription:
       "Test regular expressions online for free. See every match highlighted with its position and groups, and preview a replacement. It runs in your browser.",
-    seoTitle: "Regex Tester Online: Test and Debug Regular Expressions",
+    seoTitle: "Regex Tester: Test JavaScript Regex Online",
     steps: [
       "Type your pattern into Pattern, without the slashes.",
       "Switch the flags you need on or off in the bar above.",
@@ -537,8 +537,8 @@ export const TOOL_CONTENT: Readonly<Record<string, ToolContent>> = {
       },
     ],
     metaDescription:
-      "Free percentage calculator: percent of a number, percent change, increase or decrease, discounts and sale price, and margin and markup, with the working shown.",
-    seoTitle: "Percentage Calculator",
+      "Free percentage calculator: percent of a number, percent change, discounts and sale price, and margin and markup, with the working shown.",
+    seoTitle: "Percentage Calculator: Change and Discount",
     steps: [
       "Choose what you want to work out, such as a percentage of a number or a discount.",
       "Enter the two numbers.",
@@ -620,7 +620,7 @@ export const TOOL_CONTENT: Readonly<Record<string, ToolContent>> = {
       },
     ],
     metaDescription:
-      "Free BMI calculator in kg, lb, or stone, and cm, m, inches, or feet. See your range and the healthy weight for your height. A screening figure, not a diagnosis.",
+      "Free BMI calculator in kg, lb, or stone, and cm, m, inches, or feet. See your range and the healthy weight for your height. Not a diagnosis.",
     seoTitle: "BMI Calculator (kg, lb, cm, ft)",
     steps: [
       "Pick the unit for your height and enter it. For feet and inches, fill in both boxes.",
@@ -758,7 +758,7 @@ export const TOOL_CONTENT: Readonly<Record<string, ToolContent>> = {
     ],
     metaDescription:
       "Free hours worked calculator: get hours and minutes plus decimal hours for a shift, handle overnight shifts, and total a week. Copy or download a CSV.",
-    seoTitle: "Hours Worked Calculator",
+    seoTitle: "Hours Worked Calculator: Breaks, Overnight",
     steps: [
       "Enter the Start time and End time.",
       "Enter the Break in minutes.",
@@ -841,7 +841,7 @@ export const TOOL_CONTENT: Readonly<Record<string, ToolContent>> = {
     ],
     metaDescription:
       "Free word counter: count words, characters, sentences, and paragraphs, see reading time, and find your most used words. Your text stays in your browser.",
-    seoTitle: "Word Counter: Words, Characters, Reading Time",
+    seoTitle: "Word Counter: Count Words and Reading Time",
     steps: [
       "Type or paste your text into the box.",
       "Read the counts, which update as you type.",
@@ -987,7 +987,7 @@ export const TOOL_CONTENT: Readonly<Record<string, ToolContent>> = {
     ],
     metaDescription:
       "Compress images and convert between JPG, PNG, and WebP online for free. Set a quality or fit a target size in KB. Nothing is uploaded.",
-    seoTitle: "Image Compressor: JPG, PNG, WebP Converter",
+    seoTitle: "Compress Image to 100KB, 200KB or Any Size",
     steps: [
       "Choose images, or drop them anywhere on the page.",
       "Pick the Output format, WebP or JPEG for the smallest files.",
@@ -1072,7 +1072,7 @@ export const TOOL_CONTENT: Readonly<Record<string, ToolContent>> = {
     ],
     metaDescription:
       "Generate strong random passwords, passphrases, PINs, and tokens online for free. You control length and characters, and nothing leaves your browser.",
-    seoTitle: "Strong Password Generator",
+    seoTitle: "Password and Passphrase Generator",
     steps: [
       "Choose what to generate: a password, passphrase, PIN, or token.",
       "Set the length and the kinds of characters.",
