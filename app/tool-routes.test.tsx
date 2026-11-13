@@ -134,7 +134,7 @@ describe("registry-backed routes", () => {
 
     renderRoute(page);
 
-    expect(screen.getByRole("heading", { name: "Base64 Encoder / Decoder" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Base64 Encoder and Decoder" })).toBeInTheDocument();
     expect(await screen.findByLabelText("Base64 encoder and decoder workspace", {}, { timeout: 15_000 })).toBeInTheDocument();
   });
 
@@ -145,7 +145,7 @@ describe("registry-backed routes", () => {
 
     renderRoute(page);
 
-    expect(screen.getByRole("heading", { name: "URL Encoder / Decoder" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "URL Encoder and Decoder" })).toBeInTheDocument();
     expect(await screen.findByLabelText("URL encoder and decoder workspace", {}, { timeout: 15_000 })).toBeInTheDocument();
   });
 

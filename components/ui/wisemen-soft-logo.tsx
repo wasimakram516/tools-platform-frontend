@@ -19,6 +19,8 @@ export function WisemenSoftLogo(): ReactNode {
         alt="Wisemen Soft"
         component="img"
         height={LOGO_HEIGHT}
+        // Footer only, so lazy. It also stops React preloading both variants on every page.
+        loading="lazy"
         src="/brand/wisemen-soft-logo-light.svg"
         sx={{ ...logoSx, display: "block", [DARK_SCHEME_SELECTOR]: { display: "none" } }}
         width={LOGO_WIDTH}
@@ -27,6 +29,7 @@ export function WisemenSoftLogo(): ReactNode {
         alt="Wisemen Soft"
         component="img"
         height={LOGO_HEIGHT}
+        loading="lazy"
         src="/brand/wisemen-soft-logo-dark.svg"
         sx={{ ...logoSx, display: "none", [DARK_SCHEME_SELECTOR]: { display: "block" } }}
         width={LOGO_WIDTH}

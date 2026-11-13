@@ -95,7 +95,7 @@ const TOOL_DEFINITIONS = [
   {
     id: "DEV-04",
     slug: "base64-encoder-decoder",
-    name: "Base64 Encoder / Decoder",
+    name: "Base64 Encoder and Decoder",
     shortDescription: "Encode or decode Base64 text in your browser.",
     description: "Convert plain text to Base64 and decode Base64 without uploading your content.",
     categoryId: "developer",
@@ -110,7 +110,7 @@ const TOOL_DEFINITIONS = [
   {
     id: "DEV-05",
     slug: "url-encoder-decoder",
-    name: "URL Encoder / Decoder",
+    name: "URL Encoder and Decoder",
     shortDescription: "Safely encode and decode URL components.",
     description: "Prepare query values for URLs or turn encoded components back into readable text.",
     categoryId: "developer",
