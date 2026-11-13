@@ -4,7 +4,7 @@ import { BRAND_NAME, COMPANY_NAME, COMPANY_URL } from "@/lib/site-config";
 import type { ToolCategory, ToolDefinition } from "@/types/tool";
 
 export const SITE_NAME = BRAND_NAME;
-export const SITE_DESCRIPTION = "Free online tools for everyday tasks. Simple, clear, and no signup required.";
+export const SITE_DESCRIPTION = "Free online tools for everyday tasks. They run in your browser, so nothing is uploaded.";
 
 type JsonLdObject = Record<string, unknown>;
 

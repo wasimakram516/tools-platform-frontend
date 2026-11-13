@@ -10,7 +10,7 @@ import { PageFrame } from "@/components/layout/page-frame";
 import { JsonLd } from "@/components/seo/json-ld";
 import { HiddenHeading } from "@/components/ui/hidden-heading";
 import { FAQ_ITEMS } from "@/lib/home-content";
-import { buildPageMetadata, faqJsonLd, SITE_DESCRIPTION, websiteJsonLd } from "@/lib/seo";
+import { buildPageMetadata, faqJsonLd, organizationJsonLd, SITE_DESCRIPTION, websiteJsonLd } from "@/lib/seo";
 import { BRAND_DESCRIPTOR, BRAND_TAGLINE_BEATS } from "@/lib/site-config";
 import { getAvailableToolCategories, getFeaturedTools, getToolsByCategory } from "@/lib/tools/tool-registry";
 
@@ -56,13 +56,23 @@ export default function HomePage(): ReactNode {
 
   return (
     <PageFrame>
-      <JsonLd data={[websiteJsonLd(), faqJsonLd(FAQ_ITEMS)]} />
+      <JsonLd data={[organizationJsonLd(), websiteJsonLd(), faqJsonLd(FAQ_ITEMS)]} />
       <Box
         // Raised so the search dropdown, which hangs below the hero, covers the sections after it.
         sx={{ backgroundImage: "radial-gradient(60% 90% at 50% 0%, var(--hero-glow), transparent 75%)", position: "relative", zIndex: 5 }}
       >
       <Container maxWidth="lg" sx={{ pb: { xs: 4, md: 5 }, pt: { xs: 7, md: 11 }, textAlign: "center" }}>
-        <Typography className="rise-in" component="h1" variant="h1" sx={{ mx: "auto", maxWidth: 1100, whiteSpace: { md: "nowrap" } }}>
+        {/* The h1 says what the site is, for readers and search engines. The slogan is the big
+            line under it, styled as a heading but not one. */}
+        <Typography
+          className="rise-in"
+          color="primary"
+          component="h1"
+          sx={{ fontSize: { xs: "0.95rem", md: "1.05rem" }, fontWeight: 700, letterSpacing: "0.02em", mb: 1.5 }}
+        >
+          {BRAND_DESCRIPTOR.replace(/\.$/, "")}
+        </Typography>
+        <Typography className="rise-in" component="p" variant="h1" sx={{ mx: "auto", maxWidth: 1100, whiteSpace: { md: "nowrap" } }}>
           {firstBeat}{" "}
           <Box component="span" sx={{ color: "primary.main", display: { xs: "block", md: "inline" } }}>
             {secondBeat}
@@ -80,7 +90,7 @@ export default function HomePage(): ReactNode {
             maxWidth: 580,
           }}
         >
-          {BRAND_DESCRIPTOR} Free to use, no signup, and every tool shows how it handles your data.
+          Format JSON, compress images, count words, work out dates, and more. Free to use, no signup, and every tool shows how it handles your data.
         </Typography>
         <HomeSearch />
       </Container>

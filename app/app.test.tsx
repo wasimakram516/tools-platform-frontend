@@ -38,7 +38,9 @@ describe("application foundation", () => {
   it("renders the platform promise and pillars", () => {
     renderWithTheme(<HomePage />);
 
-    expect(screen.getByRole("heading", { name: /get it quick\. ?get it sorted/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1, name: "Free online tools that run in your browser" })).toBeInTheDocument();
+    // The slogan sits under the h1 as text. The footer repeats it, so there are two.
+    expect(screen.getAllByText(/get it quick\./i).length).toBeGreaterThan(0);
     expect(screen.getByText(/every tool shows how it handles your data/i)).toBeInTheDocument();
     const browse = screen.getByRole("region", { name: "Browse by category" });
 
@@ -97,13 +99,13 @@ describe("application foundation", () => {
     const scripts = Array.from(container.querySelectorAll('script[type="application/ld+json"]'));
     const data = scripts.flatMap((script) => JSON.parse(script.textContent ?? "[]") as { "@type": string }[]);
 
-    expect(data.map((entry) => entry["@type"])).toEqual(expect.arrayContaining(["WebSite", "FAQPage"]));
+    expect(data.map((entry) => entry["@type"])).toEqual(expect.arrayContaining(["Organization", "WebSite", "FAQPage"]));
   });
 
   it("renders the not-found state", () => {
     renderWithTheme(<NotFound />);
 
-    expect(screen.getByRole("heading", { name: /tool not found/i })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /page not found/i })).toBeInTheDocument();
   });
 
   it("allows retrying after a route error", () => {

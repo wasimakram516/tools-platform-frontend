@@ -14,10 +14,10 @@ export default function NotFound(): ReactNode {
         <Stack sx={{ alignItems: "center", gap: 2 }}>
           <SearchOffIcon aria-hidden="true" color="primary" sx={{ fontSize: 56 }} />
           <Typography component="h1" variant="h4">
-            Tool not found
+            Page not found
           </Typography>
           <Typography color="text.secondary">
-            This tool may have moved or may not be part of the approved catalog yet.
+            We don&apos;t have a tool at that address. Search for what you need, or browse by category.
           </Typography>
           <Stack direction={{ xs: "column", sm: "row" }} sx={{ gap: 1.5, mt: 1 }}>
             <Button component={NextLink} href="/categories" variant="contained">
