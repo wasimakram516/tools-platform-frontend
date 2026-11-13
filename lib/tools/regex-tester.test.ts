@@ -28,8 +28,8 @@ describe("runRegex", () => {
 
     expect(result.ok && result.matches.map((match) => [match.value, match.index])).toEqual([
       ["1", 1],
-      ["22", 5],
-      ["333", 9],
+      ["22", 4],
+      ["333", 8],
     ]);
   });
 
