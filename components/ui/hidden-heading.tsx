@@ -1,7 +1,8 @@
 import { Typography } from "@mui/material";
 import type { PropsWithChildren, ReactNode } from "react";
 
-const VISUALLY_HIDDEN_SX = {
+/** Hides an element visually while keeping it for screen readers and search engines. */
+export const VISUALLY_HIDDEN_SX = {
   border: 0,
   clip: "rect(0 0 0 0)",
   height: "1px",
