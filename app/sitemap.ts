@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { ABOUT_UPDATED_ISO } from "@/lib/about-content";
+import { getGuides, guidePath, latestGuideUpdate } from "@/lib/guides/guides";
 import { LEGAL_DOCUMENTS, LEGAL_LAST_UPDATED_ISO } from "@/lib/legal/legal-content";
 import { absoluteUrl } from "@/lib/seo";
 import { CHARACTER_LIMITS_CHECKED_ON } from "@/lib/tools/text/character-limits";
@@ -36,6 +37,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { lastModified: catalogUpdated, priority: 0.8, url: absoluteUrl("/categories") },
     ...categoryEntries,
     ...toolEntries,
+    { lastModified: latest([latestGuideUpdate(), CHARACTER_LIMITS_CHECKED_ON]), priority: 0.6, url: absoluteUrl("/guides") },
+    ...getGuides().map((guide) => ({ lastModified: guide.updatedAt, priority: 0.7, url: absoluteUrl(guidePath(guide)) })),
     { lastModified: CHARACTER_LIMITS_CHECKED_ON, priority: 0.7, url: absoluteUrl("/character-limits") },
     { lastModified: ABOUT_UPDATED_ISO, priority: 0.5, url: absoluteUrl("/about") },
     ...LEGAL_DOCUMENTS.map((document) => ({

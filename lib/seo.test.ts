@@ -143,6 +143,9 @@ describe("crawler files", () => {
     }
     expect(urls).toContain("http://localhost:3000/character-limits");
     expect(urls).toContain("http://localhost:3000/about");
+    expect(urls).toContain("http://localhost:3000/guides");
+    expect(urls).toContain("http://localhost:3000/guides/excel-date-serial-numbers");
+    expect(urls).toContain("http://localhost:3000/tools/png-to-jpg");
     expect(urls).toContain("http://localhost:3000/privacy");
     expect(urls).toContain("http://localhost:3000/terms");
     expect(urls.filter((url) => url.includes("/tools/"))).toHaveLength(availableTools.length);

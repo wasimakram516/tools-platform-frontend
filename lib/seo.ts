@@ -183,6 +183,34 @@ export function webPageJsonLd({
 }
 
 /**
+ * Describes a guide as a technical article published by the site, with the date its facts were
+ * last checked, so search engines can show how fresh it is.
+ */
+export function techArticleJsonLd({
+  dateModified,
+  description,
+  headline,
+  path,
+}: {
+  dateModified: string;
+  description: string;
+  headline: string;
+  path: string;
+}): JsonLdObject {
+  return {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    author: { "@id": organizationId() },
+    dateModified,
+    description,
+    headline,
+    inLanguage: "en",
+    mainEntityOfPage: absoluteUrl(path),
+    publisher: { "@id": organizationId() },
+  };
+}
+
+/**
  * Describes the categories hub as a collection page that lists every category.
  */
 export function categoriesJsonLd(

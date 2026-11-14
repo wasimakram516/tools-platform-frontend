@@ -206,6 +206,10 @@ const BASE_TOOL_EXTRAS: Readonly<Record<string, ToolExtras>> = {
       "Only the compact form with three parts is read, and up to 100,000 characters.",
       "Anyone can read a JWT's contents, so keep secrets out of the payload.",
     ],
+    seeAlso: {
+      href: "/guides/jwt-claims",
+      label: "JWT claims reference: exp, iat, sub, aud, and what a server should check",
+    },
   },
   "DEV-03": {
     about:
@@ -361,6 +365,10 @@ const BASE_TOOL_EXTRAS: Readonly<Record<string, ToolExtras>> = {
       "Excel's 1900 system counts a 29 February 1900 that never happened as number 60, which this tool follows, so number 60 has no real date.",
       "Check which system your workbook uses before converting. They differ by 1,462 days.",
     ],
+    seeAlso: {
+      href: "/guides/excel-date-serial-numbers",
+      label: "Excel date serial numbers explained: both date systems, the 1900 leap year bug, and formulas",
+    },
   },
   "GEN-01": {
     about:
@@ -490,6 +498,10 @@ const BASE_TOOL_EXTRAS: Readonly<Record<string, ToolExtras>> = {
       "Use the same spelling every time, because Email and email show up as two different rows.",
       "Avoid tagging links between pages on your own site, because it can break how visits are counted.",
     ],
+    seeAlso: {
+      href: "/guides/utm-parameters",
+      label: "UTM parameters reference: every parameter, GA4 channels, and naming rules",
+    },
   },
   "SEO-08": {
     about:

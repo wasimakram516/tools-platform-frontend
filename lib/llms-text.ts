@@ -1,3 +1,4 @@
+import { getGuides, guidePath } from "@/lib/guides/guides";
 import { absoluteUrl, SITE_DESCRIPTION } from "@/lib/seo";
 import { BRAND_NAME } from "@/lib/site-config";
 import { getAvailableToolCategories, getToolsByCategory } from "@/lib/tools/tool-registry";
@@ -26,7 +27,14 @@ export function buildLlmsText(): string {
     lines.push("");
   }
 
+  lines.push("## Guides", "");
+
+  for (const guide of getGuides()) {
+    lines.push(`- [${guide.name}](${absoluteUrl(guidePath(guide))}): ${guide.metaDescription}`);
+  }
+
   lines.push(
+    "",
     "## About",
     "",
     `- [Home](${absoluteUrl("/")}): all tools and answers to common questions`,

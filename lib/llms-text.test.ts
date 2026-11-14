@@ -20,6 +20,7 @@ describe("buildLlmsText", () => {
 
   it("points to the character limits page", () => {
     expect(buildLlmsText()).toContain("[Character limits](http://localhost:3000/character-limits)");
+    expect(buildLlmsText()).toContain("[JWT claims reference](http://localhost:3000/guides/jwt-claims)");
   });
 
   it("groups the tools under their category names", () => {
