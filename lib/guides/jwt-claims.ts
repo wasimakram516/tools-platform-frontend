@@ -32,6 +32,9 @@ export const JWT_CLAIMS_GUIDE: Guide = {
   metaDescription:
     "Every registered JWT claim explained: iss, sub, aud, exp, nbf, iat, and jti, plus header fields and OpenID Connect claims, with formats and pitfalls.",
   name: "JWT claims reference",
+  relatedGuides: ["sha-1-vs-sha-256-vs-sha-512", "excel-date-serial-numbers"],
+  relatedTools: ["unix-timestamp-converter", "json-formatter"],
+  searchTerms: ["jwt", "json web token", "claims", "exp", "iat", "bearer token", "hs256", "rs256"],
   sections: [
     {
       blocks: [

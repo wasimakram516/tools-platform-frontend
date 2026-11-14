@@ -107,7 +107,7 @@ function singular(word: string): string {
  * Splits a search into the words that matter, dropping filler words. A search made only of
  * filler words is kept as typed, so it never turns into an empty search.
  */
-function significantWords(query: string): string[] {
+export function significantWords(query: string): string[] {
   const words = normalize(query).split(" ").filter(Boolean);
   const meaningful = words.filter((word) => !STOP_WORDS.has(word));
 
@@ -117,7 +117,7 @@ function significantWords(query: string): string[] {
 /**
  * The words a typed word can stand for: itself and any everyday synonyms.
  */
-function alternatives(word: string): string[] {
+export function alternatives(word: string): string[] {
   return [word, ...(SYNONYMS[word] ?? [])];
 }
 
@@ -129,7 +129,7 @@ const MIN_ANYWHERE_LENGTH = 4;
  * "age" matching "image". Longer words and numbers may appear anywhere, so "256" finds
  * "sha256" and "compress" finds "compressor".
  */
-function appearsIn(text: string, word: string): boolean {
+export function appearsIn(text: string, word: string): boolean {
   const haystack = normalize(text);
 
   if (word.length >= MIN_ANYWHERE_LENGTH || /\d/.test(word)) {

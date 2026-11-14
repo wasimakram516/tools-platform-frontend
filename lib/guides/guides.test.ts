@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { describe, expect, it } from "vitest";
-import { getGuideBySlug, getGuides, guidePath, latestGuideUpdate } from "@/lib/guides/guides";
+import { getGuideBySlug, getGuides, getGuidesForTool, getMoreGuides, getSearchableGuides, guidePath, latestGuideUpdate } from "@/lib/guides/guides";
 import type { Guide } from "@/lib/guides/guide-types";
 import { getToolExtras } from "@/lib/tools/tool-extras";
 import { getToolBySlug } from "@/lib/tools/tool-registry";
@@ -103,6 +103,44 @@ describe("guides", () => {
       expect(tool?.status, guide.slug).toBe("available");
       expect(getToolExtras(tool?.id ?? "")?.seeAlso?.href, guide.slug).toBe(guidePath(guide));
     }
+  });
+
+  it.each(bySlug)("%s links to live related tools and real related guides", (_slug, guide) => {
+    expect(guide.relatedTools.length).toBeGreaterThanOrEqual(2);
+    expect(new Set(guide.relatedTools).size).toBe(guide.relatedTools.length);
+    expect(guide.relatedTools).not.toContain(guide.toolSlug);
+    guide.relatedTools.forEach((slug) => expect(getToolBySlug(slug)?.status, slug).toBe("available"));
+
+    guide.relatedGuides.forEach((slug) => {
+      expect(slug).not.toBe(guide.slug);
+      expect(getGuideBySlug(slug), slug).toBeDefined();
+    });
+    expect(guide.searchTerms.length).toBeGreaterThan(0);
+  });
+
+  it("are linked from every tool they pair with or list as related, paired guide first", () => {
+    for (const guide of guides) {
+      expect(getGuidesForTool(guide.toolSlug)[0]).toBe(guide);
+      guide.relatedTools.forEach((slug) => expect(getGuidesForTool(slug), slug).toContain(guide));
+    }
+
+    expect(getGuidesForTool("bmi-calculator")).toEqual([]);
+  });
+
+  it("each link to every other guide, related ones first", () => {
+    for (const guide of guides) {
+      const more = getMoreGuides(guide);
+
+      expect(more).not.toContain(guide);
+      expect(new Set(more).size).toBe(guides.length - 1);
+      expect(more.slice(0, guide.relatedGuides.length).map((other) => other.slug)).toEqual(guide.relatedGuides);
+    }
+  });
+
+  it("are all searchable, with the character limits page", () => {
+    const hrefs = getSearchableGuides().map((entry) => entry.href);
+
+    expect(hrefs).toEqual([...guides.map(guidePath), "/character-limits"]);
   });
 
   it("reports the latest checked date", () => {

@@ -32,6 +32,9 @@ export const QR_ERROR_CORRECTION_GUIDE: Guide = {
   metaDescription:
     "QR code error correction levels L, M, Q, and H explained: how much damage each survives, how they change the code's size, capacity, and printing tips.",
   name: "QR code error correction levels explained",
+  relatedGuides: ["utm-parameters"],
+  relatedTools: ["wifi-qr-code-generator", "utm-link-builder"],
+  searchTerms: ["qr", "qr code", "error correction", "quiet zone", "reed solomon", "qr logo"],
   sections: [
     {
       blocks: [

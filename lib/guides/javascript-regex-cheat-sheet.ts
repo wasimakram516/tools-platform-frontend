@@ -32,6 +32,9 @@ export const REGEX_CHEAT_SHEET_GUIDE: Guide = {
   metaDescription:
     "JavaScript regex cheat sheet: character classes, quantifiers, groups, lookahead and lookbehind, flags, and common patterns, each with a tested example.",
   name: "JavaScript regex cheat sheet",
+  relatedGuides: [],
+  relatedTools: ["json-formatter", "remove-duplicate-lines", "sort-lines"],
+  searchTerms: ["regex", "regexp", "regular expression", "lookahead", "lookbehind", "named group", "javascript"],
   sections: [
     {
       blocks: [
@@ -178,7 +181,7 @@ export const REGEX_CHEAT_SHEET_GUIDE: Guide = {
             "Forgetting to escape. /a.c/ matches abc as well as a.c. Write /a\\.c/ for a literal dot.",
             "Catastrophic backtracking. Nested quantifiers such as (a+)+$ can take seconds or longer on text that almost matches. Make each part match only one way.",
             "Building a pattern from user input. Escape the input first, or a value such as a+ or ( changes the pattern's meaning.",
-            "Using a regex to parse HTML or JSON. Use a parser; patterns break on nesting, quotes, and comments.",
+            "Using a regex to parse HTML or JSON. Use a parser; patterns break on nesting, quotes, and comments. For JSON, the [JSON Formatter](/tools/json-formatter) parses it and points to the first error.",
           ],
         },
         {

@@ -32,6 +32,9 @@ export const UTM_PARAMETERS_GUIDE: Guide = {
   metaDescription:
     "What each UTM parameter records, which ones to always set, how GA4 maps source and medium to channels, and naming rules that keep campaign reports clean.",
   name: "UTM parameters reference",
+  relatedGuides: ["qr-code-error-correction"],
+  relatedTools: ["url-encoder-decoder", "qr-code-generator", "meta-tag-generator"],
+  searchTerms: ["utm", "utm source", "utm medium", "utm campaign", "ga4", "google analytics", "campaign tracking"],
   sections: [
     {
       blocks: [
@@ -50,7 +53,7 @@ export const UTM_PARAMETERS_GUIDE: Guide = {
             "Parameters are joined with &, and their order does not matter.",
             "If the address already has a ?, add the tags after an & instead of a second ?.",
             "If the address has a # part, put the tags before the #. Anything after # is not part of the query, and many tools ignore it.",
-            "Spaces and symbols must be encoded, so a space becomes %20 or +. It is simpler not to use them at all.",
+            "Spaces and symbols must be encoded, so a space becomes %20 or +. It is simpler not to use them at all. The [URL Encoder and Decoder](/tools/url-encoder-decoder) shows how any value will be encoded.",
           ],
         },
       ],

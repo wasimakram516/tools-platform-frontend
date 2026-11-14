@@ -6,7 +6,7 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { NextLink } from "@/components/ui/next-link";
 import { homeCrumb, PageTitle } from "@/components/ui/page-title";
 import { formatIsoDate } from "@/lib/format-iso-date";
-import { getGuides, guidePath, latestGuideUpdate } from "@/lib/guides/guides";
+import { CHARACTER_LIMITS_LINK, getGuides, guidePath, latestGuideUpdate } from "@/lib/guides/guides";
 import { breadcrumbJsonLd, buildPageMetadata, webPageJsonLd } from "@/lib/seo";
 
 const PATH = "/guides";
@@ -22,12 +22,7 @@ export const metadata: Metadata = buildPageMetadata({ description: DESCRIPTION, 
 export default function GuidesPage(): ReactNode {
   const entries = [
     ...getGuides().map((guide) => ({ description: guide.metaDescription, href: guidePath(guide), name: guide.name, updatedAt: guide.updatedAt })),
-    {
-      description: "How much you can write in a post, a title, a description, or a text message, and where each figure comes from.",
-      href: "/character-limits",
-      name: "Character limits",
-      updatedAt: undefined,
-    },
+    { ...CHARACTER_LIMITS_LINK, updatedAt: undefined },
   ];
 
   return (

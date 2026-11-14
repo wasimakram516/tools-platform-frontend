@@ -32,6 +32,9 @@ export const SHA_COMPARISON_GUIDE: Guide = {
   metaDescription:
     "SHA-1, SHA-256, SHA-384, and SHA-512 compared: output length, which are still secure, where each is used, and why none should store passwords alone.",
   name: "SHA-1 vs SHA-256 vs SHA-512",
+  relatedGuides: ["jwt-claims"],
+  relatedTools: ["sha256-hash-generator", "password-generator"],
+  searchTerms: ["sha", "sha1", "sha256", "sha384", "sha512", "hash", "checksum", "md5"],
   sections: [
     {
       blocks: [
@@ -120,7 +123,7 @@ export const SHA_COMPARISON_GUIDE: Guide = {
         },
         {
           kind: "paragraph",
-          text: "Do not store passwords as plain SHA hashes, even with a salt. SHA functions are designed to be fast, so an attacker with a leaked database can test guesses at enormous speed. OWASP's Password Storage Cheat Sheet recommends Argon2id, then scrypt, then bcrypt, which are slow on purpose and use a salt for every password.",
+          text: "Do not store passwords as plain SHA hashes, even with a salt. SHA functions are designed to be fast, so an attacker with a leaked database can test guesses at enormous speed. OWASP's Password Storage Cheat Sheet recommends Argon2id, then scrypt, then bcrypt, which are slow on purpose and use a salt for every password. A long random password still matters, and the [Password Generator](/tools/password-generator) makes one in your browser.",
         },
         {
           kind: "paragraph",

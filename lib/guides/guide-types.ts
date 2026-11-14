@@ -33,6 +33,15 @@ export interface Guide {
   metaDescription: string;
   /** The heading on the page and the name in breadcrumbs. */
   name: string;
+  /** Slugs of other guides on a nearby subject, listed first under "More guides". */
+  relatedGuides: readonly string[];
+  /**
+   * Slugs of tools, besides the paired one, that help with what the guide covers. The guide
+   * links to them, and their pages link back to the guide.
+   */
+  relatedTools: readonly string[];
+  /** Words people search for that the title may not use, such as "sha256", for the site search. */
+  searchTerms: readonly string[];
   /** The page's title in search results, without the site name. */
   seoTitle: string;
   sections: readonly GuideSection[];

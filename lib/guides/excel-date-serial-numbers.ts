@@ -32,6 +32,9 @@ export const EXCEL_DATE_GUIDE: Guide = {
   metaDescription:
     "Why Excel shows dates as numbers like 45292, how the 1900 and 1904 date systems differ, the 1900 leap year bug, and how to convert both ways.",
   name: "Excel date serial numbers explained",
+  relatedGuides: ["jwt-claims"],
+  relatedTools: ["unix-timestamp-converter", "date-difference-calculator", "add-subtract-date", "hours-worked-calculator"],
+  searchTerms: ["excel date", "serial number", "1900 date system", "1904 date system", "google sheets date", "datevalue"],
   sections: [
     {
       blocks: [
@@ -134,7 +137,7 @@ export const EXCEL_DATE_GUIDE: Guide = {
         },
         {
           kind: "paragraph",
-          text: "The Unix formulas treat the Excel date as UTC, because Excel dates have no time zone. Watch the year in DATE too: Excel and Google Sheets add 1900 to a year below 1900, so =DATE(24,1,1) is 1 January 1924, not 2024.",
+          text: "The Unix formulas treat the Excel date as UTC, because Excel dates have no time zone. Watch the year in DATE too: Excel and Google Sheets add 1900 to a year below 1900, so =DATE(24,1,1) is 1 January 1924, not 2024. To check a Unix time on its own, paste it into the [Unix Timestamp Converter](/tools/unix-timestamp-converter).",
         },
         {
           kind: "paragraph",
