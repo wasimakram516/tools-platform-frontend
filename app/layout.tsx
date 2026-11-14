@@ -1,10 +1,9 @@
 import InitColorSchemeScript from "@mui/material/InitColorSchemeScript";
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata, Viewport } from "next";
 import { Comfortaa, Figtree, JetBrains_Mono } from "next/font/google";
 import type { PropsWithChildren, ReactNode } from "react";
 import { AppThemeProvider } from "@/components/providers/app-theme-provider";
+import { SiteAnalytics } from "@/components/providers/site-analytics";
 import { deploymentContext, env } from "@/lib/env";
 import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/seo";
 import { isIndexableDeployment } from "@/lib/site-url";
@@ -63,8 +62,7 @@ export default function RootLayout({ children }: PropsWithChildren): ReactNode {
         <InitColorSchemeScript attribute="data" defaultMode="light" />
         <AppThemeProvider>{children}</AppThemeProvider>
         {/* Cookieless page counts and speed measurements, served from this site's own address. */}
-        <Analytics />
-        <SpeedInsights />
+        <SiteAnalytics />
       </body>
     </html>
   );

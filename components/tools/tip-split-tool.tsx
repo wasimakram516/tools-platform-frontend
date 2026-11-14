@@ -9,6 +9,7 @@ import { DecimalField } from "@/components/tools/calculator-fields";
 import { NumberField } from "@/components/tools/form-fields";
 import { OptionSwitch } from "@/components/tools/option-switch";
 import { ResetButton } from "@/components/tools/reset-button";
+import { ShareLinkButton, useFillFromLink } from "@/components/tools/share-link";
 import { ToolWorkspace } from "@/components/tools/tool-workspace";
 import { formatAmount, formatPercent, parseDecimal } from "@/lib/tools/calculators/format";
 import { calculateTipSplit, MAX_PEOPLE } from "@/lib/tools/calculators/tip-split";
@@ -27,6 +28,9 @@ export function TipSplitTool(): ReactNode {
   const [tip, setTip] = useState(DEFAULT_TIP);
   const [people, setPeople] = useState(DEFAULT_PEOPLE);
   const [roundUp, setRoundUp] = useState(false);
+
+  useFillFromLink({ bill: setBill, people: setPeople, round: (value) => setRoundUp(value === "1"), tip: setTip });
+
   const result =
     bill.trim() !== "" && tip.trim() !== "" && people.trim() !== ""
       ? calculateTipSplit({
@@ -58,7 +62,12 @@ export function TipSplitTool(): ReactNode {
           tooltip="Each person pays a whole number. The extra becomes part of the tip."
         />
       }
-      secondaryActions={<ResetButton onClick={handleReset} />}
+      secondaryActions={
+        <>
+          <ShareLinkButton ready={bill.trim() !== ""} values={{ bill, people, round: roundUp ? "1" : "", tip }} />
+          <ResetButton onClick={handleReset} />
+        </>
+      }
     >
       <CalculatorLayout
         inputs={

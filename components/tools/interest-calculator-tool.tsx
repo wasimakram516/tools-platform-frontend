@@ -10,6 +10,7 @@ import { DecimalField, SelectField } from "@/components/tools/calculator-fields"
 import { NumberField } from "@/components/tools/form-fields";
 import { ModeToggle } from "@/components/tools/mode-toggle";
 import { ResetButton } from "@/components/tools/reset-button";
+import { ShareLinkButton, useFillFromLink } from "@/components/tools/share-link";
 import { ScheduleTable } from "@/components/tools/schedule-table";
 import { ToolWorkspace } from "@/components/tools/tool-workspace";
 import { formatAmount, parseDecimal } from "@/lib/tools/calculators/format";
@@ -20,6 +21,7 @@ import {
   MAX_TERM_YEARS,
 } from "@/lib/tools/calculators/interest";
 import { presetChoice, type ToolPresetProps } from "@/lib/tools/tool-preset";
+import { acceptChoice } from "@/lib/tools/share-link";
 
 type InterestMode = "compound" | "simple";
 
@@ -27,6 +29,8 @@ const INTEREST_MODES: readonly InterestMode[] = ["compound", "simple"];
 
 const MONTHS_PER_YEAR = 12;
 const DEFAULT_COMPOUNDING = "12";
+
+const COMPOUNDING_VALUES = COMPOUNDING_OPTIONS.map((option) => String(option.perYear));
 
 const COMPOUNDING_SELECT_OPTIONS = COMPOUNDING_OPTIONS.map((option) => ({
   label: option.label,
@@ -46,6 +50,17 @@ export function InterestCalculatorTool({ preset }: ToolPresetProps = {}): ReactN
   const [months, setMonths] = useState("");
   const [compounding, setCompounding] = useState(DEFAULT_COMPOUNDING);
   const [monthly, setMonthly] = useState("");
+
+  useFillFromLink({
+    amount: setPrincipal,
+    every: acceptChoice(COMPOUNDING_VALUES, setCompounding),
+    mode: acceptChoice(INTEREST_MODES, setMode),
+    monthly: setMonthly,
+    months: setMonths,
+    rate: setRate,
+    years: setYears,
+  });
+
   const hasInputs = rate.trim() !== "" && (years.trim() !== "" || months.trim() !== "") && (principal.trim() !== "" || monthly.trim() !== "");
   const input = {
     compoundsPerYear: Number(compounding),
@@ -83,7 +98,12 @@ export function InterestCalculatorTool({ preset }: ToolPresetProps = {}): ReactN
           value={mode}
         />
       }
-      secondaryActions={<ResetButton onClick={handleReset} />}
+      secondaryActions={
+        <>
+          <ShareLinkButton ready={hasInputs} values={{ amount: principal, every: compounding, mode, monthly, months, rate, years }} />
+          <ResetButton onClick={handleReset} />
+        </>
+      }
     >
       <CalculatorLayout
         inputs={

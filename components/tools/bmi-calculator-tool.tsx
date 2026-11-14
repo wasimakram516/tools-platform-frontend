@@ -7,6 +7,7 @@ import { CalculatorLayout } from "@/components/tools/calculator-layout";
 import { CalculatorResult } from "@/components/tools/calculator-result";
 import { DecimalField, SelectField } from "@/components/tools/calculator-fields";
 import { ResetButton } from "@/components/tools/reset-button";
+import { ShareLinkButton, useFillFromLink } from "@/components/tools/share-link";
 import { ToolWorkspace } from "@/components/tools/tool-workspace";
 import {
   BMI_OBESE_FROM,
@@ -21,6 +22,10 @@ import {
 } from "@/lib/tools/calculators/bmi";
 import { formatNumber, parseDecimal } from "@/lib/tools/calculators/format";
 import { SURFACE_RADIUS } from "@/theme/surface";
+import { acceptChoice } from "@/lib/tools/share-link";
+
+const HEIGHT_UNITS = HEIGHT_UNIT_OPTIONS.map((option) => option.value);
+const WEIGHT_UNITS = WEIGHT_UNIT_OPTIONS.map((option) => option.value);
 
 const RANGES: readonly { category: BmiCategory; label: string }[] = [
   { category: "Underweight", label: `Below ${BMI_UNDERWEIGHT_BELOW}` },
@@ -39,6 +44,15 @@ export function BmiCalculatorTool(): ReactNode {
   const [height, setHeight] = useState("");
   const [inches, setInches] = useState("");
   const [weight, setWeight] = useState("");
+
+  useFillFromLink({
+    height: setHeight,
+    heightUnit: acceptChoice(HEIGHT_UNITS, setHeightUnit),
+    inches: setInches,
+    weight: setWeight,
+    weightUnit: acceptChoice(WEIGHT_UNITS, setWeightUnit),
+  });
+
   const hasInputs = height.trim() !== "" && weight.trim() !== "";
   const result = hasInputs
     ? calculateBmi({
@@ -73,7 +87,12 @@ export function BmiCalculatorTool(): ReactNode {
   return (
     <ToolWorkspace
       label="BMI calculator workspace"
-      secondaryActions={<ResetButton onClick={handleReset} />}
+      secondaryActions={
+        <>
+          <ShareLinkButton ready={hasInputs} values={{ height, heightUnit, inches, weight, weightUnit }} />
+          <ResetButton onClick={handleReset} />
+        </>
+      }
     >
       <CalculatorLayout
         inputs={

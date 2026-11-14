@@ -7,6 +7,7 @@ import { CalculatorLayout } from "@/components/tools/calculator-layout";
 import { CalculatorResult } from "@/components/tools/calculator-result";
 import { DateField } from "@/components/tools/form-fields";
 import { ResetButton } from "@/components/tools/reset-button";
+import { ShareLinkButton, useFillFromLink } from "@/components/tools/share-link";
 import { ToolWorkspace } from "@/components/tools/tool-workspace";
 import {
   calculateDateDifference,
@@ -14,6 +15,7 @@ import {
   type DifferenceDirection,
 } from "@/lib/tools/dates/date-difference";
 import { formatCount, formatNumber, formatYmd } from "@/lib/tools/dates/format";
+import { acceptIsoDate } from "@/lib/tools/share-link";
 
 const DIRECTION_LABELS: Readonly<Record<DifferenceDirection, string>> = {
   earlier: "The end date is before the start date",
@@ -35,6 +37,13 @@ export function DateDifferenceTool(): ReactNode {
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [includeEndDate, setIncludeEndDate] = useState(false);
+
+  useFillFromLink({
+    end: (value) => setIncludeEndDate(value === "1"),
+    from: acceptIsoDate(setFromDate),
+    to: acceptIsoDate(setToDate),
+  });
+
   const result = fromDate && toDate ? calculateDateDifference(fromDate, toDate, includeEndDate) : null;
 
   /**
@@ -49,7 +58,12 @@ export function DateDifferenceTool(): ReactNode {
   return (
     <ToolWorkspace
       label="Date difference calculator workspace"
-      secondaryActions={<ResetButton onClick={handleReset} />}
+      secondaryActions={
+        <>
+          <ShareLinkButton ready={result !== null} values={{ end: includeEndDate ? "1" : "", from: fromDate, to: toDate }} />
+          <ResetButton onClick={handleReset} />
+        </>
+      }
     >
       <CalculatorLayout
         inputs={

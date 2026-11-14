@@ -9,6 +9,7 @@ import { CalculatorResult } from "@/components/tools/calculator-result";
 import { DateField, NumberField } from "@/components/tools/form-fields";
 import { ModeToggle } from "@/components/tools/mode-toggle";
 import { ResetButton } from "@/components/tools/reset-button";
+import { ShareLinkButton, useFillFromLink } from "@/components/tools/share-link";
 import { ToolWorkspace } from "@/components/tools/tool-workspace";
 import {
   calculateDateMath,
@@ -17,6 +18,7 @@ import {
 } from "@/lib/tools/dates/date-math";
 import { formatCount } from "@/lib/tools/dates/format";
 import { todayIsoDate } from "@/lib/tools/dates/today";
+import { acceptChoice, acceptIsoDate } from "@/lib/tools/share-link";
 
 interface DateMathToolProps {
   /** Supplies today's date as YYYY-MM-DD; replaced in tests so they do not depend on the clock. */
@@ -27,6 +29,8 @@ const OPERATION_OPTIONS = [
   { icon: <AddIcon />, label: "Add", tooltip: "Move the date later", value: "add" },
   { icon: <RemoveIcon />, label: "Subtract", tooltip: "Move the date earlier", value: "subtract" },
 ] as const;
+
+const OPERATIONS: readonly DateOperation[] = OPERATION_OPTIONS.map((option) => option.value);
 
 /**
  * Turns a field value into a number, treating an empty field as zero.
@@ -56,6 +60,16 @@ export function DateMathTool({ getToday = todayIsoDate }: DateMathToolProps = {}
   const [months, setMonths] = useState("");
   const [weeks, setWeeks] = useState("");
   const [days, setDays] = useState("");
+
+  useFillFromLink({
+    days: setDays,
+    months: setMonths,
+    op: acceptChoice(OPERATIONS, setOperation),
+    start: acceptIsoDate(setStartDate),
+    weeks: setWeeks,
+    years: setYears,
+  });
+
   const hasAmount = [years, months, weeks, days].some((value) => value !== "");
   const result = hasAmount
     ? calculateDateMath({
@@ -88,7 +102,12 @@ export function DateMathTool({ getToday = todayIsoDate }: DateMathToolProps = {}
       options={
         <ModeToggle label="Operation" onChange={setOperation} options={OPERATION_OPTIONS} value={operation} />
       }
-      secondaryActions={<ResetButton onClick={handleReset} />}
+      secondaryActions={
+        <>
+          <ShareLinkButton ready={hasAmount} values={{ days, months, op: operation === "add" ? "" : operation, start: startDate, weeks, years }} />
+          <ResetButton onClick={handleReset} />
+        </>
+      }
     >
       <CalculatorLayout
         inputs={

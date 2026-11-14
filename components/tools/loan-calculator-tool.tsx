@@ -7,6 +7,7 @@ import { CalculatorResult, type ResultRow } from "@/components/tools/calculator-
 import { DecimalField } from "@/components/tools/calculator-fields";
 import { NumberField } from "@/components/tools/form-fields";
 import { ResetButton } from "@/components/tools/reset-button";
+import { ShareLinkButton, useFillFromLink } from "@/components/tools/share-link";
 import { ScheduleTable } from "@/components/tools/schedule-table";
 import { ToolWorkspace } from "@/components/tools/tool-workspace";
 import { formatAmount, formatNumber, parseDecimal } from "@/lib/tools/calculators/format";
@@ -59,6 +60,9 @@ export function LoanCalculatorTool(): ReactNode {
   const [years, setYears] = useState("");
   const [months, setMonths] = useState("");
   const [extra, setExtra] = useState("");
+
+  useFillFromLink({ amount: setAmount, extra: setExtra, months: setMonths, rate: setRate, years: setYears });
+
   const termMonths = Number(years || "0") * MONTHS_PER_YEAR + Number(months || "0");
   const hasInputs = amount.trim() !== "" && rate.trim() !== "" && (years.trim() !== "" || months.trim() !== "");
   const result = hasInputs
@@ -83,7 +87,12 @@ export function LoanCalculatorTool(): ReactNode {
   }
 
   return (
-    <ToolWorkspace label="Loan calculator workspace" secondaryActions={<ResetButton onClick={handleReset} />}>
+    <ToolWorkspace label="Loan calculator workspace" secondaryActions={
+        <>
+          <ShareLinkButton values={{ amount, extra, months, rate, years }} />
+          <ResetButton onClick={handleReset} />
+        </>
+      }>
       <CalculatorLayout
         inputs={
           <>

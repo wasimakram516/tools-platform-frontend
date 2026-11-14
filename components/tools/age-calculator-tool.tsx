@@ -6,10 +6,12 @@ import { CalculatorLayout } from "@/components/tools/calculator-layout";
 import { CalculatorResult } from "@/components/tools/calculator-result";
 import { DateField } from "@/components/tools/form-fields";
 import { ResetButton } from "@/components/tools/reset-button";
+import { ShareLinkButton, useFillFromLink } from "@/components/tools/share-link";
 import { ToolWorkspace } from "@/components/tools/tool-workspace";
 import { calculateAge } from "@/lib/tools/dates/age";
 import { formatCount, formatNumber, formatYmd } from "@/lib/tools/dates/format";
 import { todayIsoDate } from "@/lib/tools/dates/today";
+import { acceptIsoDate } from "@/lib/tools/share-link";
 
 interface AgeCalculatorToolProps {
   /** Supplies today's date as YYYY-MM-DD; replaced in tests so they do not depend on the clock. */
@@ -22,6 +24,9 @@ interface AgeCalculatorToolProps {
 export function AgeCalculatorTool({ getToday = todayIsoDate }: AgeCalculatorToolProps = {}): ReactNode {
   const [birthDate, setBirthDate] = useState("");
   const [asOfDate, setAsOfDate] = useState("");
+
+  useFillFromLink({ birth: acceptIsoDate(setBirthDate), on: acceptIsoDate(setAsOfDate) });
+
   const result = birthDate ? calculateAge(birthDate, asOfDate || getToday()) : null;
 
   /**
@@ -35,7 +40,12 @@ export function AgeCalculatorTool({ getToday = todayIsoDate }: AgeCalculatorTool
   return (
     <ToolWorkspace
       label="Age calculator workspace"
-      secondaryActions={<ResetButton onClick={handleReset} />}
+      secondaryActions={
+        <>
+          <ShareLinkButton ready={birthDate !== ""} values={{ birth: birthDate, on: asOfDate }} />
+          <ResetButton onClick={handleReset} />
+        </>
+      }
     >
       <CalculatorLayout
         inputs={

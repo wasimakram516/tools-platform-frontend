@@ -9,6 +9,7 @@ import { CalculatorResult } from "@/components/tools/calculator-result";
 import { DecimalField, SelectField } from "@/components/tools/calculator-fields";
 import { ModeToggle } from "@/components/tools/mode-toggle";
 import { ResetButton } from "@/components/tools/reset-button";
+import { ShareLinkButton, useFillFromLink } from "@/components/tools/share-link";
 import { ToolWorkspace } from "@/components/tools/tool-workspace";
 import {
   fieldsFor,
@@ -18,10 +19,13 @@ import {
   type MarginMode,
   type PercentageMode,
 } from "@/lib/tools/calculators/percentage-summary";
+import { acceptChoice } from "@/lib/tools/share-link";
 import { presetChoice, type ToolPresetProps } from "@/lib/tools/tool-preset";
 
 const DEFAULT_MODE: PercentageMode = "percentOf";
 const MODES = PERCENTAGE_MODE_OPTIONS.map((option) => option.value);
+const MARGIN_MODES = MARGIN_MODE_OPTIONS.map((option) => option.value);
+const DIRECTIONS = ["increase", "decrease"] as const;
 const DEFAULT_MARGIN_MODE: MarginMode = "fromPrice";
 
 /**
@@ -36,6 +40,15 @@ export function PercentageCalculatorTool({ preset }: ToolPresetProps = {}): Reac
   const [direction, setDirection] = useState<"increase" | "decrease">("increase");
   const [first, setFirst] = useState("");
   const [second, setSecond] = useState("");
+
+  useFillFromLink({
+    a: setFirst,
+    b: setSecond,
+    basis: acceptChoice(MARGIN_MODES, setMarginMode),
+    dir: acceptChoice(DIRECTIONS, setDirection),
+    mode: acceptChoice(MODES, setMode),
+  });
+
   const fields = fieldsFor(mode, marginMode);
   const outcome = summarizePercentage(mode, first, second, { direction, marginMode });
   const error = outcome && "message" in outcome ? outcome.message : null;
@@ -53,7 +66,18 @@ export function PercentageCalculatorTool({ preset }: ToolPresetProps = {}): Reac
   }
 
   return (
-    <ToolWorkspace label="Percentage calculator workspace" secondaryActions={<ResetButton onClick={handleReset} />}>
+    <ToolWorkspace
+      label="Percentage calculator workspace"
+      secondaryActions={
+        <>
+          <ShareLinkButton
+            ready={answer !== null}
+            values={{ a: first, b: second, basis: mode === "margin" ? marginMode : "", dir: mode === "adjust" ? direction : "", mode }}
+          />
+          <ResetButton onClick={handleReset} />
+        </>
+      }
+    >
       <CalculatorLayout
         inputs={
           <>
