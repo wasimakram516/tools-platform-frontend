@@ -6,11 +6,12 @@ import { getFeaturedTools, getTools } from "@/lib/tools/tool-registry";
 describe("buildNavData", () => {
   const data = buildNavData();
 
-  it("lists every available tool once, grouped under its category", () => {
+  it("lists every available tool once, grouped under its category, leaving out pages made for one job", () => {
     const listed = data.categories.flatMap((category) => category.tools.map((tool) => tool.href));
-    const available = getTools().filter((tool) => tool.status === "available");
+    const baseTools = getTools().filter((tool) => tool.status === "available" && tool.variant === undefined);
 
-    expect(listed.sort()).toEqual(available.map((tool) => `/tools/${tool.slug}`).sort());
+    expect(listed.sort()).toEqual(baseTools.map((tool) => `/tools/${tool.slug}`).sort());
+    expect(listed).not.toContain("/tools/png-to-jpg");
   });
 
   it("leaves out categories with nothing to open", () => {
