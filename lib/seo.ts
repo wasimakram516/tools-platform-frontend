@@ -42,7 +42,8 @@ export function buildPageMetadata({
   path,
   title,
 }: PageMetadataInput): Metadata {
-  const socialTitle = title ?? SITE_NAME;
+  // Shared links show this title without the browser's title template, so the brand is added here.
+  const socialTitle = title ? `${title} | ${SITE_NAME}` : SITE_NAME;
 
   return {
     ...(title ? { title } : {}),

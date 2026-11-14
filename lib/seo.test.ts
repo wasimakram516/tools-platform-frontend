@@ -31,8 +31,8 @@ describe("page metadata", () => {
 
     expect(metadata.title).toBe("JSON Formatter");
     expect(metadata.alternates?.canonical).toBe("/tools/json-formatter");
-    expect(metadata.openGraph).toMatchObject({ title: "JSON Formatter", type: "website" });
-    expect(metadata.twitter).toMatchObject({ card: "summary_large_image", title: "JSON Formatter" });
+    expect(metadata.openGraph).toMatchObject({ title: "JSON Formatter | QuicklySorted", type: "website" });
+    expect(metadata.twitter).toMatchObject({ card: "summary_large_image", title: "JSON Formatter | QuicklySorted" });
     expect(metadata.keywords).toEqual(["json"]);
   });
 

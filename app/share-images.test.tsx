@@ -1,7 +1,11 @@
 // @vitest-environment node
 import { describe, expect, it } from "vitest";
 import OpenGraphImage, { alt, contentType, size } from "@/app/opengraph-image";
-import ToolOpenGraphImage, { generateStaticParams, size as toolSize } from "@/app/tools/[toolSlug]/opengraph-image";
+import ToolOpenGraphImage, {
+  generateImageMetadata,
+  generateStaticParams,
+  size as toolSize,
+} from "@/app/tools/[toolSlug]/opengraph-image";
 import { SHARE_IMAGE_SIZE, SHARE_IMAGE_TYPE } from "@/lib/og/share-image";
 import { getTools } from "@/lib/tools/tool-registry";
 
@@ -51,6 +55,14 @@ describe("share pictures", () => {
 
     expect((await inspect(response)).start).toEqual(PNG_SIGNATURE);
   }, 60_000);
+
+  it("gives each tool's picture alt text that names the tool and what it does", () => {
+    const [image] = generateImageMetadata({ params: { toolSlug: "loan-calculator" } });
+
+    expect(image?.alt).toBe("Loan Calculator: Monthly payment, total interest, and a full repayment schedule.");
+    expect(image?.size).toEqual(SHARE_IMAGE_SIZE);
+    expect(generateImageMetadata({ params: { toolSlug: "nothing-here" } })[0]?.alt).toContain("QuicklySorted");
+  });
 
   it("prebuilds one picture for every available tool", () => {
     expect(generateStaticParams().map((entry) => entry.toolSlug).sort()).toEqual(
