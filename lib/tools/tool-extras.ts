@@ -266,6 +266,10 @@ const BASE_TOOL_EXTRAS: Readonly<Record<string, ToolExtras>> = {
       "SHA-1, SHA-256, SHA-384, and SHA-512 are supported. MD5 is not.",
       "A hash alone is not a safe way to store passwords. Use a slow password hashing method for that.",
     ],
+    seeAlso: {
+      href: "/guides/sha-1-vs-sha-256-vs-sha-512",
+      label: "SHA-1 vs SHA-256 vs SHA-512: sizes, security, and what not to use a hash for",
+    },
   },
   "DEV-07": {
     about:
@@ -281,6 +285,10 @@ const BASE_TOOL_EXTRAS: Readonly<Record<string, ToolExtras>> = {
       "It uses JavaScript regex rules. Other languages may treat some patterns differently.",
       "A pattern that takes more than 2 seconds is stopped.",
     ],
+    seeAlso: {
+      href: "/guides/javascript-regex-cheat-sheet",
+      label: "JavaScript regex cheat sheet: classes, groups, lookarounds, flags, and traps",
+    },
   },
   "DTM-01": {
     about:
@@ -397,6 +405,10 @@ const BASE_TOOL_EXTRAS: Readonly<Record<string, ToolExtras>> = {
       "A QR code cannot be changed after it is printed, so use a link you will keep.",
       "Wi-Fi names are limited to 32 bytes and passwords to 63 characters, as the Wi-Fi standard requires.",
     ],
+    seeAlso: {
+      href: "/guides/qr-code-error-correction",
+      label: "QR code error correction levels: which to choose, capacity, and printing tips",
+    },
   },
   "GEN-03": {
     about:

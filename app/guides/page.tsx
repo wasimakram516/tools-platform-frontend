@@ -10,9 +10,9 @@ import { getGuides, guidePath, latestGuideUpdate } from "@/lib/guides/guides";
 import { breadcrumbJsonLd, buildPageMetadata, webPageJsonLd } from "@/lib/seo";
 
 const PATH = "/guides";
-const TITLE = "Guides: Excel Dates, JWT Claims, UTM Tags";
+const TITLE = "Guides: Excel Dates, JWT, UTM, QR, SHA, Regex";
 const DESCRIPTION =
-  "Reference guides that go further than a tool: Excel date serial numbers, JWT claims, UTM parameters, and character limits, each checked against sources.";
+  "Reference guides on Excel dates, JWT claims, UTM tags, QR error correction, SHA hashes, regex, and character limits, each checked against its sources.";
 
 export const metadata: Metadata = buildPageMetadata({ description: DESCRIPTION, path: PATH, title: TITLE });
 

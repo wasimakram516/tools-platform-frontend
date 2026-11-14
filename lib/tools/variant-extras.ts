@@ -194,6 +194,7 @@ export const VARIANT_EXTRAS: Readonly<Record<string, ToolExtras>> = {
       "It hashes text you type or paste, not files.",
       "A fast hash alone is not a safe way to store passwords. Use a slow password hashing method for that.",
     ],
+    seeAlso: { href: "/guides/sha-1-vs-sha-256-vs-sha-512", label: "SHA-1 vs SHA-256 vs SHA-512: which to use and why" },
   },
   "GEN-16": {
     about:
@@ -221,6 +222,7 @@ export const VARIANT_EXTRAS: Readonly<Record<string, ToolExtras>> = {
       "Workplace networks that need a username as well as a password are not supported.",
       "Anyone who can see the code can read the password from it.",
     ],
+    seeAlso: { href: "/guides/qr-code-error-correction", label: "QR code error correction levels and printing tips" },
   },
   "GEN-18": {
     about:
