@@ -8,10 +8,12 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { FaqAccordion } from "@/components/ui/faq-accordion";
 import { NextLink } from "@/components/ui/next-link";
 import { homeCrumb, PageTitle } from "@/components/ui/page-title";
+import { RelatedToolLinks } from "@/components/ui/related-tool-links";
 import { formatIsoDate } from "@/lib/format-iso-date";
-import { getGuideBySlug, getGuides, guidePath } from "@/lib/guides/guides";
+import { getGuideBySlug, getGuides, getMoreGuides, guidePath } from "@/lib/guides/guides";
 import { breadcrumbJsonLd, buildPageMetadata, faqJsonLd, organizationJsonLd, techArticleJsonLd } from "@/lib/seo";
 import { getToolBySlug } from "@/lib/tools/tool-registry";
+import type { ToolDefinition } from "@/types/tool";
 
 interface GuidePageProps {
   params: Promise<{ guideSlug: string }>;
@@ -34,8 +36,9 @@ export async function generateMetadata({ params }: GuidePageProps): Promise<Meta
 }
 
 /**
- * A reference guide: the sections, a link to the paired tool, questions, and the sources the
- * facts were checked against, with the date they were checked.
+ * A reference guide: the sections, a link to the paired tool and to other tools that help,
+ * questions, the sources the facts were checked against with the date they were checked, and
+ * links to the other guides.
  */
 export default async function GuidePage({ params }: GuidePageProps): Promise<ReactNode> {
   const guide = getGuideBySlug((await params).guideSlug);
@@ -46,6 +49,9 @@ export default async function GuidePage({ params }: GuidePageProps): Promise<Rea
   }
 
   const path = guidePath(guide);
+  const relatedTools = guide.relatedTools
+    .map((slug) => getToolBySlug(slug))
+    .filter((related): related is ToolDefinition => related?.status === "available");
 
   return (
     <PageFrame>
@@ -99,6 +105,9 @@ export default async function GuidePage({ params }: GuidePageProps): Promise<Rea
               {guide.toolAction}
             </Button>
           </Stack>
+          <Box sx={{ mt: { xs: -2, md: -3 } }}>
+            <RelatedToolLinks headingId="guide-related-tools" tools={relatedTools} />
+          </Box>
 
           <Box aria-labelledby="guide-faq" component="section">
             <Typography component="h2" id="guide-faq" variant="h4">
@@ -122,6 +131,27 @@ export default async function GuidePage({ params }: GuidePageProps): Promise<Rea
                 </li>
               ))}
             </Box>
+          </Box>
+
+          <Box aria-labelledby="guide-more" component="nav">
+            <Typography component="h2" id="guide-more" variant="h5">
+              More guides
+            </Typography>
+            <Box component="ul" sx={{ display: "grid", gap: 1.25, listStyle: "none", m: 0, mt: 1.5, p: 0 }}>
+              {getMoreGuides(guide).map((other) => (
+                <li key={other.slug}>
+                  <Link component={NextLink} href={guidePath(other)} sx={{ fontWeight: 600 }} underline="hover">
+                    {other.name}
+                  </Link>
+                  <Typography color="text.secondary" sx={{ fontSize: "0.9rem", lineHeight: 1.6 }}>
+                    {other.metaDescription}
+                  </Typography>
+                </li>
+              ))}
+            </Box>
+            <Link component={NextLink} href="/guides" sx={{ display: "inline-block", mt: 2 }} underline="always">
+              All guides and references
+            </Link>
           </Box>
         </Stack>
       </Container>

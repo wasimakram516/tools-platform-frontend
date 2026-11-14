@@ -2,7 +2,7 @@ import { render, screen, within } from "@testing-library/react";
 import type { PropsWithChildren } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { AppThemeProvider } from "@/components/providers/app-theme-provider";
-import { getGuides, guidePath } from "@/lib/guides/guides";
+import { getGuides, getMoreGuides, guidePath } from "@/lib/guides/guides";
 import GuidePage, { generateMetadata, generateStaticParams } from "./[guideSlug]/page";
 import GuidesPage, { metadata } from "./page";
 
@@ -73,6 +73,16 @@ describe("guide page", () => {
       expect(screen.getByRole("link", { name: guide.toolAction })).toHaveAttribute("href", `/tools/${guide.toolSlug}`);
       guide.sources.forEach((source) => expect(screen.getByRole("link", { name: source.label })).toHaveAttribute("href", source.url));
       expect(jsonLdTypes(container)).toEqual(expect.arrayContaining(["Organization", "TechArticle", "BreadcrumbList", "FAQPage"]));
+
+      const related = within(screen.getByRole("navigation", { name: "Related tools" })).getAllByRole("link");
+
+      expect(related.map((link) => link.getAttribute("href"))).toEqual(guide.relatedTools.map((slug) => `/tools/${slug}`));
+
+      const more = within(screen.getByRole("navigation", { name: "More guides" }));
+
+      expect(more.getAllByRole("link").map((link) => link.getAttribute("href"))).toEqual(
+        [...getMoreGuides(guide).map(guidePath), "/guides"],
+      );
     },
   );
 

@@ -5,6 +5,7 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { ToolGuide } from "@/components/tools/tool-guide";
 import { ToolPageShell } from "@/components/tools/tool-page-shell";
 import { ToolRenderer } from "@/components/tools/tool-renderer";
+import { getGuidesForTool } from "@/lib/guides/guides";
 import { breadcrumbJsonLd, buildPageMetadata, faqJsonLd, toolJsonLd } from "@/lib/seo";
 import { getToolContent } from "@/lib/tools/tool-content";
 import { getToolExtras } from "@/lib/tools/tool-extras";
@@ -85,6 +86,7 @@ export default async function ToolPage({ params }: ToolPageProps): Promise<React
       <ToolPageShell
         category={category}
         guide={content ? <ToolGuide content={content} extras={getToolExtras(tool.id)} idPrefix={tool.slug} toolName={tool.name} /> : undefined}
+        guides={getGuidesForTool(tool.slug)}
         relatedTools={getRelatedTools(tool)}
         tool={tool}
         variants={getToolVariants(tool.id)}

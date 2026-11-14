@@ -95,6 +95,28 @@ describe("registry-backed routes", () => {
     expect(screen.getByText("On this device · background worker")).toBeInTheDocument();
   });
 
+  it.each([
+    ["jwt-decoder", ["/guides/jwt-claims"]],
+    ["unix-timestamp-converter", ["/guides/excel-date-serial-numbers", "/guides/jwt-claims"]],
+    ["sha256-hash-generator", ["/guides/sha-1-vs-sha-256-vs-sha-512"]],
+  ])("links %s to the guides about it", async (toolSlug, hrefs) => {
+    const page = await ToolPage({ params: Promise.resolve({ toolSlug }) });
+
+    renderRoute(page);
+
+    const links = within(screen.getByRole("navigation", { name: "Guides" })).getAllByRole("link");
+
+    expect(links.map((link) => link.getAttribute("href"))).toEqual(hrefs);
+  });
+
+  it("shows no guides line on a tool no guide covers", async () => {
+    const page = await ToolPage({ params: Promise.resolve({ toolSlug: "bmi-calculator" }) });
+
+    renderRoute(page);
+
+    expect(screen.queryByRole("navigation", { name: "Guides" })).not.toBeInTheDocument();
+  });
+
   it("shows when a tool page was last updated, as a machine readable date", async () => {
     const page = await ToolPage({
       params: Promise.resolve({ toolSlug: "json-formatter" }),
