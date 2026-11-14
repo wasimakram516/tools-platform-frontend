@@ -10,6 +10,11 @@ const CATEGORY_SCORE = 1;
 const NAME_START_SCORE = 2;
 /** Shared out between the typed words, by how much of a short name they cover. */
 const NAME_COVERAGE_SCORE = 8;
+/**
+ * Added when the query holds a tool's whole address in order, such as "json to csv" for
+ * /tools/json-to-csv. Words alone cannot tell "json to csv" from "csv to json".
+ */
+const SLUG_PHRASE_SCORE = 20;
 
 /** The most tools shown as "closest matches" when nothing matches every word. */
 const APPROXIMATE_LIMIT = 6;
@@ -208,14 +213,16 @@ export function searchToolsDetailed(
     return { approximate: false, tools: [] };
   }
 
+  const phrase = ` ${normalize(query)} `;
   const scored = tools.map((tool, index) => {
     const scores = words.map((word) => scoreTypedWord(word, tool, categoryNameFor(tool.categoryId)));
+    const slugBonus = phrase.includes(` ${normalize(tool.slug)} `) ? SLUG_PHRASE_SCORE : 0;
 
     return {
       index,
       matchedWords: scores.filter((score) => score > 0).length,
       tool,
-      total: scores.reduce((sum, score) => sum + score, 0),
+      total: scores.reduce((sum, score) => sum + score, 0) + slugBonus,
     };
   });
   const byRank = (a: (typeof scored)[number], b: (typeof scored)[number]): number =>

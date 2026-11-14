@@ -4,7 +4,12 @@ import { transformBase64 } from "@/lib/tools/base64";
 import { calculateBmi } from "@/lib/tools/calculators/bmi";
 import { calculateLoan } from "@/lib/tools/calculators/loan";
 import { calculateTipSplit } from "@/lib/tools/calculators/tip-split";
-import { csvToJson } from "@/lib/tools/data/csv-json";
+import { summarizePercentage } from "@/lib/tools/calculators/percentage-summary";
+import { calculateSimpleInterest } from "@/lib/tools/calculators/interest";
+import { csvToJson, jsonToCsv } from "@/lib/tools/data/csv-json";
+import { jsonToXml } from "@/lib/tools/data/xml-json";
+import { jsonToYaml } from "@/lib/tools/data/yaml-json";
+import { wifiPayload } from "@/lib/tools/generators/qr-payloads";
 import { formatInteger, parseInteger, toRoman } from "@/lib/tools/data/number-bases";
 import { calculateDateDifference } from "@/lib/tools/dates/date-difference";
 import { calculateDateMath } from "@/lib/tools/dates/date-math";
@@ -160,5 +165,51 @@ describe("worked examples match what the tools really produce", () => {
     );
 
     expect(result.url).toBe(TOOL_EXTRAS["SEO-07"]?.example.output);
+  });
+});
+
+describe("worked examples on the pages made for one job match the tools", () => {
+  const options = { direction: "increase" as const, marginMode: "fromPrice" as const };
+
+  it("works out the discount, margin, and percentage change", () => {
+    const discount = summarizePercentage("discount", "80", "25", options);
+    const margin = summarizePercentage("margin", "40", "50", options);
+    const change = summarizePercentage("change", "1200", "1500", options);
+
+    expect(discount && "headline" in discount && [discount.headline, discount.rows[1]?.value]).toEqual(["Sale price: 60.00", "20.00"]);
+    expect(TOOL_EXTRAS["CAL-02"]?.example.output).toBe("Sale price: 60.00. You save 20.00.");
+    expect(margin && "headline" in margin && [margin.headline, ...margin.rows.map((row) => row.value)]).toEqual(["Margin: 20%", "25%", "10.00", "50.00"]);
+    expect(TOOL_EXTRAS["CAL-09"]?.example.output).toBe("Margin: 20%. Markup 25%, profit 10.00, selling price 50.00.");
+    expect(change && "headline" in change && [change.headline, change.rows[2]?.value]).toEqual(["25% increase", "300"]);
+    expect(TOOL_EXTRAS["CAL-16"]?.example.output).toBe("25% increase. The difference is 300.");
+  });
+
+  it("works out simple interest", () => {
+    const result = calculateSimpleInterest({ compoundsPerYear: 12, monthlyContribution: 0, principal: 10_000, ratePercent: 5, termMonths: 36 });
+
+    expect(result.ok && [result.finalBalance.toFixed(2), result.totalInterest.toFixed(2)]).toEqual(["11500.00", "1500.00"]);
+  });
+
+  it("converts JSON to CSV, YAML, and XML", () => {
+    const csv = jsonToCsv(TOOL_EXTRAS["DAT-02"]?.example.input ?? "", { delimiter: ",", flatten: true, includeHeader: true, protectFormulas: false, quoteAll: false });
+    const yaml = jsonToYaml(TOOL_EXTRAS["DAT-06"]?.example.input ?? "", { indent: 2, sortKeys: false });
+    const xml = jsonToXml(TOOL_EXTRAS["DAT-04"]?.example.input ?? "", { declaration: false, indent: 2, rootName: "root" });
+
+    expect(csv.ok && csv.output).toBe(TOOL_EXTRAS["DAT-02"]?.example.output);
+    expect(yaml.ok && yaml.output).toBe(TOOL_EXTRAS["DAT-06"]?.example.output);
+    expect(xml.ok && xml.output).toBe(TOOL_EXTRAS["DAT-04"]?.example.output);
+  });
+
+  it("hashes text with SHA-256", async () => {
+    const result = await hashText("hello world", "");
+
+    expect(TOOL_EXTRAS["DEV-16"]?.example.output).toBe(`SHA-256: ${result.ok ? result.hashes["SHA-256"] : "missing"}`);
+  });
+
+  it("writes the Wi-Fi code's text", () => {
+    const result = wifiPayload({ hidden: false, password: "sunflower42", security: "WPA", ssid: "HomeWiFi" });
+
+    expect(result.ok && result.text).toBe("WIFI:T:WPA;S:HomeWiFi;P:sunflower42;;");
+    expect(TOOL_EXTRAS["GEN-17"]?.example.output).toContain(result.ok ? result.text : "missing");
   });
 });

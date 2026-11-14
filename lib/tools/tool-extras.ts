@@ -1,3 +1,5 @@
+import { VARIANT_EXTRAS } from "@/lib/tools/variant-extras";
+
 /**
  * A worked example, plain limits, and a short explanation for a tool page. The text sits beside
  * the tool so a reader can see what to expect, and so search engines have real, specific words
@@ -31,10 +33,10 @@ export function getToolExtras(toolId: string): ToolExtras | undefined {
 }
 
 /**
- * Extras for every available tool, keyed by the tool's registry id. Where the output is text,
- * it was produced by the tool's own code, and a test keeps every tool covered.
+ * Extras for every base tool, keyed by the tool's registry id. Where the output is text, it was
+ * produced by the tool's own code. Pages made for one job have theirs in variant-extras.ts.
  */
-export const TOOL_EXTRAS: Readonly<Record<string, ToolExtras>> = {
+const BASE_TOOL_EXTRAS: Readonly<Record<string, ToolExtras>> = {
   "CAL-01": {
     about:
       "Pick the question you are asking, such as what a percentage of a number is, or how much a price changed, and fill in the two numbers. The result is worked out directly from them, with the working shown in words so you can check it.",
@@ -579,3 +581,8 @@ export const TOOL_EXTRAS: Readonly<Record<string, ToolExtras>> = {
     ],
   },
 };
+
+/**
+ * Extras for every available tool page, keyed by registry id. A test keeps every page covered.
+ */
+export const TOOL_EXTRAS: Readonly<Record<string, ToolExtras>> = { ...BASE_TOOL_EXTRAS, ...VARIANT_EXTRAS };

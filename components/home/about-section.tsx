@@ -19,7 +19,7 @@ import {
   USE_CASES_HEADING,
   type UseCaseGroup,
 } from "@/lib/home-content";
-import { getAvailableToolCategories, getToolBySlug, getTools } from "@/lib/tools/tool-registry";
+import { countBaseTools, getAvailableToolCategories, getToolBySlug } from "@/lib/tools/tool-registry";
 import { CONTROL_RADIUS, SURFACE_RADIUS, SURFACE_SHADOW } from "@/theme/surface";
 import { FONT_HEADING } from "@/theme/typography";
 
@@ -37,7 +37,7 @@ const GROUP_ICONS: Readonly<Record<UseCaseGroup["icon"], ReactNode>> = {
  */
 export function AboutSection(): ReactNode {
   const facts = [
-    { label: "free tools", value: getTools().filter((tool) => tool.status === "available").length },
+    { label: "free tools", value: countBaseTools() },
     { label: "categories", value: getAvailableToolCategories().length },
     { label: "accounts needed", value: 0 },
   ];

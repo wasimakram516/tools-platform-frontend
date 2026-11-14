@@ -1,3 +1,4 @@
+import { VARIANT_DEFINITIONS } from "@/lib/tools/tool-variant-registry";
 import type { ToolCategory, ToolDefinition } from "@/types/tool";
 
 /**
@@ -74,7 +75,7 @@ const TOOL_CATEGORIES = [
   },
 ] as const satisfies readonly ToolCategory[];
 
-const TOOL_DEFINITIONS = [
+const BASE_TOOL_DEFINITIONS = [
   {
     id: "DEV-01",
     slug: "json-formatter",
@@ -688,6 +689,9 @@ const TOOL_DEFINITIONS = [
   },
 ] as const satisfies readonly ToolDefinition[];
 
+/** Every tool page: the tools first, then the pages made for one job with them. */
+const TOOL_DEFINITIONS: readonly ToolDefinition[] = [...BASE_TOOL_DEFINITIONS, ...VARIANT_DEFINITIONS];
+
 const categoryBySlug = new Map<string, ToolCategory>(
   TOOL_CATEGORIES.map((category) => [category.slug, category]),
 );
@@ -731,9 +735,7 @@ export function getToolCategoryById(categoryId: string): ToolCategory | undefine
  * Returns the available tools flagged as featured, in display order, for the homepage.
  */
 export function getFeaturedTools(): readonly ToolDefinition[] {
-  const tools: readonly ToolDefinition[] = TOOL_DEFINITIONS;
-
-  return tools.filter((tool) => tool.status === "available" && tool.featured === true);
+  return TOOL_DEFINITIONS.filter((tool) => tool.status === "available" && tool.featured === true);
 }
 
 /**
@@ -765,4 +767,36 @@ export function getRelatedTools(tool: ToolDefinition): readonly ToolDefinition[]
     const relatedTool = toolById.get(toolId);
     return relatedTool ? [relatedTool] : [];
   });
+}
+
+/**
+ * Returns the available tools in a category, leaving out the pages made for one job with another
+ * tool. Menus and the home page list these, so they stay short; category pages, search, and the
+ * sitemap list every page.
+ */
+export function getBaseToolsByCategory(categoryId: string): readonly ToolDefinition[] {
+  return getToolsByCategory(categoryId).filter((tool) => tool.status === "available" && tool.variant === undefined);
+}
+
+/**
+ * Counts the available tools, not counting the pages made for one job with another tool.
+ */
+export function countBaseTools(): number {
+  return TOOL_DEFINITIONS.filter((tool) => tool.status === "available" && tool.variant === undefined).length;
+}
+
+/**
+ * Returns the id of the tool whose component renders this page: the base tool for a page made
+ * for one job, or the tool itself.
+ */
+export function getEngineToolId(tool: ToolDefinition): string {
+  return tool.variant?.baseToolId ?? tool.id;
+}
+
+/**
+ * Returns the available pages made for one job with this tool, such as PNG to JPG for the image
+ * compressor, in registry order.
+ */
+export function getToolVariants(toolId: string): readonly ToolDefinition[] {
+  return TOOL_DEFINITIONS.filter((tool) => tool.status === "available" && tool.variant?.baseToolId === toolId);
 }

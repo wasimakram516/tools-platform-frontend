@@ -1,5 +1,5 @@
 import type { IconKey } from "@/components/ui/tool-icon";
-import { getAvailableToolCategories, getFeaturedTools, getToolsByCategory } from "@/lib/tools/tool-registry";
+import { getAvailableToolCategories, getBaseToolsByCategory, getFeaturedTools } from "@/lib/tools/tool-registry";
 
 export interface NavTool {
   href: string;
@@ -22,7 +22,8 @@ export interface NavData {
 
 /**
  * Builds what the navigation bar shows from the tool registry: the popular tools, and every
- * available tool grouped by category for the mega menu. A new tool, category, or popular flag
+ * available tool grouped by category for the mega menu. Pages made for one job with another
+ * tool, such as PNG to JPG, are left out to keep the menu short; their category pages list them. A new tool, category, or popular flag
  * appears with no change here.
  */
 export function buildNavData(): NavData {
@@ -32,9 +33,7 @@ export function buildNavData(): NavData {
         href: `/categories/${category.slug}`,
         id: category.id,
         name: category.name,
-        tools: getToolsByCategory(category.id)
-          .filter((tool) => tool.status === "available")
-          .map((tool) => ({ href: `/tools/${tool.slug}`, icon: tool.icon, label: tool.name })),
+        tools: getBaseToolsByCategory(category.id).map((tool) => ({ href: `/tools/${tool.slug}`, icon: tool.icon, label: tool.name })),
       }))
       .filter((category) => category.tools.length > 0),
     popular: getFeaturedTools().map((tool) => ({ href: `/tools/${tool.slug}`, icon: tool.icon, label: tool.name })),

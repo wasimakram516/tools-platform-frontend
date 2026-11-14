@@ -9,16 +9,17 @@ import { breadcrumbJsonLd, buildPageMetadata, faqJsonLd, toolJsonLd } from "@/li
 import { getToolContent } from "@/lib/tools/tool-content";
 import { getToolExtras } from "@/lib/tools/tool-extras";
 import {
+  getEngineToolId,
   getRelatedTools,
   getToolBySlug,
   getToolCategoryById,
   getTools,
+  getToolVariants,
 } from "@/lib/tools/tool-registry";
 
 interface ToolPageProps {
   params: Promise<{ toolSlug: string }>;
 }
-
 
 /**
  * Prebuilds every available tool route.
@@ -86,8 +87,9 @@ export default async function ToolPage({ params }: ToolPageProps): Promise<React
         guide={content ? <ToolGuide content={content} extras={getToolExtras(tool.id)} idPrefix={tool.slug} toolName={tool.name} /> : undefined}
         relatedTools={getRelatedTools(tool)}
         tool={tool}
+        variants={getToolVariants(tool.id)}
       >
-        <ToolRenderer toolId={tool.id} />
+        <ToolRenderer preset={tool.variant?.preset} toolId={getEngineToolId(tool)} />
       </ToolPageShell>
     </>
   );

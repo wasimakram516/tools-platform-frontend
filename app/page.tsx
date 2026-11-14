@@ -12,7 +12,7 @@ import { HiddenHeading } from "@/components/ui/hidden-heading";
 import { FAQ_ITEMS } from "@/lib/home-content";
 import { buildPageMetadata, faqJsonLd, organizationJsonLd, SITE_DESCRIPTION, websiteJsonLd } from "@/lib/seo";
 import { BRAND_DESCRIPTOR, BRAND_TAGLINE_BEATS } from "@/lib/site-config";
-import { getAvailableToolCategories, getFeaturedTools, getToolsByCategory } from "@/lib/tools/tool-registry";
+import { getAvailableToolCategories, getBaseToolsByCategory, getFeaturedTools } from "@/lib/tools/tool-registry";
 
 /**
  * Lists the categories and tools a visitor can use today, for the popular row and category tiles.
@@ -21,7 +21,7 @@ function browsableCategories(): BrowsableCategory[] {
   return getAvailableToolCategories()
     .map((category) => ({
       category,
-      tools: getToolsByCategory(category.id).filter((tool) => tool.status === "available"),
+      tools: getBaseToolsByCategory(category.id),
     }))
     .filter((entry) => entry.tools.length > 0);
 }

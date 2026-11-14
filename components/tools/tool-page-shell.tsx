@@ -14,16 +14,20 @@ interface ToolPageShellProps extends PropsWithChildren {
   guide?: ReactNode;
   tool: ToolDefinition;
   relatedTools: readonly ToolDefinition[];
+  /** Pages made for one job with this tool, such as PNG to JPG, linked as shortcuts. */
+  variants?: readonly ToolDefinition[];
 }
 
 /**
- * Renders the consistent context, privacy details, workspace, and a quiet line of related tools.
+ * Renders the consistent context, privacy details, workspace, and quiet lines of shortcuts (pages
+ * made for one job with this tool) and related tools.
  */
 export function ToolPageShell({
   category,
   guide,
   tool,
   relatedTools,
+  variants = [],
   children,
 }: ToolPageShellProps): ReactNode {
   return (
@@ -53,6 +57,7 @@ export function ToolPageShell({
           <Typography color="text.secondary" sx={{ fontSize: "0.85rem" }}>
             Last updated <time dateTime={tool.updatedAt}>{formatIsoDate(tool.updatedAt)}</time>
           </Typography>
+          <RelatedToolLinks heading="Shortcuts" headingId="tool-shortcuts-heading" tools={variants} />
           <RelatedToolLinks tools={relatedTools} />
         </Stack>
       </Container>

@@ -9,6 +9,7 @@ import {
   getToolCategoryBySlug,
   getTools,
   getToolsByCategory,
+  getToolVariants,
 } from "./tool-registry";
 
 describe("tool registry", () => {
@@ -73,6 +74,8 @@ describe("tool registry", () => {
       expect(tool.relatedToolIds, `${tool.id} links to itself`).not.toContain(tool.id);
       expect(related.length, `${tool.id} links to a tool that does not exist`).toBe(tool.relatedToolIds.length);
       related.forEach((relatedTool) => linkedTo.add(relatedTool.id));
+      // A tool page also links to the pages made for one job with it, as shortcuts.
+      getToolVariants(tool.id).forEach((variant) => linkedTo.add(variant.id));
     }
 
     for (const tool of available) {

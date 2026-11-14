@@ -1,4 +1,5 @@
 import type { FaqEntry } from "@/lib/seo";
+import { VARIANT_CONTENT } from "@/lib/tools/variant-content";
 
 /**
  * The words a tool page adds for readers and for search engines, beyond the tool itself.
@@ -15,10 +16,10 @@ export interface ToolContent {
 }
 
 /**
- * Content for every available tool, keyed by the tool's registry id. A test makes sure that
- * every available tool has an entry, with the right shape and length.
+ * Content for every base tool, keyed by the tool's registry id. Pages made for one job with a
+ * tool have theirs in variant-content.ts.
  */
-export const TOOL_CONTENT: Readonly<Record<string, ToolContent>> = {
+const BASE_TOOL_CONTENT: Readonly<Record<string, ToolContent>> = {
   "DAT-01": {
     faqs: [
       {
@@ -1135,6 +1136,12 @@ export const TOOL_CONTENT: Readonly<Record<string, ToolContent>> = {
     ],
   },
 };
+
+/**
+ * Content for every available tool page, keyed by registry id. A test makes sure that every
+ * available tool has an entry, with the right shape and length.
+ */
+export const TOOL_CONTENT: Readonly<Record<string, ToolContent>> = { ...BASE_TOOL_CONTENT, ...VARIANT_CONTENT };
 
 /**
  * Finds the extra content for a tool, if it has any.

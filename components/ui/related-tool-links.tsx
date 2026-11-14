@@ -5,6 +5,10 @@ import { ToolIcon } from "@/components/ui/tool-icon";
 import type { ToolDefinition } from "@/types/tool";
 
 interface RelatedToolLinksProps {
+  /** The label before the links. */
+  heading?: string;
+  /** The heading's id, unique on the page. */
+  headingId?: string;
   tools: readonly ToolDefinition[];
 }
 
@@ -12,24 +16,28 @@ interface RelatedToolLinksProps {
  * A single quiet line of links to related tools: a small label, then a rounded pill for each tool
  * with its icon. It replaces a row of cards so the tool itself stays the focus of the page.
  */
-export function RelatedToolLinks({ tools }: RelatedToolLinksProps): ReactNode {
+export function RelatedToolLinks({
+  heading = "Related tools",
+  headingId = "related-tools-heading",
+  tools,
+}: RelatedToolLinksProps): ReactNode {
   if (tools.length === 0) {
     return null;
   }
 
   return (
     <Box
-      aria-labelledby="related-tools-heading"
+      aria-labelledby={headingId}
       component="nav"
       sx={{ alignItems: "center", display: "flex", flexWrap: "wrap", gap: 1.25, pt: 1 }}
     >
       <Typography
         color="text.secondary"
         component="h2"
-        id="related-tools-heading"
+        id={headingId}
         sx={{ fontSize: "0.85rem", fontWeight: 700, letterSpacing: "0.01em", mr: 0.5 }}
       >
-        Related tools
+        {heading}
       </Typography>
       <Box component="ul" sx={{ display: "contents", listStyle: "none", m: 0, p: 0 }}>
         {tools.map((tool) => (

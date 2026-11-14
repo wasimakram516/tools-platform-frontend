@@ -1,4 +1,5 @@
 import type { IconKey } from "@/components/ui/tool-icon";
+import type { ToolPreset } from "@/lib/tools/tool-preset";
 
 export type ProcessingMode = "browser" | "worker" | "wasm" | "server";
 
@@ -34,4 +35,16 @@ export interface ToolDefinition {
   /** The date this tool, or its page, last meaningfully changed (YYYY-MM-DD). Used for the sitemap. */
   updatedAt: string;
   icon: IconKey;
+  /**
+   * Set on a page made for one job that another tool already does, such as PNG to JPG. The page
+   * gets its own address, title, and questions, and opens the base tool with these settings.
+   */
+  variant?: ToolVariant;
+}
+
+export interface ToolVariant {
+  /** The registry id of the tool whose component this page uses. */
+  baseToolId: string;
+  /** The settings the base tool opens with. */
+  preset: ToolPreset;
 }

@@ -48,7 +48,7 @@ export const USE_CASES: readonly UseCaseGroup[] = [
     links: [
       { label: "Format JSON", slug: "json-formatter" },
       { label: "Decode a JWT", slug: "jwt-decoder" },
-      { label: "Generate a hash", slug: "hash-generator" },
+      { label: "Make a SHA-256 hash", slug: "sha256-hash-generator" },
       { label: "Encode Base64", slug: "base64-encoder-decoder" },
     ],
     title: "Developers",
@@ -68,7 +68,7 @@ export const USE_CASES: readonly UseCaseGroup[] = [
     icon: "owners",
     id: "owners",
     links: [
-      { label: "Compress images", slug: "image-compressor-converter" },
+      { label: "Compress an image to 100 KB", slug: "compress-image-to-100kb" },
       { label: "Resize and crop an image", slug: "image-resizer" },
       { label: "Make a favicon", slug: "favicon-generator" },
       { label: "Create a QR code", slug: "qr-code-generator" },
@@ -82,7 +82,7 @@ export const USE_CASES: readonly UseCaseGroup[] = [
       { label: "Work out an age", slug: "age-calculator" },
       { label: "Convert an Excel date", slug: "excel-date-converter" },
       { label: "Generate a password", slug: "password-generator" },
-      { label: "Pick a winner or roll dice", slug: "random-number-generator" },
+      { label: "Pick a random winner", slug: "random-name-picker" },
     ],
     title: "Anyone with a quick task",
   },
