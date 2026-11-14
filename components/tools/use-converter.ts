@@ -27,6 +27,8 @@ interface UseConverterInput<Value extends string> {
   /** Turns the input into the output for one direction. It must not throw. */
   convert: (input: string, mode: Value) => DataConversionResult;
   directions: readonly [ConverterDirection<Value>, ConverterDirection<Value>];
+  /** The direction to open with. The first direction is used when it is missing or unknown. */
+  initialMode?: string;
 }
 
 /**
@@ -34,8 +36,10 @@ interface UseConverterInput<Value extends string> {
  * actions on it. The conversion runs as the text changes. The text is deferred a moment so that
  * typing stays smooth even with a large input.
  */
-export function useConverter<Value extends string>({ convert, directions }: UseConverterInput<Value>) {
-  const [mode, setMode] = useState<Value>(directions[0].value);
+export function useConverter<Value extends string>({ convert, directions, initialMode }: UseConverterInput<Value>) {
+  const [mode, setMode] = useState<Value>(
+    () => directions.find((entry) => entry.value === initialMode)?.value ?? directions[0].value,
+  );
   const [input, setInput] = useState("");
   const [status, setStatus] = useState("");
   const deferredInput = useDeferredValue(input);

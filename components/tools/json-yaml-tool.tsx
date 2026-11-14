@@ -8,6 +8,7 @@ import { ConverterTool } from "@/components/tools/converter-tool";
 import { INDENT_OPTIONS, ToolbarSelect, type ToolbarSelectOption } from "@/components/tools/converter-options";
 import { OptionSwitch } from "@/components/tools/option-switch";
 import type { ConverterDirection } from "@/components/tools/use-converter";
+import type { ToolPresetProps } from "@/lib/tools/tool-preset";
 import { jsonToYaml, yamlToJson } from "@/lib/tools/data/yaml-json";
 
 type Mode = "yamlToJson" | "jsonToYaml";
@@ -51,12 +52,13 @@ const YAML_INDENT_OPTIONS: readonly ToolbarSelectOption<number>[] = INDENT_OPTIO
  * Converts YAML to JSON and JSON to YAML, live as you type. It follows YAML 1.2, so words such
  * as yes and no stay text, and it reports where a mistake is.
  */
-export function JsonYamlTool(): ReactNode {
+export function JsonYamlTool({ preset }: ToolPresetProps = {}): ReactNode {
   const [indent, setIndent] = useState(2);
   const [sortKeys, setSortKeys] = useState(false);
 
   return (
     <ConverterTool
+      preset={preset}
       convert={(input, mode) =>
         mode === "yamlToJson" ? yamlToJson(input, { indent }) : jsonToYaml(input, { indent, sortKeys })
       }

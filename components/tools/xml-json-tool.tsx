@@ -9,6 +9,7 @@ import { ConverterTool } from "@/components/tools/converter-tool";
 import { INDENT_OPTIONS, ToolbarSelect } from "@/components/tools/converter-options";
 import { OptionSwitch } from "@/components/tools/option-switch";
 import type { ConverterDirection } from "@/components/tools/use-converter";
+import type { ToolPresetProps } from "@/lib/tools/tool-preset";
 import { jsonToXml, xmlToJson } from "@/lib/tools/data/xml-json";
 
 type Mode = "xmlToJson" | "jsonToXml";
@@ -53,7 +54,7 @@ const DIRECTIONS: readonly [ConverterDirection<Mode>, ConverterDirection<Mode>] 
  * Attributes become keys that start with @, text beside child elements goes under #text, and
  * repeated elements become lists.
  */
-export function XmlJsonTool(): ReactNode {
+export function XmlJsonTool({ preset }: ToolPresetProps = {}): ReactNode {
   const [includeAttributes, setIncludeAttributes] = useState(true);
   const [inferTypes, setInferTypes] = useState(false);
   const [indent, setIndent] = useState(2);
@@ -62,6 +63,7 @@ export function XmlJsonTool(): ReactNode {
 
   return (
     <ConverterTool
+      preset={preset}
       convert={(input, mode) =>
         mode === "xmlToJson"
           ? xmlToJson(input, { includeAttributes, indent, inferTypes })

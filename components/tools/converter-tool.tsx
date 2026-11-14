@@ -13,6 +13,7 @@ import { ToolFooter, ToolWorkspace } from "@/components/tools/tool-workspace";
 import { useConverter, type ConverterDirection, type ConverterState } from "@/components/tools/use-converter";
 import type { DataConversionResult } from "@/lib/tools/data/csv-json";
 import { MAX_DATA_INPUT_CHARACTERS } from "@/lib/tools/data/csv";
+import type { ToolPreset } from "@/lib/tools/tool-preset";
 
 interface ConverterControlsProps<Value extends string> {
   directions: readonly [ConverterDirection<Value>, ConverterDirection<Value>];
@@ -120,6 +121,8 @@ interface ConverterToolProps<Value extends string> {
   idPrefix: string;
   /** Settings for the chosen direction, shown beside the direction toggle. */
   options?: (mode: Value) => ReactNode;
+  /** The settings to open with; "direction" names the direction, such as jsonToCsv. */
+  preset?: ToolPreset;
   toggleLabel: string;
   workspaceLabel: string;
 }
@@ -134,10 +137,11 @@ export function ConverterTool<Value extends string>({
   idleMessage,
   idPrefix,
   options,
+  preset,
   toggleLabel,
   workspaceLabel,
 }: ConverterToolProps<Value>): ReactNode {
-  const state = useConverter({ convert, directions });
+  const state = useConverter({ convert, directions, initialMode: preset?.direction });
 
   return (
     <ToolWorkspace

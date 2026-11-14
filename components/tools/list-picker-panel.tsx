@@ -23,6 +23,7 @@ import {
   type ListResult,
   type TeamsResult,
 } from "@/lib/tools/generators/random-tools";
+import { presetChoice, type ToolPreset } from "@/lib/tools/tool-preset";
 import { FONT_HEADING } from "@/theme/typography";
 import { SURFACE_RADIUS } from "@/theme/surface";
 
@@ -40,10 +41,13 @@ const SPLIT_OPTIONS = [
   { label: "Team size", tooltip: "Say how many people go in each team", value: "size" },
 ] as const;
 
+const ACTION_VALUES: readonly Action[] = ACTIONS.map((option) => option.value);
 const MAX_LIST_CHARACTERS = 200_000;
 
 interface ListPickerPanelProps {
   onStatus: (message: string) => void;
+  /** The settings to open with; "action" chooses pick, shuffle, or teams. */
+  preset?: ToolPreset;
   source?: Uint32Source;
 }
 
@@ -51,9 +55,9 @@ interface ListPickerPanelProps {
  * Picks winners from a list of names, shuffles it, or splits it into fair teams, using the
  * browser's secure random numbers.
  */
-export function ListPickerPanel({ onStatus, source }: ListPickerPanelProps): ReactNode {
+export function ListPickerPanel({ onStatus, preset, source }: ListPickerPanelProps): ReactNode {
   const [text, setText] = useState("");
-  const [action, setAction] = useState<Action>("pick");
+  const [action, setAction] = useState<Action>(() => presetChoice(preset, "action", ACTION_VALUES, "pick"));
   const [winners, setWinners] = useState("1");
   const [splitBy, setSplitBy] = useState<SplitBy>("teams");
   const [splitAmount, setSplitAmount] = useState("2");

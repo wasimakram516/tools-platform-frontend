@@ -18,8 +18,10 @@ import {
   type MarginMode,
   type PercentageMode,
 } from "@/lib/tools/calculators/percentage-summary";
+import { presetChoice, type ToolPresetProps } from "@/lib/tools/tool-preset";
 
 const DEFAULT_MODE: PercentageMode = "percentOf";
+const MODES = PERCENTAGE_MODE_OPTIONS.map((option) => option.value);
 const DEFAULT_MARGIN_MODE: MarginMode = "fromPrice";
 
 /**
@@ -27,8 +29,9 @@ const DEFAULT_MARGIN_MODE: MarginMode = "fromPrice";
  * number is of another, percentage change, raising or lowering a number, discounts, and margin
  * and markup. The answer updates as the numbers are typed.
  */
-export function PercentageCalculatorTool(): ReactNode {
-  const [mode, setMode] = useState<PercentageMode>(DEFAULT_MODE);
+export function PercentageCalculatorTool({ preset }: ToolPresetProps = {}): ReactNode {
+  const startMode = presetChoice(preset, "mode", MODES, DEFAULT_MODE);
+  const [mode, setMode] = useState<PercentageMode>(startMode);
   const [marginMode, setMarginMode] = useState<MarginMode>(DEFAULT_MARGIN_MODE);
   const [direction, setDirection] = useState<"increase" | "decrease">("increase");
   const [first, setFirst] = useState("");
@@ -39,10 +42,10 @@ export function PercentageCalculatorTool(): ReactNode {
   const answer = outcome && "headline" in outcome ? outcome : null;
 
   /**
-   * Clears the numbers and returns to the first mode.
+   * Clears the numbers and returns to the mode the page opened with.
    */
   function handleReset(): void {
-    setMode(DEFAULT_MODE);
+    setMode(startMode);
     setMarginMode(DEFAULT_MARGIN_MODE);
     setDirection("increase");
     setFirst("");

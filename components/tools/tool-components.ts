@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import type { ComponentType } from "react";
+import type { ToolPresetProps } from "@/lib/tools/tool-preset";
 
 /**
  * Maps a registry tool id to the component that renders its workspace.
@@ -11,9 +12,10 @@ import type { ComponentType } from "react";
  * Import this map only from ToolRenderer, which is a client component. A server component that
  * imports it puts every tool's code on every tool page.
  *
- * Every tool with status "available" in the registry must have an entry here; a test enforces it.
+ * Every available tool that is not a variant of another must have an entry here; a test enforces
+ * it. A variant, such as PNG to JPG, uses its base tool's entry and passes a preset.
  */
-export const TOOL_COMPONENTS: Readonly<Record<string, ComponentType>> = {
+const LOADED_TOOLS = {
   "DEV-01": dynamic(() => import("@/components/tools/json-formatter-tool").then((module) => module.JsonFormatterTool)),
   "DEV-04": dynamic(() => import("@/components/tools/base64-encoder-decoder-tool").then((module) => module.Base64EncoderDecoderTool)),
   "DEV-05": dynamic(() => import("@/components/tools/url-encoder-decoder-tool").then((module) => module.UrlEncoderDecoderTool)),
@@ -53,3 +55,9 @@ export const TOOL_COMPONENTS: Readonly<Record<string, ComponentType>> = {
   "TXT-07": dynamic(() => import("@/components/tools/sort-lines-tool").then((module) => module.SortLinesTool)),
   "TXT-08": dynamic(() => import("@/components/tools/remove-duplicate-lines-tool").then((module) => module.RemoveDuplicateLinesTool)),
 };
+
+/**
+ * The same map, typed for ToolRenderer. Every tool is given an optional preset; the tools that
+ * have variant pages read it, and the rest ignore it.
+ */
+export const TOOL_COMPONENTS = LOADED_TOOLS as unknown as Readonly<Record<string, ComponentType<ToolPresetProps>>>;

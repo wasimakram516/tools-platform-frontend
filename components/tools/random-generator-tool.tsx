@@ -12,6 +12,7 @@ import { ModeToggle } from "@/components/tools/mode-toggle";
 import { RandomNumbersPanel } from "@/components/tools/random-numbers-panel";
 import { ToolFooter, ToolWorkspace } from "@/components/tools/tool-workspace";
 import type { Uint32Source } from "@/lib/tools/generators/random";
+import { presetChoice, type ToolPreset } from "@/lib/tools/tool-preset";
 
 type Mode = "numbers" | "dice" | "list";
 
@@ -21,7 +22,11 @@ const MODES = [
   { icon: <FormatListNumberedIcon />, label: "List picker", tooltip: "Pick winners, shuffle, or make teams", value: "list" },
 ] as const;
 
+const MODE_VALUES: readonly Mode[] = MODES.map((option) => option.value);
+
 interface RandomGeneratorToolProps {
+  /** The settings to open with, for a page made for one job: mode, and the list picker's action. */
+  preset?: ToolPreset;
   /** Supplies random numbers; replaced in tests so the results are predictable. */
   source?: Uint32Source;
 }
@@ -30,8 +35,8 @@ interface RandomGeneratorToolProps {
  * Random numbers, dice and coins, and a list picker for winners, shuffles, and teams, all drawn
  * with the browser's secure random numbers on this device.
  */
-export function RandomGeneratorTool({ source }: RandomGeneratorToolProps = {}): ReactNode {
-  const [mode, setMode] = useState<Mode>("numbers");
+export function RandomGeneratorTool({ preset, source }: RandomGeneratorToolProps = {}): ReactNode {
+  const [mode, setMode] = useState<Mode>(() => presetChoice(preset, "mode", MODE_VALUES, "numbers"));
   const [statusMessage, setStatusMessage] = useState("");
 
   // Every panel stays mounted and is only hidden, so a list you typed is still there when you come back.
@@ -47,7 +52,7 @@ export function RandomGeneratorTool({ source }: RandomGeneratorToolProps = {}): 
         <DiceCoinPanel onStatus={setStatusMessage} source={source} />
       </Box>
       <Box hidden={mode !== "list"}>
-        <ListPickerPanel onStatus={setStatusMessage} source={source} />
+        <ListPickerPanel onStatus={setStatusMessage} preset={preset} source={source} />
       </Box>
       <ToolFooter
         message={

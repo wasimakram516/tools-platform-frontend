@@ -41,6 +41,7 @@ import {
 } from "@/lib/tools/generators/qr-payloads";
 import { renderQrPng, type PngOptions } from "@/lib/tools/generators/qr-render";
 import { FONT_MONO } from "@/theme/typography";
+import { presetChoice, type ToolPreset } from "@/lib/tools/tool-preset";
 import { SURFACE_RADIUS } from "@/theme/surface";
 
 type Kind = "url" | "text" | "wifi" | "contact" | "email" | "phone" | "sms" | "whatsapp";
@@ -55,6 +56,8 @@ const KINDS: readonly { label: string; value: Kind }[] = [
   { label: "Text message (SMS)", value: "sms" },
   { label: "WhatsApp message", value: "whatsapp" },
 ];
+
+const KIND_VALUES: readonly Kind[] = KINDS.map((option) => option.value);
 
 const SECURITY_OPTIONS = [
   { label: "WPA, WPA2, or WPA3", value: "WPA" },
@@ -94,6 +97,8 @@ const INITIAL_FIELDS: Fields = {
 interface QrCodeToolProps {
   /** Saves a file; replaced in tests so nothing is downloaded. */
   download?: (blob: Blob, fileName: string) => void;
+  /** The settings to open with, for a page made for one kind of code, such as Wi-Fi. */
+  preset?: ToolPreset;
   /** Draws the PNG; replaced in tests because jsdom has no canvas. */
   renderPng?: (code: QrCode, options: PngOptions) => Promise<Blob | null>;
 }
@@ -126,8 +131,8 @@ function buildPayload(kind: Kind, fields: Fields): PayloadResult {
  * Makes QR codes for web addresses, text, Wi-Fi networks, contact cards, email, phone numbers,
  * and messages, live as you type, and downloads them as PNG or SVG. Nothing is uploaded.
  */
-export function QrCodeTool({ download = downloadBlob, renderPng = renderQrPng }: QrCodeToolProps = {}): ReactNode {
-  const [kind, setKind] = useState<Kind>("url");
+export function QrCodeTool({ download = downloadBlob, preset, renderPng = renderQrPng }: QrCodeToolProps = {}): ReactNode {
+  const [kind, setKind] = useState<Kind>(() => presetChoice(preset, "kind", KIND_VALUES, "url"));
   const [fields, setFields] = useState<Fields>(INITIAL_FIELDS);
   const [level, setLevel] = useState<ErrorCorrection>("M");
   const [quietZone, setQuietZone] = useState(RECOMMENDED_QUIET_ZONE);

@@ -39,6 +39,7 @@ import {
   type RenderResult,
 } from "@/lib/tools/image/image-processing";
 import { createZip } from "@/lib/tools/image/zip";
+import { presetChoice, type ToolPreset } from "@/lib/tools/tool-preset";
 
 const DEBOUNCE_MS = 250;
 const DEFAULT_QUALITY = 80;
@@ -75,9 +76,33 @@ interface Outcome {
   width?: number;
 }
 
+const FORMAT_SETTINGS = FORMAT_OPTIONS.map((option) => option.value);
+const SIZE_MODES = SIZE_MODE_OPTIONS.map((option) => option.value);
+const TARGET_PRESET_VALUES = TARGET_PRESETS_KB.map(String);
+
+interface StartingSettings {
+  format: FormatSetting;
+  sizeMode: "quality" | "target";
+  targetKb: string;
+}
+
+/**
+ * Works out the settings to open with. A page for one job, such as PNG to JPG or compressing to
+ * 100 KB, passes a preset; anything it does not set keeps the usual default.
+ */
+function startingSettings(preset: ToolPreset | undefined): StartingSettings {
+  return {
+    format: presetChoice(preset, "format", FORMAT_SETTINGS, "webp"),
+    sizeMode: presetChoice(preset, "sizeMode", SIZE_MODES, "quality"),
+    targetKb: presetChoice(preset, "targetKb", [...TARGET_PRESET_VALUES, ""], ""),
+  };
+}
+
 interface ImageCompressorToolProps {
   /** Saves a file; replaced in tests so nothing is downloaded. */
   download?: (blob: Blob, fileName: string) => void;
+  /** The settings to open with, for a page made for one job. */
+  preset?: ToolPreset;
   /** Reads and writes images; replaced in tests because jsdom has no canvas. */
   processor?: ImageProcessor;
 }
@@ -90,15 +115,17 @@ let nextId = 0;
  */
 export function ImageCompressorTool({
   download = downloadBlob,
+  preset,
   processor = browserImageProcessor,
 }: ImageCompressorToolProps = {}): ReactNode {
+  const start = startingSettings(preset);
   const [sources, setSources] = useState<Source[]>([]);
   const [outcomes, setOutcomes] = useState<Record<string, Outcome>>({});
   const [rejected, setRejected] = useState<string[]>([]);
-  const [format, setFormat] = useState<FormatSetting>("webp");
+  const [format, setFormat] = useState<FormatSetting>(start.format);
   const [quality, setQuality] = useState(DEFAULT_QUALITY);
-  const [sizeMode, setSizeMode] = useState<"quality" | "target">("quality");
-  const [targetKb, setTargetKb] = useState("");
+  const [sizeMode, setSizeMode] = useState<"quality" | "target">(start.sizeMode);
+  const [targetKb, setTargetKb] = useState(start.targetKb);
   const [maxWidth, setMaxWidth] = useState("");
   const [keepSmaller, setKeepSmaller] = useState(true);
   const [background, setBackground] = useState("#ffffff");
@@ -297,10 +324,10 @@ export function ImageCompressorTool({
     setSources([]);
     setOutcomes({});
     setRejected([]);
-    setFormat("webp");
+    setFormat(start.format);
     setQuality(DEFAULT_QUALITY);
-    setSizeMode("quality");
-    setTargetKb("");
+    setSizeMode(start.sizeMode);
+    setTargetKb(start.targetKb);
     setMaxWidth("");
     setKeepSmaller(true);
     setBackground("#ffffff");

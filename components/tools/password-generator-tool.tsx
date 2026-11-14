@@ -40,6 +40,7 @@ import {
   type TokenOptions,
 } from "@/lib/tools/generators/password";
 import type { Uint32Source } from "@/lib/tools/generators/random";
+import { presetChoice, type ToolPreset } from "@/lib/tools/tool-preset";
 
 type Mode = "password" | "passphrase" | "pin" | "token";
 
@@ -98,7 +99,18 @@ const INITIAL_SETTINGS: Settings = {
   token: { alphabet: "hex", length: 32 },
 };
 
+const MODE_VALUES: readonly Mode[] = MODE_OPTIONS.map((option) => option.value);
+
+/**
+ * The settings to open with: the usual ones, in the mode a page made for one job asks for.
+ */
+function startingSettings(preset: ToolPreset | undefined): Settings {
+  return { ...INITIAL_SETTINGS, mode: presetChoice(preset, "mode", MODE_VALUES, INITIAL_SETTINGS.mode) };
+}
+
 interface PasswordGeneratorToolProps {
+  /** The settings to open with, for a page made for one job, such as passphrases. */
+  preset?: ToolPreset;
   /** Supplies random numbers; replaced in tests so the output is predictable. */
   source?: Uint32Source;
 }
@@ -123,8 +135,8 @@ function generate(settings: Settings, source?: Uint32Source): GenerationResult {
  * Generates random passwords, passphrases, PINs, and tokens with the browser's secure random
  * numbers. Everything happens on this device, and nothing is sent or stored.
  */
-export function PasswordGeneratorTool({ source }: PasswordGeneratorToolProps = {}): ReactNode {
-  const [settings, setSettings] = useState<Settings>(INITIAL_SETTINGS);
+export function PasswordGeneratorTool({ preset, source }: PasswordGeneratorToolProps = {}): ReactNode {
+  const [settings, setSettings] = useState<Settings>(() => startingSettings(preset));
   const [result, setResult] = useState<GenerationResult | null>(null);
   const [statusMessage, setStatusMessage] = useState("");
 
@@ -133,7 +145,7 @@ export function PasswordGeneratorTool({ source }: PasswordGeneratorToolProps = {
     // Setting state here once after mounting is the point: it is how the browser's random source
     // reaches the page without a mismatch with the server's output.
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setResult(generate(INITIAL_SETTINGS, source));
+    setResult(generate(settings, source));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

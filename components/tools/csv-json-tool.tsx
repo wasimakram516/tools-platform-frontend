@@ -9,6 +9,7 @@ import { INDENT_OPTIONS, ToolbarSelect } from "@/components/tools/converter-opti
 import { OptionSwitch } from "@/components/tools/option-switch";
 import type { ConverterDirection } from "@/components/tools/use-converter";
 import { DELIMITERS, type Delimiter } from "@/lib/tools/data/csv";
+import type { ToolPresetProps } from "@/lib/tools/tool-preset";
 import { csvToJson, jsonToCsv } from "@/lib/tools/data/csv-json";
 
 type Mode = "csvToJson" | "jsonToCsv";
@@ -53,7 +54,7 @@ const INPUT_DELIMITER_OPTIONS = [{ label: "Detect it", value: "auto" as const },
  * separator for you, can turn numbers and true or false into JSON values, and can flatten nested
  * objects into columns.
  */
-export function CsvJsonTool(): ReactNode {
+export function CsvJsonTool({ preset }: ToolPresetProps = {}): ReactNode {
   const [inputDelimiter, setInputDelimiter] = useState<Delimiter | "auto">("auto");
   const [hasHeader, setHasHeader] = useState(true);
   const [inferTypes, setInferTypes] = useState(true);
@@ -67,6 +68,7 @@ export function CsvJsonTool(): ReactNode {
 
   return (
     <ConverterTool
+      preset={preset}
       convert={(input, mode) =>
         mode === "csvToJson"
           ? csvToJson(input, { delimiter: inputDelimiter, hasHeader, indent, inferTypes, trim })

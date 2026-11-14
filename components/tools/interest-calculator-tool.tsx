@@ -19,8 +19,11 @@ import {
   COMPOUNDING_OPTIONS,
   MAX_TERM_YEARS,
 } from "@/lib/tools/calculators/interest";
+import { presetChoice, type ToolPresetProps } from "@/lib/tools/tool-preset";
 
 type InterestMode = "compound" | "simple";
+
+const INTEREST_MODES: readonly InterestMode[] = ["compound", "simple"];
 
 const MONTHS_PER_YEAR = 12;
 const DEFAULT_COMPOUNDING = "12";
@@ -34,8 +37,9 @@ const COMPOUNDING_SELECT_OPTIONS = COMPOUNDING_OPTIONS.map((option) => ({
  * Calculates simple or compound interest, with an optional amount added every month, and shows
  * the balance year by year.
  */
-export function InterestCalculatorTool(): ReactNode {
-  const [mode, setMode] = useState<InterestMode>("compound");
+export function InterestCalculatorTool({ preset }: ToolPresetProps = {}): ReactNode {
+  const startMode = presetChoice(preset, "mode", INTEREST_MODES, "compound");
+  const [mode, setMode] = useState<InterestMode>(startMode);
   const [principal, setPrincipal] = useState("");
   const [rate, setRate] = useState("");
   const [years, setYears] = useState("");
@@ -53,10 +57,10 @@ export function InterestCalculatorTool(): ReactNode {
   const result = hasInputs ? (mode === "simple" ? calculateSimpleInterest(input) : calculateCompoundInterest(input)) : null;
 
   /**
-   * Clears every field and goes back to compound interest.
+   * Clears every field and goes back to the kind of interest the page opened with.
    */
   function handleReset(): void {
-    setMode("compound");
+    setMode(startMode);
     setPrincipal("");
     setRate("");
     setYears("");
