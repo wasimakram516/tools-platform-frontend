@@ -4,11 +4,13 @@ import type { CSSProperties, ReactNode } from "react";
 import { AboutSection } from "@/components/home/about-section";
 import { HomeSearch } from "@/components/home/home-search";
 import { FaqSection } from "@/components/home/faq-section";
+import { GuidesSection } from "@/components/home/guides-section";
 import { ToolBrowser, type BrowsableCategory } from "@/components/home/tool-browser";
 import { WhySection } from "@/components/home/why-section";
 import { PageFrame } from "@/components/layout/page-frame";
 import { JsonLd } from "@/components/seo/json-ld";
 import { HiddenHeading } from "@/components/ui/hidden-heading";
+import { getSearchableGuides } from "@/lib/guides/guides";
 import { FAQ_ITEMS } from "@/lib/home-content";
 import { buildPageMetadata, faqJsonLd, organizationJsonLd, SITE_DESCRIPTION, websiteJsonLd } from "@/lib/seo";
 import { BRAND_DESCRIPTOR, BRAND_TAGLINE_BEATS } from "@/lib/site-config";
@@ -47,7 +49,7 @@ export function generateMetadata(): Metadata {
 
 /**
  * Renders the home page: what the site is, popular tools, one tile per category,
- * who it is for, why to use it, and the frequently asked questions. The page frame adds the
+ * who it is for, the guides, why to use it, and the frequently asked questions. The page frame adds the
  * closing "suggest a tool" band.
  */
 export default function HomePage(): ReactNode {
@@ -92,7 +94,7 @@ export default function HomePage(): ReactNode {
         >
           Format JSON, compress images, count words, work out dates, and more. Free to use, no signup, and every tool shows how it handles your data.
         </Typography>
-        <HomeSearch />
+        <HomeSearch guides={getSearchableGuides()} />
       </Container>
       </Box>
 
@@ -107,6 +109,7 @@ export default function HomePage(): ReactNode {
       </Container>
 
       <AboutSection />
+      <GuidesSection />
       <WhySection />
       <FaqSection />
     </PageFrame>

@@ -3,6 +3,7 @@ import type { PropsWithChildren } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ToolSearch, type ToolSearchProps } from "@/components/search/tool-search";
 import { AppThemeProvider } from "@/components/providers/app-theme-provider";
+import { getSearchableGuides } from "@/lib/guides/guides";
 
 vi.mock("@mui/material-nextjs/v16-appRouter", () => ({
   AppRouterCacheProvider: ({ children }: PropsWithChildren) => children,
@@ -148,5 +149,61 @@ describe("ToolSearch in the floating dialog", () => {
 
     expect(screen.getByText("Popular tools")).toBeInTheDocument();
     expect(screen.getAllByRole("option").length).toBeGreaterThan(0);
+  });
+});
+
+describe("ToolSearch with guides", () => {
+  it("lists matching guides after the tools, marked as guides, and counts both", () => {
+    const box = renderSearch({ guides: getSearchableGuides() });
+
+    fireEvent.focus(box);
+    fireEvent.change(box, { target: { value: "jwt" } });
+
+    const options = screen.getAllByRole("option");
+    const guide = screen.getByRole("option", { name: /^Guide: JWT claims/ });
+
+    expect(options[0]).toHaveAttribute("href", "/tools/jwt-decoder");
+    expect(options.at(-1)).toBe(guide);
+    expect(guide).toHaveAttribute("href", "/guides/jwt-claims");
+    expect(screen.getByText("Guides")).toBeInTheDocument();
+    expect(screen.getByRole("listbox")).toHaveAccessibleName("Tools and guides");
+    expect(screen.getByRole("status")).toHaveTextContent(/tools? and 1 guide found\./);
+  });
+
+  it("opens a guide with the arrow keys and Enter", () => {
+    const onNavigate = vi.fn();
+    const box = renderSearch({ guides: getSearchableGuides() }, onNavigate);
+
+    fireEvent.focus(box);
+    fireEvent.change(box, { target: { value: "jwt" } });
+
+    const count = screen.getAllByRole("option").length;
+
+    for (let step = 1; step < count; step += 1) {
+      fireEvent.keyDown(box, { key: "ArrowDown" });
+    }
+
+    fireEvent.keyDown(box, { key: "Enter" });
+
+    expect(push).toHaveBeenCalledWith("/guides/jwt-claims");
+    expect(onNavigate).toHaveBeenCalled();
+  });
+
+  it("shows a guide even when no tool matches", () => {
+    const box = renderSearch({ guides: getSearchableGuides() });
+
+    fireEvent.focus(box);
+    fireEvent.change(box, { target: { value: "instagram caption" } });
+
+    expect(screen.queryByText(/No tools match this search/)).not.toBeInTheDocument();
+    expect(screen.getByRole("option", { name: /^Guide: Character limits/ })).toHaveAttribute("href", "/character-limits");
+  });
+
+  it("does not list guides before anything is typed", () => {
+    const box = renderSearch({ guides: getSearchableGuides(), showPopularWhenEmpty: true });
+
+    fireEvent.focus(box);
+
+    expect(screen.queryByRole("option", { name: /^Guide:/ })).not.toBeInTheDocument();
   });
 });

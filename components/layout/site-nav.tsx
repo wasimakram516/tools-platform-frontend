@@ -269,7 +269,7 @@ export function SiteNav({ data }: SiteNavProps): ReactNode {
 
       {searchOpen ? (
         <Suspense fallback={null}>
-          <SearchMenu onClose={() => setSearchOpen(false)} />
+          <SearchMenu guides={data.guides} onClose={() => setSearchOpen(false)} />
         </Suspense>
       ) : null}
 

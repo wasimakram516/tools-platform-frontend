@@ -3,6 +3,7 @@ import type { PropsWithChildren, ReactNode } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { AppThemeProvider } from "@/components/providers/app-theme-provider";
 import { FAQ_VISIBLE_COUNT } from "@/components/home/faq-section";
+import { getGuides, guidePath } from "@/lib/guides/guides";
 import { FAQ_ITEMS } from "@/lib/home-content";
 import { CONTACT_URL } from "@/lib/site-config";
 import ErrorPage from "./error";
@@ -144,3 +145,27 @@ describe("home page search", () => {
   });
 });
 
+describe("home page guides", () => {
+  it("links to every guide and to the guides page", () => {
+    renderWithTheme(<HomePage />);
+
+    const section = within(screen.getByRole("region", { name: "Guides" }));
+
+    for (const guide of getGuides()) {
+      expect(section.getByRole("link", { name: new RegExp(`^${guide.name}`) })).toHaveAttribute("href", guidePath(guide));
+    }
+
+    expect(section.getByRole("link", { name: "All guides" })).toHaveAttribute("href", "/guides");
+  });
+
+  it("finds guides from the search box too", () => {
+    renderWithTheme(<HomePage />);
+
+    const box = screen.getByRole("combobox", { name: "Search all tools" });
+
+    fireEvent.focus(box);
+    fireEvent.change(box, { target: { value: "regex cheat sheet" } });
+
+    expect(screen.getByRole("option", { name: /^Guide: JavaScript regex cheat sheet/ })).toHaveAttribute("href", "/guides/javascript-regex-cheat-sheet");
+  });
+});

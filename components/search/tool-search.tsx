@@ -2,6 +2,7 @@
 
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ClearIcon from "@mui/icons-material/Clear";
+import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
 import SearchIcon from "@mui/icons-material/Search";
 import { Box, IconButton, InputBase, Typography } from "@mui/material";
 import { useRouter } from "next/navigation";
@@ -9,6 +10,7 @@ import type { ChangeEvent, KeyboardEvent, ReactNode } from "react";
 import { useCallback, useState } from "react";
 import { NextLink } from "@/components/ui/next-link";
 import { ToolIcon } from "@/components/ui/tool-icon";
+import { searchGuides, type SearchableGuide } from "@/lib/guides/guide-search";
 import { getFeaturedTools, getToolCategoryById, getTools } from "@/lib/tools/tool-registry";
 import { searchToolsDetailed } from "@/lib/tools/tool-search";
 import { SURFACE_RADIUS, SURFACE_SHADOW } from "@/theme/surface";
@@ -16,6 +18,7 @@ import { SURFACE_RADIUS, SURFACE_SHADOW } from "@/theme/surface";
 const MAX_QUERY_LENGTH = 80;
 const PILL_HEIGHT = 56;
 const RESULTS_GAP = 1;
+const VISUALLY_HIDDEN = { border: 0, clip: "rect(0 0 0 0)", height: 1, m: -0.125, overflow: "hidden", position: "absolute", width: 1 } as const;
 
 /** The colours of the small text, which depends on what the search box sits on. */
 const TONES = {
@@ -30,6 +33,11 @@ export interface ToolSearchProps {
   clearOnEscape?: boolean;
   /** A small key hint shown while the box is empty, such as "/" or "Esc". */
   hint?: string;
+  /**
+   * Guides to search as well. Matching guides are listed after the tools. They come from the
+   * page, which builds them on the server, so the guides themselves never reach the browser.
+   */
+  guides?: readonly SearchableGuide[];
   /** Used to make every element id on the page unique. */
   idPrefix: string;
   /**
@@ -57,15 +65,37 @@ function categoryNameFor(categoryId: string): string {
   return getToolCategoryById(categoryId)?.name ?? "";
 }
 
+/** One row in the results: a tool or a guide. */
+interface ResultItem {
+  description: string;
+  href: string;
+  icon: ReactNode;
+  id: string;
+  /** Read before the name by assistive technology, such as "Guide". */
+  kind?: string;
+  name: string;
+}
+
+/**
+ * Says how many tools and guides the search found, for screen reader users.
+ */
+function resultSummary(toolCount: number, guideCount: number): string {
+  const tools = `${toolCount} ${toolCount === 1 ? "tool" : "tools"}`;
+
+  return guideCount === 0 ? `${tools} found.` : `${tools} and ${guideCount} ${guideCount === 1 ? "guide" : "guides"} found.`;
+}
+
 /**
  * The tool search, used in the header's floating search and in the box on the home page, so
  * both behave the same way. It is a pill-shaped box with matching tools listed beneath it as
  * rows, which can be clicked or chosen with the arrow keys and Enter. It understands tool names
- * and plain descriptions of the job, such as "shrink an image".
+ * and plain descriptions of the job, such as "shrink an image". Guides that fit the search are
+ * listed after the tools.
  */
 export function ToolSearch({
   autoFocus = false,
   clearOnEscape = false,
+  guides = [],
   hint,
   idPrefix,
   inputId,
@@ -86,9 +116,27 @@ export function ToolSearch({
   // A dropdown shows only while the box, or something inside it, has focus.
   const isOpen = layout === "flow" || focused;
   const wantsList = isSearching || showPopularWhenEmpty;
-  const items = isOpen && wantsList ? (isSearching ? found : getFeaturedTools()) : [];
+  const foundGuides = isSearching ? searchGuides(guides, query) : [];
+  const shownTools = isOpen && wantsList ? (isSearching ? found : getFeaturedTools()) : [];
+  const shownGuides = isOpen ? foundGuides : [];
+  const toolItems: ResultItem[] = shownTools.map((tool) => ({
+    description: tool.shortDescription,
+    href: `/tools/${tool.slug}`,
+    icon: <ToolIcon name={tool.icon} sx={{ color: "primary.main", flexShrink: 0 }} />,
+    id: `${idPrefix}-${tool.id}`,
+    name: tool.name,
+  }));
+  const guideItems: ResultItem[] = shownGuides.map((guide) => ({
+    description: guide.description,
+    href: guide.href,
+    icon: <MenuBookOutlinedIcon sx={{ color: "primary.main", flexShrink: 0 }} />,
+    id: `${idPrefix}-guide-${guide.href.split("/").at(-1) ?? ""}`,
+    kind: "Guide",
+    name: guide.name,
+  }));
+  const items = [...toolItems, ...guideItems];
   const listId = `${idPrefix}-results`;
-  const activeId = items[activeIndex] ? `${idPrefix}-${items[activeIndex].id}` : undefined;
+  const activeId = items[activeIndex]?.id;
   const colours = TONES[tone];
 
   /**
@@ -142,7 +190,7 @@ export function ToolSearch({
 
       if (chosen) {
         event.preventDefault();
-        router.push(`/tools/${chosen.slug}`);
+        router.push(chosen.href);
         onNavigate?.();
       }
     }
@@ -212,12 +260,8 @@ export function ToolSearch({
         ) : null}
       </Box>
 
-      <Typography
-        aria-live="polite"
-        role="status"
-        sx={{ border: 0, clip: "rect(0 0 0 0)", height: 1, m: -0.125, overflow: "hidden", position: "absolute", width: 1 }}
-      >
-        {isSearching ? `${found.length} ${found.length === 1 ? "tool" : "tools"} found.` : ""}
+      <Typography aria-live="polite" role="status" sx={VISUALLY_HIDDEN}>
+        {isSearching ? resultSummary(found.length, foundGuides.length) : ""}
       </Typography>
 
       {isOpen && wantsList ? (
@@ -242,74 +286,107 @@ export function ToolSearch({
               : { minHeight: 0, overflowX: "hidden", overflowY: "auto", pb: 2, pt: 1.5, px: 0.5 }
           }
         >
-          {isSearching && found.length === 0 ? (
+          {items.length === 0 ? (
             <Typography sx={{ color: colours.message, px: 2, py: 1 }}>
               No tools match this search. Try describing the job in a few words, like &quot;compress an image&quot;.
             </Typography>
           ) : (
-            <>
-              <Typography
-                sx={{ color: colours.heading, fontSize: "0.78rem", fontWeight: 700, letterSpacing: "0.06em", pb: 1, px: 2, textTransform: "uppercase" }}
-              >
-                {!isSearching ? "Popular tools" : approximate ? "Closest matches" : "Tools"}
-              </Typography>
-              <Box
-                aria-label="Tools"
-                component="ul"
-                id={listId}
-                role="listbox"
-                sx={{ display: "grid", gap: RESULTS_GAP, gridTemplateColumns: "minmax(0, 1fr)", listStyle: "none", m: 0, p: 0 }}
-              >
-                {items.map((tool, index) => {
-                  const isActive = index === activeIndex;
-
-                  return (
-                    <Box component="li" key={tool.id} role="presentation" sx={{ minWidth: 0 }}>
-                      <Box
-                        aria-selected={isActive}
-                        component={NextLink}
-                        href={`/tools/${tool.slug}`}
-                        id={`${idPrefix}-${tool.id}`}
-                        onClick={onNavigate}
-                        onMouseEnter={() => setActiveIndex(index)}
-                        role="option"
-                        sx={{
-                          alignItems: "center",
-                          bgcolor: layout === "dropdown" ? (isActive ? "action.hover" : "transparent") : "background.paper",
-                          border: "1px solid",
-                          borderColor: layout === "dropdown" ? "transparent" : isActive ? "primary.main" : "divider",
-                          borderRadius: SURFACE_RADIUS,
-                          boxShadow: layout === "dropdown" ? "none" : isActive ? SURFACE_SHADOW : colours.shadow,
-                          color: "text.primary",
-                          display: "flex",
-                          gap: 1.5,
-                          px: 2,
-                          py: 1.25,
-                          textDecoration: "none",
-                          transition: "border-color 120ms ease, box-shadow 120ms ease",
-                        }}
-                      >
-                        <ToolIcon name={tool.icon} sx={{ color: "primary.main", flexShrink: 0 }} />
-                        <Box sx={{ flexGrow: 1, minWidth: 0 }}>
-                          <Typography sx={{ fontWeight: 600 }}>{tool.name}</Typography>
-                          <Typography color="text.secondary" noWrap sx={{ fontSize: "0.85rem" }}>
-                            {tool.shortDescription}
-                          </Typography>
-                        </Box>
-                        <ArrowForwardIcon
-                          aria-hidden="true"
-                          fontSize="small"
-                          sx={{ color: isActive ? "primary.main" : "text.secondary", flexShrink: 0 }}
-                        />
-                      </Box>
-                    </Box>
-                  );
-                })}
-              </Box>
-            </>
+            <Box
+              aria-label={guideItems.length > 0 ? "Tools and guides" : "Tools"}
+              component="ul"
+              id={listId}
+              role="listbox"
+              sx={{ display: "grid", gap: RESULTS_GAP, gridTemplateColumns: "minmax(0, 1fr)", listStyle: "none", m: 0, p: 0 }}
+            >
+              {[
+                { heading: !isSearching ? "Popular tools" : approximate ? "Closest matches" : "Tools", rows: toolItems, start: 0 },
+                { heading: "Guides", rows: guideItems, start: toolItems.length },
+              ]
+                .filter((group) => group.rows.length > 0)
+                .flatMap((group) => [
+                  <Box aria-hidden="true" component="li" key={`heading-${group.heading}`} role="presentation" sx={{ pt: group.start > 0 ? 1.5 : 0 }}>
+                    <Typography
+                      sx={{ color: colours.heading, fontSize: "0.78rem", fontWeight: 700, letterSpacing: "0.06em", pb: 0.5, px: 2, textTransform: "uppercase" }}
+                    >
+                      {group.heading}
+                    </Typography>
+                  </Box>,
+                  ...group.rows.map((item, offset) => (
+                    <SearchResultRow
+                      active={group.start + offset === activeIndex}
+                      item={item}
+                      key={item.id}
+                      layout={layout}
+                      onHover={() => setActiveIndex(group.start + offset)}
+                      onNavigate={onNavigate}
+                      tone={tone}
+                    />
+                  )),
+                ])}
+            </Box>
           )}
         </Box>
       ) : null}
+    </Box>
+  );
+}
+
+interface SearchResultRowProps {
+  active: boolean;
+  item: ResultItem;
+  layout: ToolSearchProps["layout"];
+  onHover: () => void;
+  onNavigate?: () => void;
+  tone: ToolSearchProps["tone"];
+}
+
+/**
+ * One result: an icon, the name, a one line description, and an arrow. In a dropdown the active
+ * row is shaded; in the floating dialog each row is a card and the active one is outlined.
+ */
+function SearchResultRow({ active, item, layout, onHover, onNavigate, tone }: SearchResultRowProps): ReactNode {
+  return (
+    <Box component="li" role="presentation" sx={{ minWidth: 0 }}>
+      <Box
+        aria-selected={active}
+        component={NextLink}
+        href={item.href}
+        id={item.id}
+        onClick={onNavigate}
+        onMouseEnter={onHover}
+        role="option"
+        sx={{
+          alignItems: "center",
+          bgcolor: layout === "dropdown" ? (active ? "action.hover" : "transparent") : "background.paper",
+          border: "1px solid",
+          borderColor: layout === "dropdown" ? "transparent" : active ? "primary.main" : "divider",
+          borderRadius: SURFACE_RADIUS,
+          boxShadow: layout === "dropdown" ? "none" : active ? SURFACE_SHADOW : TONES[tone].shadow,
+          color: "text.primary",
+          display: "flex",
+          gap: 1.5,
+          px: 2,
+          py: 1.25,
+          textDecoration: "none",
+          transition: "border-color 120ms ease, box-shadow 120ms ease",
+        }}
+      >
+        {item.icon}
+        <Box sx={{ flexGrow: 1, minWidth: 0 }}>
+          <Typography sx={{ fontWeight: 600 }}>
+            {item.kind ? (
+              <>
+                <Box component="span" sx={VISUALLY_HIDDEN}>{`${item.kind}:`}</Box>{" "}
+              </>
+            ) : null}
+            {item.name}
+          </Typography>
+          <Typography color="text.secondary" noWrap sx={{ fontSize: "0.85rem" }}>
+            {item.description}
+          </Typography>
+        </Box>
+        <ArrowForwardIcon aria-hidden="true" fontSize="small" sx={{ color: active ? "primary.main" : "text.secondary", flexShrink: 0 }} />
+      </Box>
     </Box>
   );
 }

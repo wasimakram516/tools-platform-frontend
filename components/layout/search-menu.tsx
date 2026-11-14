@@ -3,20 +3,24 @@
 import { Box, Modal } from "@mui/material";
 import type { ReactNode } from "react";
 import { ToolSearch } from "@/components/search/tool-search";
+import type { SearchableGuide } from "@/lib/guides/guide-search";
 
 const PILL_MAX_WIDTH = 640;
 /** The same gap from the top of the window that the floating header pill uses. */
 const TOP_GAP = 10;
 
 interface SearchMenuProps {
+  /** Guides to search as well as the tools. */
+  guides?: readonly SearchableGuide[];
   onClose: () => void;
 }
 
 /**
  * The floating search from the header: the shared tool search, in the same place and shape as the
- * header pill, over a dimmed backdrop. With nothing typed it offers the popular tools.
+ * header pill, over a dimmed backdrop. With nothing typed it offers the popular tools; once
+ * something is typed, matching guides are listed after the tools.
  */
-export function SearchMenu({ onClose }: SearchMenuProps): ReactNode {
+export function SearchMenu({ guides, onClose }: SearchMenuProps): ReactNode {
   return (
     <Modal
       // The input takes focus itself; letting the modal focus its own frame would steal it.
@@ -42,6 +46,7 @@ export function SearchMenu({ onClose }: SearchMenuProps): ReactNode {
       >
         <ToolSearch
           autoFocus
+          guides={guides}
           hint="Esc"
           idPrefix="site-search"
           label="Search tools"

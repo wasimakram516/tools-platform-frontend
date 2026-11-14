@@ -1,16 +1,26 @@
 import { Box } from "@mui/material";
 import type { CSSProperties, ReactNode } from "react";
 import { ToolSearch } from "@/components/search/tool-search";
+import type { SearchableGuide } from "@/lib/guides/guide-search";
 
 /** The id of the home page's search box, so the "/" key can find it and focus it. */
 export const HOME_SEARCH_INPUT_ID = "home-search-input";
 
+interface HomeSearchProps {
+  /**
+   * Guides to search as well. The page passes them in: the header imports this file for its id,
+   * so importing the guides here would put every guide in the header's browser code.
+   */
+  guides: readonly SearchableGuide[];
+}
+
 /**
  * The search box under the home page headline. It is the same search as the header's, so it
- * understands tool names and plain descriptions of a job. When the box is clicked into, a dropdown
- * floats over the page with the popular tools, and it narrows to matches as someone types.
+ * understands tool names and plain descriptions of a job, and guides that fit the search. When
+ * the box is clicked into, a dropdown floats over the page with the popular tools, and it narrows
+ * to matches as someone types.
  */
-export function HomeSearch(): ReactNode {
+export function HomeSearch({ guides }: HomeSearchProps): ReactNode {
   return (
     <Box
       className="rise-in"
@@ -21,6 +31,7 @@ export function HomeSearch(): ReactNode {
     >
       <ToolSearch
         clearOnEscape
+        guides={guides}
         hint="/"
         idPrefix="home-search"
         inputId={HOME_SEARCH_INPUT_ID}

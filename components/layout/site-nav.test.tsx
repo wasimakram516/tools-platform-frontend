@@ -29,6 +29,7 @@ const DATA: NavData = {
       tools: [{ href: "/tools/loan-calculator", icon: "loan", label: "Loan Calculator" }],
     },
   ],
+  guides: [{ description: "What each claim means.", href: "/guides/jwt-claims", name: "JWT claims reference", terms: "jwt exp" }],
   popular: [
     { href: "/tools/json-formatter", icon: "json", label: "JSON Formatter" },
     { href: "/tools/image-compressor-converter", icon: "imageCompress", label: "Image Compressor and Converter" },
@@ -103,6 +104,17 @@ describe("SiteNav", () => {
     const box = await screen.findByRole("combobox", { name: "Search tools" }, { timeout: 15_000 });
 
     await waitFor(() => expect(box).toHaveFocus());
+  });
+
+  it("searches the guides it was given from the header search", async () => {
+    renderNav();
+    fireEvent.click(screen.getByRole("button", { name: "Search tools" }));
+
+    const box = await screen.findByRole("combobox", { name: "Search tools" }, { timeout: 15_000 });
+
+    fireEvent.change(box, { target: { value: "jwt" } });
+
+    expect(screen.getByRole("option", { name: /Guide: JWT claims reference/ })).toHaveAttribute("href", "/guides/jwt-claims");
   });
 
   it("opens the search menu with the / key, but not while typing in a field", async () => {

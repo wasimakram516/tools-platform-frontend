@@ -1,4 +1,6 @@
 import type { IconKey } from "@/components/ui/tool-icon";
+import type { SearchableGuide } from "@/lib/guides/guide-search";
+import { getSearchableGuides } from "@/lib/guides/guides";
 import { getAvailableToolCategories, getBaseToolsByCategory, getFeaturedTools } from "@/lib/tools/tool-registry";
 
 export interface NavTool {
@@ -16,6 +18,8 @@ export interface NavCategory {
 
 export interface NavData {
   categories: NavCategory[];
+  /** The guides, in the small form the header search looks through. */
+  guides: SearchableGuide[];
   /** The tools marked as popular in the registry, for the "Popular" menu. */
   popular: NavTool[];
 }
@@ -36,6 +40,7 @@ export function buildNavData(): NavData {
         tools: getBaseToolsByCategory(category.id).map((tool) => ({ href: `/tools/${tool.slug}`, icon: tool.icon, label: tool.name })),
       }))
       .filter((category) => category.tools.length > 0),
+    guides: getSearchableGuides(),
     popular: getFeaturedTools().map((tool) => ({ href: `/tools/${tool.slug}`, icon: tool.icon, label: tool.name })),
   };
 }
