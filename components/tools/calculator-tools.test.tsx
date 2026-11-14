@@ -169,7 +169,10 @@ describe("LoanCalculatorTool", () => {
     expect(screen.getByText("21 years")).toBeInTheDocument();
     expect(screen.getByText("79,800.51")).toBeInTheDocument();
     expect(screen.getByText("9 years")).toBeInTheDocument();
-    expect(within(screen.getByRole("status")).getByText("1,399.10")).toBeInTheDocument();
+    // The share button has its own status line, so pick the result's.
+    const result = screen.getAllByRole("status").find((region) => within(region).queryByText("1,399.10"));
+
+    expect(result).toBeDefined();
   });
 
   it("explains a term that is too long", () => {

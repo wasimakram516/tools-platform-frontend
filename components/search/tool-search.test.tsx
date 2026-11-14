@@ -55,9 +55,9 @@ describe("ToolSearch on a page", () => {
     const box = renderSearch();
 
     fireEvent.focus(box);
-    fireEvent.change(box, { target: { value: "sha256" } });
+    fireEvent.change(box, { target: { value: "uuid" } });
     expect(screen.getAllByRole("option")).toHaveLength(1);
-    expect(screen.getAllByRole("option")[0]).toHaveAttribute("href", "/tools/hash-generator");
+    expect(screen.getAllByRole("option")[0]).toHaveAttribute("href", "/tools/uuid-generator");
 
     fireEvent.change(box, { target: { value: "how do I make a photo smaller" } });
     expect(screen.getAllByRole("option")[0]).toHaveAttribute("href", "/tools/image-compressor-converter");
