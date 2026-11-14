@@ -2,40 +2,14 @@ import { renderShareImage } from "@/lib/og/share-image";
 import { BRAND_NAME } from "@/lib/site-config";
 import { getToolBySlug, getToolCategoryById, getTools } from "@/lib/tools/tool-registry";
 
+export const alt = `${BRAND_NAME} tool`;
 // Next reads these two exports as written, so they are literal values. A test checks that they
 // match the size the picture is drawn at.
 export const size = { height: 630, width: 1200 };
 export const contentType = "image/png";
 
 interface ToolImageProps {
-  /** The image id from generateImageMetadata. There is one picture per tool, so it is not used. */
-  id?: Promise<string>;
   params: Promise<{ toolSlug: string }>;
-}
-
-/** The one picture each tool has. Its id becomes the last part of the picture's address. */
-const IMAGE_ID = "card";
-
-/**
- * Describes the tool's picture, with alt text that names the tool and says what it does, so a
- * reader who cannot see the picture, or a search engine, learns what the link is about.
- */
-export function generateImageMetadata({ params }: { params: { toolSlug: string } }): Array<{
-  alt: string;
-  contentType: string;
-  id: string;
-  size: { height: number; width: number };
-}> {
-  const tool = getToolBySlug(params.toolSlug);
-
-  return [
-    {
-      alt: tool ? `${tool.name}: ${tool.shortDescription}` : `${BRAND_NAME} tool`,
-      contentType,
-      id: IMAGE_ID,
-      size,
-    },
-  ];
 }
 
 /**
