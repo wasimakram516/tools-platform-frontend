@@ -46,7 +46,7 @@ export function FaqSection(): ReactNode {
           </Button>
         </Box>
 
-        <FaqAccordion items={FAQ_ITEMS} visibleCount={FAQ_VISIBLE_COUNT} />
+        <FaqAccordion animate items={FAQ_ITEMS} visibleCount={FAQ_VISIBLE_COUNT} />
       </Box>
     </HomeSection>
   );

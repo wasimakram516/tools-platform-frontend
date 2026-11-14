@@ -105,6 +105,11 @@ function FaqRow({ index, isOpen, item, onToggle }: FaqRowProps): ReactNode {
 }
 
 interface FaqAccordionProps {
+  /**
+   * Fade the questions in as they scroll into view. Only the home page asks for it: on a tool or
+   * reference page the questions are content people came for, and should simply be there.
+   */
+  animate?: boolean;
   items: readonly FaqAccordionItem[];
   /** How many questions show before "Show more". Leave out to show them all. */
   visibleCount?: number;
@@ -117,7 +122,7 @@ const MORE_QUESTIONS_ID_PREFIX = "faq-more-questions";
  * When there are more questions than `visibleCount`, the rest are folded away behind a "Show
  * more" button. Every answer stays in the page, so search engines read all of them.
  */
-export function FaqAccordion({ items, visibleCount = items.length }: FaqAccordionProps): ReactNode {
+export function FaqAccordion({ animate = false, items, visibleCount = items.length }: FaqAccordionProps): ReactNode {
   const [openId, setOpenId] = useState<string | false>(false);
   const [showAll, setShowAll] = useState(false);
   const firstItems = items.slice(0, visibleCount);
@@ -146,9 +151,13 @@ export function FaqAccordion({ items, visibleCount = items.length }: FaqAccordio
     <Box>
       <Box sx={{ display: "grid", gap: 1.5 }}>
         {firstItems.map((item, index) => (
-          <Reveal delay={revealDelay(index)} key={item.id}>
-            <FaqRow index={index} isOpen={openId === item.id} item={item} onToggle={(expanded) => handleToggle(item.id, expanded)} />
-          </Reveal>
+          animate ? (
+            <Reveal delay={revealDelay(index)} key={item.id}>
+              <FaqRow index={index} isOpen={openId === item.id} item={item} onToggle={(expanded) => handleToggle(item.id, expanded)} />
+            </Reveal>
+          ) : (
+            <FaqRow index={index} isOpen={openId === item.id} item={item} key={item.id} onToggle={(expanded) => handleToggle(item.id, expanded)} />
+          )
         ))}
       </Box>
 
