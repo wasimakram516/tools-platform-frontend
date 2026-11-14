@@ -68,7 +68,7 @@ describe("application foundation", () => {
 
     expect(questionButtons(faq)).toHaveLength(FAQ_ITEMS.length);
     expect(within(faq).getByRole("link", { name: "Ask us a question" })).toHaveAttribute("href", CONTACT_URL);
-    expect(screen.getByRole("link", { name: "Suggest a tool" })).toHaveAttribute("href", CONTACT_URL);
+    expect(screen.getByRole("link", { name: "Suggest a tool on wisemensoft.com" })).toHaveAttribute("href", CONTACT_URL);
   });
 
   it("opens one answer at a time in the FAQ", () => {

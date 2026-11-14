@@ -33,7 +33,7 @@ export function SuggestToolSection(): ReactNode {
           target="_blank"
           variant="contained"
         >
-          Suggest a tool
+          Suggest a tool on wisemensoft.com
         </Button>
       </Reveal>
     </HomeSection>
