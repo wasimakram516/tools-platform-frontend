@@ -53,14 +53,25 @@ describe("SearchMenu", () => {
   it("lists matching tools as menu items while typing, each linking to its tool", () => {
     renderMenu();
 
-    type("sha256");
+    type("uuid");
 
     const options = screen.getAllByRole("option");
 
     expect(options).toHaveLength(1);
-    expect(options[0]).toHaveAccessibleName(/Hash Generator/);
-    expect(options[0]).toHaveAttribute("href", "/tools/hash-generator");
+    expect(options[0]).toHaveAccessibleName(/UUID Generator/);
+    expect(options[0]).toHaveAttribute("href", "/tools/uuid-generator");
     expect(screen.getByRole("status")).toHaveTextContent("1 tool found.");
+  });
+
+  it("puts the page made for one job above the general tool", () => {
+    renderMenu();
+
+    type("sha256");
+
+    const options = screen.getAllByRole("option");
+
+    expect(options[0]).toHaveAttribute("href", "/tools/sha256-hash-generator");
+    expect(options[1]).toHaveAttribute("href", "/tools/hash-generator");
   });
 
   it("understands a description of the job, not only a tool's name", () => {
