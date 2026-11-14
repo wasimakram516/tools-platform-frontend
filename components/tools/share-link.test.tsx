@@ -5,7 +5,9 @@ import { AppThemeProvider } from "@/components/providers/app-theme-provider";
 import { DateDifferenceTool } from "@/components/tools/date-difference-tool";
 import { InterestCalculatorTool } from "@/components/tools/interest-calculator-tool";
 import { LoanCalculatorTool } from "@/components/tools/loan-calculator-tool";
+import { NumberBaseTool } from "@/components/tools/number-base-tool";
 import { PercentageCalculatorTool } from "@/components/tools/percentage-calculator-tool";
+import { UnitConverterTool } from "@/components/tools/unit-converter-tool";
 
 vi.mock("@mui/material-nextjs/v16-appRouter", () => ({
   AppRouterCacheProvider: ({ children }: PropsWithChildren) => children,
@@ -94,5 +96,34 @@ describe("shared calculator links", () => {
     openTool("/tools/percentage-calculator?mode=discount&a=80&b=25", <PercentageCalculatorTool />);
 
     expect(await screen.findByText("Sale price: 60.00")).toBeInTheDocument();
+  });
+
+  it("opens the unit converter on the category and units in the link", async () => {
+    openTool("/tools/unit-converter?category=mass&from=lb&to=kg&value=10", <UnitConverterTool />);
+
+    await waitFor(() => expect(screen.getByRole("combobox", { name: "Category" })).toHaveTextContent("Weight"));
+    expect(screen.getByRole("combobox", { name: "From" })).toHaveTextContent(/Pound/);
+    expect(screen.getByRole("combobox", { name: "To" })).toHaveTextContent(/Kilogram/);
+  });
+
+  it("falls back to the category's own units when the link names units from another one", async () => {
+    openTool("/tools/unit-converter?category=mass&from=km&to=mile", <UnitConverterTool />);
+
+    await waitFor(() => expect(screen.getByRole("combobox", { name: "Category" })).toHaveTextContent("Weight"));
+    expect(screen.getByRole("combobox", { name: "From" })).not.toHaveTextContent(/Kilometre|Kilometer/);
+  });
+
+  it("fills the number base converter, ignoring a base outside 2 to 36", async () => {
+    openTool("/tools/number-base-converter?n=ff&from=16&to=99", <NumberBaseTool />);
+
+    await waitFor(() => expect(screen.getByLabelText("Number")).toHaveValue("ff"));
+    expect(screen.getByRole("combobox", { name: "From base" })).toHaveTextContent(/16/);
+    expect(screen.getByRole("combobox", { name: "Also show base" })).toHaveTextContent(/36/);
+  });
+
+  it("opens the Roman numeral panel from a link", async () => {
+    openTool("/tools/number-base-converter?panel=roman&roman=2024", <NumberBaseTool />);
+
+    await waitFor(() => expect(screen.getByLabelText("Number or Roman numeral")).toHaveValue("2024"));
   });
 });

@@ -7,6 +7,7 @@ import { useState } from "react";
 import { DecimalField } from "@/components/tools/calculator-fields";
 import { ToolbarSelect } from "@/components/tools/converter-options";
 import { ResetButton } from "@/components/tools/reset-button";
+import { ShareLinkButton, useLinkValues } from "@/components/tools/share-link";
 import { ToolFooter, ToolWorkspace } from "@/components/tools/tool-workspace";
 import { copyBlockedMessage, copyToClipboard } from "@/lib/tools/clipboard";
 import { parseDecimal } from "@/lib/tools/calculators/format";
@@ -29,6 +30,24 @@ export function UnitConverterTool(): ReactNode {
   const [fromId, setFromId] = useState(category?.defaultFrom ?? "");
   const [toId, setToId] = useState(category?.defaultTo ?? "");
   const [status, setStatus] = useState("");
+
+  useLinkValues(["category", "from", "to", "value"], (shared) => {
+    const next = getUnitCategory(shared.category ?? DEFAULT_CATEGORY);
+
+    if (!next) {
+      return;
+    }
+
+    const hasUnit = (id: string | undefined): id is string => next.units.some((unit) => unit.id === id);
+
+    setCategoryId(next.id);
+    setFromId(hasUnit(shared.from) ? shared.from : next.defaultFrom);
+    setToId(hasUnit(shared.to) ? shared.to : next.defaultTo);
+
+    if (shared.value !== undefined) {
+      setValueText(shared.value);
+    }
+  });
 
   if (!category) {
     return null;
@@ -89,7 +108,12 @@ export function UnitConverterTool(): ReactNode {
     <ToolWorkspace
       label="Unit converter workspace"
       options={<ToolbarSelect id="unit-category" label="Category" onChange={changeCategory} options={CATEGORY_OPTIONS} value={category.id} />}
-      secondaryActions={<ResetButton onClick={reset} />}
+      secondaryActions={
+        <>
+          <ShareLinkButton ready={main?.ok === true} values={{ category: category.id, from: fromId, to: toId, value: valueText }} />
+          <ResetButton onClick={reset} />
+        </>
+      }
     >
       <Stack sx={{ gap: 2.5 }}>
         <Box sx={{ alignItems: "center", display: "grid", gap: 1.5, gridTemplateColumns: { xs: "1fr", md: "minmax(0, 1fr) minmax(0, 1.3fr) auto minmax(0, 1.3fr)" } }}>

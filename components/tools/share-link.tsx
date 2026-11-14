@@ -16,11 +16,24 @@ const COPIED_FOR_MS = 2500;
  * not know. The page is prerendered without the link's values, so they are read in the browser.
  */
 export function useFillFromLink(setters: Readonly<Record<string, (value: string) => void>>): void {
-  useEffect(() => {
-    const shared = readSharedValues(window.location.search, Object.keys(setters));
-
+  useLinkValues(Object.keys(setters), (shared) => {
     for (const [key, value] of Object.entries(shared)) {
       setters[key]?.(value);
+    }
+  });
+}
+
+/**
+ * Reads the given keys from a shared link, once, after the page has loaded, and hands them to
+ * apply together. Use it when one value decides which others are valid, such as a unit category
+ * and its units. apply is not called when the link has none of the keys.
+ */
+export function useLinkValues(keys: readonly string[], apply: (shared: Readonly<Record<string, string>>) => void): void {
+  useEffect(() => {
+    const shared = readSharedValues(window.location.search, keys);
+
+    if (Object.keys(shared).length > 0) {
+      apply(shared);
     }
     // A shared link fills the tool once, when it opens; after that, typing takes over.
     // eslint-disable-next-line react-hooks/exhaustive-deps

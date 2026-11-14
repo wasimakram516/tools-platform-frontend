@@ -12,6 +12,7 @@ import { CopyableValueRow } from "@/components/tools/copyable-value-row";
 import { ToolbarSelect, type ToolbarSelectOption } from "@/components/tools/converter-options";
 import { ModeToggle } from "@/components/tools/mode-toggle";
 import { OptionSwitch } from "@/components/tools/option-switch";
+import { ShareLinkButton, useFillFromLink } from "@/components/tools/share-link";
 import { useConverter, type ConverterDirection } from "@/components/tools/use-converter";
 import { ToolFooter, ToolWorkspace } from "@/components/tools/tool-workspace";
 import { copyBlockedMessage, copyToClipboard } from "@/lib/tools/clipboard";
@@ -30,6 +31,7 @@ import {
   toRoman,
   type ByteBase,
 } from "@/lib/tools/data/number-bases";
+import { acceptChoice } from "@/lib/tools/share-link";
 
 type Panel = "bases" | "bytes" | "roman";
 type BytesMode = "textToBytes" | "bytesToText";
@@ -37,6 +39,20 @@ type BytesMode = "textToBytes" | "bytesToText";
 const DEFAULT_FROM_BASE = 10;
 const DEFAULT_OTHER_BASE = 36;
 const ROMAN_PATTERN_DIGITS = /^\d+$/;
+const SHAREABLE_PANELS: readonly Panel[] = ["bases", "roman"];
+
+/**
+ * Wraps a base setter so that a shared base outside 2 to 36 is ignored.
+ */
+function acceptBase(set: (base: number) => void): (value: string) => void {
+  return (value) => {
+    const base = Number(value);
+
+    if (Number.isInteger(base) && base >= MIN_BASE && base <= MAX_BASE) {
+      set(base);
+    }
+  };
+}
 
 /** Names for the bases people know, and plain numbers for the rest. */
 const BASE_OPTIONS: readonly ToolbarSelectOption<number>[] = Array.from({ length: MAX_BASE - MIN_BASE + 1 }, (_, index) => {
@@ -108,6 +124,14 @@ export function NumberBaseTool(): ReactNode {
   const [uppercase, setUppercase] = useState(false);
 
   const [romanText, setRomanText] = useState("");
+
+  useFillFromLink({
+    from: acceptBase(setFromBase),
+    n: setNumberText,
+    panel: acceptChoice(SHAREABLE_PANELS, setPanel),
+    roman: setRomanText,
+    to: acceptBase(setOtherBase),
+  });
 
   const converter = useConverter<BytesMode>({
     convert: (input, mode): DataConversionResult => {
@@ -206,7 +230,15 @@ export function NumberBaseTool(): ReactNode {
           ) : null}
         </>
       }
-      secondaryActions={panel === "bytes" ? <ConverterHelpers state={converter} /> : undefined}
+      secondaryActions={
+        panel === "bytes" ? (
+          <ConverterHelpers state={converter} />
+        ) : panel === "roman" ? (
+          <ShareLinkButton values={{ panel: "roman", roman: romanText }} />
+        ) : (
+          <ShareLinkButton ready={numberText.trim() !== ""} values={{ from: String(fromBase), n: numberText, to: String(otherBase) }} />
+        )
+      }
     >
       {panel === "bases" ? (
         <Stack sx={{ gap: 2 }}>
