@@ -65,7 +65,8 @@ export function ToolSnapshots(): ReactNode {
     >
       <SnapshotCard label="QR code" tilt={-2}>
         {qrUrl ? (
-          <Box alt="" component="img" src={qrUrl} sx={{ borderRadius: CONTROL_RADIUS, display: "block", imageRendering: "pixelated", width: "100%" }} />
+          // The whole panel is hidden from screen readers, but crawlers flag an image with empty alt text.
+          <Box alt={`QR code for ${BRAND_DOMAIN}, made with the QR Code Generator`} component="img" src={qrUrl} sx={{ borderRadius: CONTROL_RADIUS, display: "block", imageRendering: "pixelated", width: "100%" }} />
         ) : null}
       </SnapshotCard>
 
